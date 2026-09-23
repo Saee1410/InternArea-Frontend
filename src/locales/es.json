@@ -1,0 +1,491 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "internships": "Pasantías",
+    "jobs": "Empleos",
+    "plans": "Planes",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión"
+  },
+
+  "home": {
+    "dreamCareer": "Haz realidad la carrera de tus sueños",
+    "trending": "Tendencias en InternArea 🔥",
+
+    "growSkills": "Desarrolla tus habilidades",
+    "startCareer": "Comienza tu carrera",
+    "learnBest": "Aprende de los mejores",
+    "connectCompanies": "Conecta con las mejores empresas",
+
+    "activelyHiring": "Contratando activamente",
+    "tbd": "Por determinar",
+    "immediate": "Inmediato",
+    "internship": "Prácticas",
+    "viewDetails": "Ver detalles",
+
+    "latestInternships": "Últimas prácticas en InternArea"
+  },
+
+  "common": {
+    "applyNow": "Aplicar ahora",
+    "viewDetails": "Ver detalles",
+    "location": "Ubicación",
+    "duration": "Duración",
+    "stipend": "Estipendio"
+  },
+  "register": {
+  "title": "Crear una cuenta",
+  "subtitle": "Únete a InternArea hoy 🚀",
+  "fullName": "Nombre completo",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "creatingAccount": "Creando cuenta...",
+  "createAccount": "Crear cuenta",
+  "or": "O",
+  "continueGoogle": "Continuar con Google",
+  "alreadyAccount": "¿Ya tienes una cuenta?",
+  "login": "Iniciar sesión"
+},
+"login": {
+  "title": "Bienvenido de nuevo",
+  "subtitle": "Inicia sesión para continuar",
+  "student": "Estudiante",
+  "admin": "Administrador",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "rememberMe": "Recuérdame",
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "loggingIn": "Iniciando sesión...",
+  "loginButton": "Iniciar sesión",
+  "or": "O",
+  "googleLoginFailed": "Error al iniciar sesión con Google",
+  "noAccount": "¿No tienes una cuenta?",
+  "register": "Registrarse",
+  "loginFailed": "Error al iniciar sesión",
+  "studentOption": "Inicia sesión usando la opción Estudiante",
+  "adminOption": "Inicia sesión usando la opción Administrador"
+},
+"forgotPassword": {
+  "title": "¿Olvidaste tu contraseña?",
+  "subtitle": "Ingresa tu correo electrónico o número de teléfono registrado.",
+  "emailOrPhone": "Correo electrónico o número de teléfono",
+  "placeholder": "Ingresa tu correo electrónico o número de teléfono",
+  "processing": "Procesando...",
+  "resetPassword": "Restablecer contraseña",
+  "backToLogin": "Volver al inicio de sesión",
+  "enterRegistered": "Ingresa tu correo electrónico o número de teléfono registrado",
+  "newPassword": "Nueva contraseña",
+  "somethingWrong": "Algo salió mal. Inténtalo de nuevo."
+},
+"resumeBuilder": {
+  "title": "Crea tu currículum",
+  "subtitle": "Crea un currículum profesional y solicita prácticas fácilmente.",
+  "personalInformation": "Información personal",
+  "fullName": "Nombre completo",
+  "fullNamePlaceholder": "Ingresa tu nombre completo",
+  "email": "Correo electrónico",
+  "emailPlaceholder": "Ingresa tu correo electrónico",
+  "phone": "Número de teléfono",
+  "phonePlaceholder": "Ingresa el número de teléfono",
+  "location": "Ubicación",
+  "locationPlaceholder": "Ciudad, Estado",
+  "education": "Educación",
+  "qualification": "Título académico",
+  "qualificationPlaceholder": "ej. Ingeniería Informática",
+  "college": "Universidad / Instituto",
+  "collegePlaceholder": "Ingresa el nombre de la universidad",
+  "graduationYear": "Año de graduación",
+  "graduationYearPlaceholder": "2027",
+  "experience": "Experiencia",
+  "experiencePlaceholder": "Describe tu experiencia de prácticas o laboral...",
+  "skills": "Habilidades",
+  "skillsPlaceholder": "ej. React, Node.js, MongoDB, Java, SQL",
+  "projects": "Proyectos",
+  "projectsPlaceholder": "Describe tus proyectos...",
+  "achievements": "Logros",
+  "achievementsPlaceholder": "Certificados, hackathons, premios, etc.",
+  "socialProfiles": "Perfiles sociales",
+  "linkedin": "Perfil de LinkedIn",
+  "linkedinPlaceholder": "https://linkedin.com/in/username",
+  "github": "Perfil de GitHub",
+  "githubPlaceholder": "https://github.com/username",
+  "profilePhoto": "Foto de perfil",
+  "uploadPhoto": "Subir foto de perfil",
+  "selected": "Seleccionado",
+  "continuePreview": "Continuar a la vista previa del currículum",
+  "failedToSave": "No se pudo guardar el currículum"
+},
+"adminProfile": {
+  "adminName": "Nombre del administrador",
+  "admin": "ADMINISTRADOR",
+  "phone": "Número de teléfono",
+  "location": "Ubicación",
+  "notAdded": "No añadido",
+  "editProfile": "Editar perfil"
+},
+
+"adminEdit": {
+  "title": "Editar perfil de administrador",
+  "uploadPhoto": "Subir foto",
+  "removePhoto": "Eliminar foto",
+  "profilePhotoUrl": "URL de la foto de perfil",
+  "imageUrlPlaceholder": "O pega aquí la URL de la imagen",
+  "fullName": "Nombre completo",
+  "email": "Correo electrónico",
+  "phone": "Número de teléfono",
+  "location": "Ubicación",
+  "saveChanges": "Guardar cambios",
+  "profileUpdated": "Perfil actualizado correctamente",
+  "profileUpdateFailed": "No se pudo actualizar el perfil"
+},
+"dashboard": {
+  "title": "Panel de administración",
+  "description": "Administra tus ofertas de trabajo, prácticas y seguimiento de candidatos desde un solo lugar.",
+  "jobApplications": "Solicitudes de empleo",
+  "totalApplications": "Total de solicitudes recibidas",
+  "viewApplications": "Ver solicitudes",
+  "addJob": "Agregar trabajo",
+  "createJob": "Crear trabajo",
+  "postNewJob": "Publicar una nueva oferta de trabajo",
+  "postNewJobButton": "Publicar nuevo trabajo",
+  "addInternship": "Agregar práctica",
+  "createInternship": "Crear práctica",
+  "postNewInternship": "Publicar una nueva práctica",
+  "postInternship": "Publicar práctica"
+},
+"createInternship": {
+  "title": "Crear pasantía",
+  "internshipTitle": "Título de la pasantía",
+  "companyName": "Nombre de la empresa",
+  "location": "Ubicación",
+  "category": "Categoría",
+  "stipend": "Estipendio",
+  "startDate": "Fecha de inicio",
+  "duration": "Duración",
+  "numberOfOpening": "Número de vacantes",
+  "aboutCompany": "Acerca de la empresa",
+  "aboutInternship": "Acerca de la pasantía",
+  "whoCanApply": "Quién puede postularse",
+  "perks": "Beneficios",
+  "additionalInfo": "Información adicional",
+  "createButton": "Crear pasantía",
+  "success": "Pasantía creada correctamente",
+  "failed": "No se pudo crear la pasantía"
+},
+"createJob": {
+  "title": "Crear empleo",
+  "companyName": "Nombre de la empresa",
+  "jobTitle": "Título del empleo",
+  "location": "Ubicación",
+  "category": "Categoría",
+  "salaryPackage": "Salario / Paquete",
+  "joiningDate": "Fecha de incorporación",
+  "experienceDuration": "Experiencia / Duración",
+  "aboutCompany": "Acerca de la empresa",
+  "jobDescription": "Descripción del empleo",
+  "whoCanApply": "Quién puede postularse",
+  "perks": "Beneficios",
+  "additionalInfo": "Información adicional",
+  "numberOfOpenings": "Número de vacantes",
+  "createButton": "Crear empleo",
+  "success": "Empleo creado correctamente",
+  "failed": "Algo salió mal"
+},
+"editProfile": {
+  "title": "Editar perfil",
+  "subtitle": "Actualiza tus datos personales y tu identidad profesional",
+  "uploadPhoto": "Subir foto",
+  "removePhoto": "Eliminar foto",
+  "profilePhotoUrl": "URL de la foto de perfil",
+  "imageUrlPlaceholder": "También puedes pegar directamente la URL de una imagen",
+  "fullName": "Nombre completo",
+  "email": "Correo electrónico",
+  "phone": "Número de teléfono",
+  "location": "Ubicación",
+  "qualification": "Cualificación",
+  "skills": "Habilidades",
+  "skillsPlaceholder": "ej. React, Node.js, MongoDB",
+  "bio": "Biografía",
+  "saveChanges": "Guardar cambios",
+  "photoSizeError": "Selecciona una foto de menos de 10 MB.",
+  "profileUpdated": "Perfil actualizado correctamente",
+  "profileUpdateFailed": "No se pudo actualizar el perfil"
+},
+
+
+"profile": {
+  "phone": "Teléfono",
+  "location": "Ubicación",
+  "qualification": "Cualificación",
+  "skills": "Habilidades",
+  "bio": "Biografía",
+  "notAdded": "No añadido",
+  "noBio": "No se ha añadido ninguna biografía",
+  "myResume": "Mi currículum",
+  "loadingResume": "Cargando currículum...",
+  "resumeSaved": "Currículum guardado correctamente.",
+  "viewResume": "Ver currículum",
+  "editResume": "Editar currículum",
+  "noResume": "No se encontró ningún currículum.",
+  "createResume": "Crear currículum",
+  "editProfile": "Editar perfil",
+  "addFriend": "Añadir amigo",
+  "addPost": "Añadir publicación",
+  "loginHistory": "Historial de inicio de sesión",
+  "loadingLoginHistory": "Cargando historial de inicio de sesión...",
+  "noLoginHistory": "No se encontró historial de inicio de sesión.",
+  "browser": "Navegador",
+  "operatingSystem": "Sistema operativo",
+  "device": "Dispositivo",
+  "ipAddress": "Dirección IP",
+  "status": "Estado",
+  "loginTime": "Hora de inicio de sesión",
+  "unknown": "Desconocido"
+},
+
+ "applications": {
+    "title": "Total de solicitudes",
+    "subtitle": "Solicitudes recibidas para los trabajos/prácticas publicados por ti.",
+    "companyTitle": "Empresa / Título",
+    "category": "Categoría",
+    "appliedBy": "Solicitado por",
+    "date": "Fecha",
+    "status": "Estado",
+    "action": "Acción",
+    "noApplications": "No se encontraron solicitudes para tus publicaciones.",
+    "internship": "Prácticas",
+    "job": "Empleo",
+    "position": "Puesto",
+    "anonymousUser": "Usuario anónimo",
+    "viewCandidate": "Ver perfil del candidato",
+    "accept": "Aceptar solicitud",
+    "reject": "Rechazar solicitud",
+    "pending": "Pendiente",
+    "accepted": "Aceptado",
+    "selected": "Seleccionado",
+    "rejected": "Rechazado"
+  },
+   "internshipCard": {
+    "activelyHiring": "Contratando activamente",
+    "job": "Empleo",
+    "internship": "Prácticas",
+    "viewDetails": "Ver detalles"
+  },
+   
+  "internshipSection": {
+  "all": "Todos",
+  "internship": "Prácticas",
+  "jobs": "Empleos",
+  "latestInternships": "Últimas prácticas",
+  "noInternships": "No hay prácticas disponibles",
+  "latestJobs": "Últimos empleos",
+  "noJobs": "No hay empleos disponibles",
+  "internships": "prácticas",
+  "students": "estudiantes",
+  "learners": "aprendices"
+},
+
+"footer": {
+  "internshipsByPlaces": "Prácticas por ubicación",
+  "internshipsByStream": "Prácticas por área",
+  "jobsByPlaces": "Empleos por ubicación",
+  "jobsByStream": "Empleos por área",
+  "about": "Sobre nosotros",
+  "ourTeam": "Nuestro equipo",
+  "legal": "Legal",
+  "quickLinks": "Enlaces rápidos",
+  "availableOn": "Disponible en",
+  "copyright": "© 2026 InternArea. Todos los derechos reservados.",
+  "places": {
+    "newYork": "Nueva York",
+    "losAngeles": "Los Ángeles",
+    "chicago": "Chicago",
+    "sanFrancisco": "San Francisco",
+    "miami": "Miami",
+    "seattle": "Seattle",
+    "mumbai": "Mumbai",
+    "pune": "Pune",
+    "bangalore": "Bangalore",
+    "hyderabad": "Hyderabad",
+    "delhi": "Delhi",
+    "chennai": "Chennai"
+  },
+  "streams": {
+    "webDevelopment": "Desarrollo web",
+    "appDevelopment": "Desarrollo de aplicaciones",
+    "javaDevelopment": "Desarrollo Java",
+    "pythonDevelopment": "Desarrollo Python",
+    "dataScience": "Ciencia de datos",
+    "uiuxDesign": "Diseño UI/UX",
+    "softwareDevelopment": "Desarrollo de software",
+    "marketing": "Marketing",
+    "finance": "Finanzas",
+    "humanResources": "Recursos humanos",
+    "sales": "Ventas",
+    "management": "Gestión"
+  },
+  "links": {
+    "About Us": "Sobre nosotros",
+    "Contact Us": "Contáctanos",
+    "Our Team": "Nuestro equipo",
+    "Careers": "Carreras",
+    "Terms & Conditions": "Términos y condiciones",
+    "Privacy Policy": "Política de privacidad",
+    "Home": "Inicio",
+    "Internships": "Prácticas",
+    "Jobs": "Empleos"
+  }
+},
+
+  "details": { "loginToApply": "Inicia sesión para solicitar esta práctica.", "internshipOnly": "La solicitud está disponible actualmente solo para prácticas.", "applicationSuccess": "¡Solicitud enviada correctamente!", "applicationFailed": "No se pudo solicitar la práctica.", "loading": "Cargando detalles...", "notFound": "Detalles no encontrados", "notExist": "La práctica o el empleo que buscas no existe.", "goBack": "Volver", "internship": "Prácticas", "job": "Empleo", "applying": "Solicitando...", "applyNow": "Solicitar ahora", "jobApplication": "Solicitud de empleo", "location": "Ubicación", "stipend": "Estipendio", "duration": "Duración", "startDate": "Fecha de inicio", "notSpecified": "No especificado", "category": "Categoría", "aboutCompany": "Sobre la empresa", "aboutInternshipJob": "Sobre las prácticas / el empleo", "whoCanApply": "Quién puede solicitar", "perks": "Beneficios", "additionalInformation": "Información adicional", "noInformation": "No hay información disponible.", "numberOfOpenings": "Número de vacantes:", "interested": "¿Te interesa esta práctica?", "nextStep": "Envía tu solicitud y da el siguiente paso en tu carrera." },
+
+  "friendRequests": { "title": "Solicitudes de amistad", "noRequests": "No hay solicitudes de amistad pendientes.", "accept": "Aceptar", "reject": "Rechazar", "fetchFailed": "No se pudieron obtener las solicitudes de amistad", "acceptSuccess": "Solicitud de amistad aceptada correctamente", "acceptFailed": "No se pudo aceptar la solicitud de amistad", "rejectSuccess": "Solicitud de amistad rechazada correctamente", "rejectFailed": "No se pudo rechazar la solicitud de amistad" },
+
+  "internships": {
+  "filters": "Filtros",
+  "clearAll": "Borrar todo",
+  "category": "Categoría",
+  "categoryPlaceholder": "ej. Desarrollo de software",
+  "location": "Ubicación",
+  "locationPlaceholder": "ej. Mumbai",
+  "workFromHome": "Trabajo desde casa",
+  "partTime": "Tiempo parcial",
+  "monthlyStipend": "Estipendio mensual",
+  "internshipsFound": "{{count}} prácticas encontradas",
+  "noInternshipsFound": "No se encontraron prácticas"
+},
+
+"jobs": { "filters": "Filtros", "clearAll": "Borrar todo", "category": "Categoría", "categoryPlaceholder": "ej. Desarrollador de software", "location": "Ubicación", "locationPlaceholder": "ej. Mumbai", "experience": "Experiencia", "experiencePlaceholder": "ej. 2 años", "workFromHome": "Trabajo desde casa", "partTime": "Tiempo parcial", "annualSalary": "Salario anual (₹ en lakhs)", "jobsFound": "{{count}} empleos encontrados", "noJobsFound": "No se encontraron empleos" },
+
+"otherUserProfile": {
+  "fetchFailed": "No se pudo cargar el perfil del usuario",
+  "requestSent": "Solicitud de amistad enviada correctamente",
+  "requestError": "Algo salió mal al enviar la solicitud de amistad",
+  "userNotFound": "Usuario no encontrado",
+  "sending": "Enviando...",
+  "requestSentButton": "Solicitud enviada",
+  "addFriend": "Añadir amigo",
+  "phone": "Teléfono",
+  "location": "Ubicación",
+  "qualification": "Cualificación",
+  "skills": "Habilidades",
+  "bio": "Biografía"
+},
+
+"publicSpace": {
+  "title": "Espacio público",
+  "description": "Comparte tus pensamientos, imágenes y vídeos con la comunidad de InternArea.",
+  "createPost": "Crear una publicación pública",
+  "uploadMedia": "Subir una imagen o vídeo",
+  "chooseFile": "Elegir archivo",
+  "caption": "Descripción",
+  "captionPlaceholder": "Escribe algo sobre tu publicación...",
+  "uploading": "Subiendo...",
+  "createPublicPost": "Crear publicación pública",
+  "maxFileSize": "Tamaño máximo del archivo: 50MB",
+  "publicPosts": "Publicaciones públicas",
+  "loadingPosts": "Cargando publicaciones...",
+  "noPosts": "Aún no hay publicaciones públicas.",
+  "user": "Usuario",
+  "publicPostAlt": "Publicación pública",
+  "comments": "Comentarios",
+  "writeComment": "Escribe un comentario...",
+  "comment": "Comentar",
+  "onlyImageVideo": "Solo se permiten archivos de imagen y vídeo.",
+  "fileSizeError": "El tamaño del archivo debe ser inferior a 50MB.",
+  "loginToLike": "Inicia sesión para indicar que te gusta una publicación.",
+  "unableIdentifyUser": "No se puede identificar al usuario actual.",
+  "likeError": "Algo salió mal al indicar que te gusta la publicación.",
+  "loginToComment": "Inicia sesión para comentar.",
+  "commentAdded": "¡Comentario añadido correctamente!",
+  "commentError": "Algo salió mal al añadir el comentario.",
+  "loginToShare": "Inicia sesión para compartir una publicación.",
+  "shareSuccess": "¡Publicación compartida correctamente!",
+  "linkCopied": "¡Enlace de la publicación copiado correctamente!",
+  "shareError": "Algo salió mal al compartir la publicación.",
+  "selectFile": "Selecciona una imagen o vídeo.",
+  "uploadSuccess": "¡Publicación pública creada correctamente!",
+  "uploadError": "Algo salió mal al subir la publicación.",
+  "shareTitle": "Espacio público de InternArea",
+  "shareText": "¡Mira esta publicación en InternArea!"
+},
+
+
+  "subscriptions": {
+    "plans": "Planes de InternArea",
+    "choosePlan": "Elige tu plan de suscripción",
+    "subtitle": "Solicita más prácticas cada mes con un plan que se adapte a tus objetivos profesionales.",
+    "paymentTime": "Los pagos de suscripción están disponibles solo entre",
+    "paymentTimeRange": "10:00 AM y 11:00 AM IST",
+    "mostPopular": "Más popular",
+    "month": "/mes",
+
+    "planNames": {
+      "free": "Gratis",
+      "bronze": "Bronce",
+      "silver": "Plata",
+      "gold": "Oro"
+    },
+
+    "planDescriptions": {
+      "free": "Perfecto para empezar",
+      "bronze": "Para estudiantes que solicitan regularmente",
+      "silver": "Para quienes buscan prácticas activamente",
+      "gold": "La mejor opción para quienes buscan empleo seriamente"
+    },
+
+    "applications": {
+      "free": "1 solicitud / mes",
+      "bronze": "3 solicitudes / mes",
+      "silver": "5 solicitudes / mes",
+      "gold": "Solicitudes ilimitadas"
+    },
+
+    "features": {
+      "free": [
+        "1 solicitud de prácticas al mes",
+        "Explorar prácticas",
+        "Explorar empleos",
+        "Crear perfil"
+      ],
+      "bronze": [
+        "3 solicitudes de prácticas al mes",
+        "Explorar prácticas",
+        "Explorar empleos",
+        "Crear perfil"
+      ],
+      "silver": [
+        "5 solicitudes de prácticas al mes",
+        "Explorar prácticas",
+        "Explorar empleos",
+        "Crear perfil"
+      ],
+      "gold": [
+        "Solicitudes de prácticas ilimitadas",
+        "Explorar prácticas",
+        "Explorar empleos",
+        "Crear perfil"
+      ]
+    },
+
+    "currentFreePlan": "Plan gratuito actual",
+    "upgradeTo": "Actualizar a {{plan}}",
+
+    "bottomTitle": "Solicita de forma más inteligente con InternArea",
+    "bottomDescription": "Tu límite de solicitudes se restablece cada mes. Los miembros Gold pueden solicitar prácticas ilimitadas.",
+
+    "loginRequired": "Inicia sesión antes de comprar una suscripción.",
+    "freePlanMessage": "El plan gratuito ya está disponible sin pago.",
+    "invalidOrder": "Se recibió una orden de pago no válida del servidor.",
+    "razorpayNotLoaded": "Razorpay no se ha cargado. Actualiza la página e inténtalo de nuevo.",
+    "activated": "¡Suscripción activada correctamente!",
+    "verificationFailed": "La verificación del pago falló.",
+    "paymentCancelled": "El pago fue cancelado.",
+    "paymentFailed": "El pago falló. Inténtalo de nuevo.",
+    "createPaymentFailed": "No se pudo crear el pago de la suscripción."
+  }
+
+
+}

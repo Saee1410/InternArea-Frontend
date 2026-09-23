@@ -1,0 +1,484 @@
+{
+  "navbar": {
+    "home": "Início",
+    "internships": "Estágios",
+    "jobs": "Empregos",
+    "plans": "Planos",
+    "login": "Entrar",
+    "register": "Registrar",
+    "profile": "Perfil",
+    "logout": "Sair"
+  },
+
+   "home": {
+    "dreamCareer": "Torne a carreira dos seus sonhos uma realidade",
+    "trending": "Em alta no InternArea 🔥",
+
+    "growSkills": "Desenvolva suas habilidades",
+    "startCareer": "Comece sua carreira",
+    "learnBest": "Aprenda com os melhores",
+    "connectCompanies": "Conecte-se com as principais empresas",
+
+    "activelyHiring": "Contratando ativamente",
+    "tbd": "A definir",
+    "immediate": "Imediato",
+    "internship": "Estágio",
+    "viewDetails": "Ver detalhes",
+
+    "latestInternships": "Últimos estágios no InternArea"
+  },
+
+  "common": {
+    "applyNow": "Candidate-se agora",
+    "viewDetails": "Ver detalhes",
+    "location": "Localização",
+    "duration": "Duração",
+    "stipend": "Bolsa"
+  },
+  "login": {
+  "title": "Bem-vindo de volta",
+  "subtitle": "Faça login para continuar",
+  "student": "Estudante",
+  "admin": "Administrador",
+  "email": "E-mail",
+  "password": "Senha",
+  "rememberMe": "Lembrar-me",
+  "forgotPassword": "Esqueceu sua senha?",
+  "loggingIn": "Entrando...",
+  "loginButton": "Entrar",
+  "or": "OU",
+  "googleLoginFailed": "Falha ao fazer login com o Google",
+  "noAccount": "Não tem uma conta?",
+  "register": "Cadastre-se",
+  "loginFailed": "Falha no login",
+  "studentOption": "Faça login usando a opção Estudante",
+  "adminOption": "Faça login usando a opção Administrador"
+},
+  "register": {
+  "title": "Criar conta",
+  "subtitle": "Junte-se à InternArea hoje 🚀",
+  "fullName": "Nome completo",
+  "email": "E-mail",
+  "password": "Senha",
+  "creatingAccount": "Criando conta...",
+  "createAccount": "Criar conta",
+  "or": "OU",
+  "continueGoogle": "Continuar com o Google",
+  "alreadyAccount": "Já tem uma conta?",
+  "login": "Entrar"
+},
+"forgotPassword": { "title": "Esqueceu sua senha?", "subtitle": "Digite seu e-mail ou número de telefone cadastrado.", "emailOrPhone": "E-mail ou número de telefone", "placeholder": "Digite seu e-mail ou número de telefone", "processing": "Processando...", "resetPassword": "Redefinir senha", "backToLogin": "Voltar para o login", "enterRegistered": "Digite seu e-mail ou número de telefone cadastrado", "newPassword": "Nova senha", "somethingWrong": "Algo deu errado. Tente novamente." },
+"resumeBuilder": {
+  "title": "Crie seu currículo",
+  "subtitle": "Crie um currículo profissional e candidate-se a estágios facilmente.",
+  "personalInformation": "Informações pessoais",
+  "fullName": "Nome completo",
+  "fullNamePlaceholder": "Digite seu nome completo",
+  "email": "E-mail",
+  "emailPlaceholder": "Digite seu e-mail",
+  "phone": "Número de telefone",
+  "phonePlaceholder": "Digite o número de telefone",
+  "location": "Localização",
+  "locationPlaceholder": "Cidade, Estado",
+  "education": "Educação",
+  "qualification": "Qualificação",
+  "qualificationPlaceholder": "ex. Engenharia da Computação",
+  "college": "Faculdade / Universidade",
+  "collegePlaceholder": "Digite o nome da faculdade",
+  "graduationYear": "Ano de formatura",
+  "graduationYearPlaceholder": "2027",
+  "experience": "Experiência",
+  "experiencePlaceholder": "Descreva sua experiência de estágio ou trabalho...",
+  "skills": "Habilidades",
+  "skillsPlaceholder": "ex. React, Node.js, MongoDB, Java, SQL",
+  "projects": "Projetos",
+  "projectsPlaceholder": "Descreva seus projetos...",
+  "achievements": "Conquistas",
+  "achievementsPlaceholder": "Certificados, hackathons, prêmios etc.",
+  "socialProfiles": "Perfis sociais",
+  "linkedin": "Perfil do LinkedIn",
+  "linkedinPlaceholder": "https://linkedin.com/in/username",
+  "github": "Perfil do GitHub",
+  "githubPlaceholder": "https://github.com/username",
+  "profilePhoto": "Foto de perfil",
+  "uploadPhoto": "Enviar foto de perfil",
+  "selected": "Selecionado",
+  "continuePreview": "Continuar para a visualização do currículo",
+  "failedToSave": "Falha ao salvar o currículo"
+},
+"adminProfile": {
+  "adminName": "Nome do administrador",
+  "admin": "ADMINISTRADOR",
+  "phone": "Número de telefone",
+  "location": "Localização",
+  "notAdded": "Não adicionado",
+  "editProfile": "Editar perfil"
+},
+
+"adminEdit": {
+  "title": "Editar perfil do administrador",
+  "uploadPhoto": "Enviar foto",
+  "removePhoto": "Remover foto",
+  "profilePhotoUrl": "URL da foto de perfil",
+  "imageUrlPlaceholder": "Ou cole a URL da imagem aqui",
+  "fullName": "Nome completo",
+  "email": "E-mail",
+  "phone": "Número de telefone",
+  "location": "Localização",
+  "saveChanges": "Salvar alterações",
+  "profileUpdated": "Perfil atualizado com sucesso",
+  "profileUpdateFailed": "Falha ao atualizar o perfil"
+},
+"dashboard": {
+  "title": "Painel do administrador",
+  "description": "Gerencie suas vagas de emprego, estágios e o acompanhamento dos candidatos em um só lugar.",
+  "jobApplications": "Candidaturas a empregos",
+  "totalApplications": "Total de candidaturas recebidas",
+  "viewApplications": "Ver candidaturas",
+  "addJob": "Adicionar emprego",
+  "createJob": "Criar emprego",
+  "postNewJob": "Publicar uma nova vaga de emprego",
+  "postNewJobButton": "Publicar novo emprego",
+  "addInternship": "Adicionar estágio",
+  "createInternship": "Criar estágio",
+  "postNewInternship": "Publicar um novo estágio",
+  "postInternship": "Publicar estágio"
+},
+"createInternship": {
+  "title": "Criar estágio",
+  "internshipTitle": "Título do estágio",
+  "companyName": "Nome da empresa",
+  "location": "Localização",
+  "category": "Categoria",
+  "stipend": "Bolsa",
+  "startDate": "Data de início",
+  "duration": "Duração",
+  "numberOfOpening": "Número de vagas",
+  "aboutCompany": "Sobre a empresa",
+  "aboutInternship": "Sobre o estágio",
+  "whoCanApply": "Quem pode se candidatar",
+  "perks": "Benefícios",
+  "additionalInfo": "Informações adicionais",
+  "createButton": "Criar estágio",
+  "success": "Estágio criado com sucesso",
+  "failed": "Falha ao criar o estágio"
+},
+"createJob": {
+  "title": "Criar emprego",
+  "companyName": "Nome da empresa",
+  "jobTitle": "Título do emprego",
+  "location": "Localização",
+  "category": "Categoria",
+  "salaryPackage": "Salário / Pacote",
+  "joiningDate": "Data de entrada",
+  "experienceDuration": "Experiência / Duração",
+  "aboutCompany": "Sobre a empresa",
+  "jobDescription": "Descrição do emprego",
+  "whoCanApply": "Quem pode se candidatar",
+  "perks": "Benefícios",
+  "additionalInfo": "Informações adicionais",
+  "numberOfOpenings": "Número de vagas",
+  "createButton": "Criar emprego",
+  "success": "Emprego criado com sucesso",
+  "failed": "Algo deu errado"
+},
+"editProfile": {
+  "title": "Editar perfil",
+  "subtitle": "Atualize seus dados pessoais e sua identidade profissional",
+  "uploadPhoto": "Enviar foto",
+  "removePhoto": "Remover foto",
+  "profilePhotoUrl": "URL da foto de perfil",
+  "imageUrlPlaceholder": "Você também pode colar diretamente uma URL de imagem",
+  "fullName": "Nome completo",
+  "email": "E-mail",
+  "phone": "Número de telefone",
+  "location": "Localização",
+  "qualification": "Qualificação",
+  "skills": "Habilidades",
+  "skillsPlaceholder": "ex. React, Node.js, MongoDB",
+  "bio": "Biografia",
+  "saveChanges": "Salvar alterações",
+  "photoSizeError": "Selecione uma foto menor que 10 MB.",
+  "profileUpdated": "Perfil atualizado com sucesso",
+  "profileUpdateFailed": "Falha ao atualizar o perfil"
+},
+
+
+
+
+"profile": {
+  "phone": "Telefone",
+  "location": "Localização",
+  "qualification": "Qualificação",
+  "skills": "Habilidades",
+  "bio": "Biografia",
+  "notAdded": "Não adicionado",
+  "noBio": "Nenhuma biografia adicionada",
+  "myResume": "Meu currículo",
+  "loadingResume": "Carregando currículo...",
+  "resumeSaved": "Currículo salvo com sucesso.",
+  "viewResume": "Ver currículo",
+  "editResume": "Editar currículo",
+  "noResume": "Nenhum currículo encontrado.",
+  "createResume": "Criar currículo",
+  "editProfile": "Editar perfil",
+  "addFriend": "Adicionar amigo",
+  "addPost": "Adicionar publicação",
+  "loginHistory": "Histórico de login",
+  "loadingLoginHistory": "Carregando histórico de login...",
+  "noLoginHistory": "Nenhum histórico de login encontrado.",
+  "browser": "Navegador",
+  "operatingSystem": "Sistema operacional",
+  "device": "Dispositivo",
+  "ipAddress": "Endereço IP",
+  "status": "Status",
+  "loginTime": "Hora do login",
+  "unknown": "Desconhecido"
+},
+
+ "applications": {
+    "title": "Total de candidaturas",
+    "subtitle": "Candidaturas recebidas para empregos/estágios publicados por você.",
+    "companyTitle": "Empresa / Título",
+    "category": "Categoria",
+    "appliedBy": "Candidatado por",
+    "date": "Data",
+    "status": "Status",
+    "action": "Ação",
+    "noApplications": "Nenhuma candidatura encontrada para suas publicações.",
+    "internship": "Estágio",
+    "job": "Emprego",
+    "position": "Cargo",
+    "anonymousUser": "Usuário anônimo",
+    "viewCandidate": "Ver perfil do candidato",
+    "accept": "Aceitar candidatura",
+    "reject": "Rejeitar candidatura",
+    "pending": "Pendente",
+    "accepted": "Aceito",
+    "selected": "Selecionado",
+    "rejected": "Rejeitado"
+  },
+   "internshipCard": {
+    "activelyHiring": "Contratando ativamente",
+    "job": "Emprego",
+    "internship": "Estágio",
+    "viewDetails": "Ver detalhes"
+  },
+
+  "internshipSection": {
+  "all": "Todos",
+  "internship": "Estágio",
+  "jobs": "Empregos",
+  "latestInternships": "Últimos estágios",
+  "noInternships": "Nenhum estágio disponível",
+  "latestJobs": "Últimos empregos",
+  "noJobs": "Nenhum emprego disponível",
+  "internships": "estágios",
+  "students": "estudantes",
+  "learners": "aprendizes"
+},
+
+    "footer": {
+  "internshipsByPlaces": "Estágios por localização",
+  "internshipsByStream": "Estágios por área",
+  "jobsByPlaces": "Empregos por localização",
+  "jobsByStream": "Empregos por área",
+  "about": "Sobre nós",
+  "ourTeam": "Nossa equipe",
+  "legal": "Legal",
+  "quickLinks": "Links rápidos",
+  "availableOn": "Disponível em",
+  "copyright": "© 2026 InternArea. Todos os direitos reservados.",
+  "places": {
+    "newYork": "Nova York",
+    "losAngeles": "Los Angeles",
+    "chicago": "Chicago",
+    "sanFrancisco": "São Francisco",
+    "miami": "Miami",
+    "seattle": "Seattle",
+    "mumbai": "Mumbai",
+    "pune": "Pune",
+    "bangalore": "Bangalore",
+    "hyderabad": "Hyderabad",
+    "delhi": "Delhi",
+    "chennai": "Chennai"
+  },
+  "streams": {
+    "webDevelopment": "Desenvolvimento Web",
+    "appDevelopment": "Desenvolvimento de Aplicativos",
+    "javaDevelopment": "Desenvolvimento Java",
+    "pythonDevelopment": "Desenvolvimento Python",
+    "dataScience": "Ciência de Dados",
+    "uiuxDesign": "Design UI/UX",
+    "softwareDevelopment": "Desenvolvimento de Software",
+    "marketing": "Marketing",
+    "finance": "Finanças",
+    "humanResources": "Recursos Humanos",
+    "sales": "Vendas",
+    "management": "Gestão"
+  },
+  "links": {
+    "About Us": "Sobre nós",
+    "Contact Us": "Fale conosco",
+    "Our Team": "Nossa equipe",
+    "Careers": "Carreiras",
+    "Terms & Conditions": "Termos e condições",
+    "Privacy Policy": "Política de privacidade",
+    "Home": "Início",
+    "Internships": "Estágios",
+    "Jobs": "Empregos"
+  }
+},
+
+  "details": { "loginToApply": "Faça login para se candidatar a este estágio.", "internshipOnly": "A candidatura está disponível atualmente apenas para estágios.", "applicationSuccess": "Candidatura enviada com sucesso!", "applicationFailed": "Falha ao se candidatar ao estágio.", "loading": "Carregando detalhes...", "notFound": "Detalhes não encontrados", "notExist": "O estágio ou emprego que você procura não existe.", "goBack": "Voltar", "internship": "Estágio", "job": "Emprego", "applying": "Candidatando-se...", "applyNow": "Candidatar-se agora", "jobApplication": "Candidatura ao emprego", "location": "Localização", "stipend": "Bolsa", "duration": "Duração", "startDate": "Data de início", "notSpecified": "Não especificado", "category": "Categoria", "aboutCompany": "Sobre a empresa", "aboutInternshipJob": "Sobre o estágio / emprego", "whoCanApply": "Quem pode se candidatar", "perks": "Benefícios", "additionalInformation": "Informações adicionais", "noInformation": "Nenhuma informação disponível.", "numberOfOpenings": "Número de vagas:", "interested": "Interessado neste estágio?", "nextStep": "Envie sua candidatura e dê o próximo passo em sua carreira." },
+
+  "friendRequests": { "title": "Solicitações de amizade", "noRequests": "Não há solicitações de amizade pendentes.", "accept": "Aceitar", "reject": "Rejeitar", "fetchFailed": "Falha ao buscar solicitações de amizade", "acceptSuccess": "Solicitação de amizade aceita com sucesso", "acceptFailed": "Falha ao aceitar a solicitação de amizade", "rejectSuccess": "Solicitação de amizade rejeitada com sucesso", "rejectFailed": "Falha ao rejeitar a solicitação de amizade" },
+
+  "internships": {
+  "filters": "Filtros",
+  "clearAll": "Limpar tudo",
+  "category": "Categoria",
+  "categoryPlaceholder": "ex. Desenvolvimento de software",
+  "location": "Localização",
+  "locationPlaceholder": "ex. Mumbai",
+  "workFromHome": "Trabalho remoto",
+  "partTime": "Meio período",
+  "monthlyStipend": "Bolsa mensal",
+  "internshipsFound": "{{count}} estágios encontrados",
+  "noInternshipsFound": "Nenhum estágio encontrado"
+},
+
+"jobs": {
+  "filters": "Filtros",
+  "clearAll": "Limpar tudo",
+  "category": "Categoria",
+  "categoryPlaceholder": "ex. Desenvolvedor de software",
+  "location": "Localização",
+  "locationPlaceholder": "ex. Mumbai",
+  "experience": "Experiência",
+  "experiencePlaceholder": "ex. 2 anos",
+  "workFromHome": "Trabalho remoto",
+  "partTime": "Meio período",
+  "annualSalary": "Salário anual (₹ em lakhs)",
+  "jobsFound": "{{count}} empregos encontrados",
+  "noJobsFound": "Nenhum emprego encontrado"
+},
+
+"otherUserProfile": { "fetchFailed": "Falha ao carregar o perfil do usuário", "requestSent": "Solicitação de amizade enviada com sucesso", "requestError": "Algo deu errado ao enviar a solicitação de amizade", "userNotFound": "Usuário não encontrado", "sending": "Enviando...", "requestSentButton": "Solicitação enviada", "addFriend": "Adicionar amigo", "phone": "Telefone", "location": "Localização", "qualification": "Qualificação", "skills": "Habilidades", "bio": "Biografia" },
+
+"publicSpace": {
+  "title": "Espaço público",
+  "description": "Compartilhe seus pensamentos, imagens e vídeos com a comunidade InternArea.",
+  "createPost": "Criar uma publicação pública",
+  "uploadMedia": "Enviar uma imagem ou vídeo",
+  "chooseFile": "Escolher arquivo",
+  "caption": "Legenda",
+  "captionPlaceholder": "Escreva algo sobre sua publicação...",
+  "uploading": "Enviando...",
+  "createPublicPost": "Criar publicação pública",
+  "maxFileSize": "Tamanho máximo do arquivo: 50MB",
+  "publicPosts": "Publicações públicas",
+  "loadingPosts": "Carregando publicações...",
+  "noPosts": "Ainda não há publicações públicas.",
+  "user": "Usuário",
+  "publicPostAlt": "Publicação pública",
+  "comments": "Comentários",
+  "writeComment": "Escreva um comentário...",
+  "comment": "Comentar",
+  "onlyImageVideo": "Apenas arquivos de imagem e vídeo são permitidos.",
+  "fileSizeError": "O tamanho do arquivo deve ser inferior a 50MB.",
+  "loginToLike": "Faça login para curtir uma publicação.",
+  "unableIdentifyUser": "Não foi possível identificar o usuário atual.",
+  "likeError": "Algo deu errado ao curtir a publicação.",
+  "loginToComment": "Faça login para comentar.",
+  "commentAdded": "Comentário adicionado com sucesso!",
+  "commentError": "Algo deu errado ao adicionar o comentário.",
+  "loginToShare": "Faça login para compartilhar uma publicação.",
+  "shareSuccess": "Publicação compartilhada com sucesso!",
+  "linkCopied": "Link da publicação copiado com sucesso!",
+  "shareError": "Algo deu errado ao compartilhar a publicação.",
+  "selectFile": "Selecione uma imagem ou vídeo.",
+  "uploadSuccess": "Publicação pública criada com sucesso!",
+  "uploadError": "Algo deu errado ao enviar a publicação.",
+  "shareTitle": "Espaço público InternArea",
+  "shareText": "Confira esta publicação no InternArea!"
+},
+
+
+  "subscriptions": {
+    "plans": "Planos InternArea",
+    "choosePlan": "Escolha seu plano de assinatura",
+    "subtitle": "Candidate-se a mais estágios todos os meses com um plano que se adapta aos seus objetivos de carreira.",
+    "paymentTime": "Os pagamentos da assinatura estão disponíveis apenas entre",
+    "paymentTimeRange": "10:00 e 11:00 IST",
+    "mostPopular": "Mais popular",
+    "month": "/mês",
+
+    "planNames": {
+      "free": "Grátis",
+      "bronze": "Bronze",
+      "silver": "Prata",
+      "gold": "Ouro"
+    },
+
+    "planDescriptions": {
+      "free": "Perfeito para começar",
+      "bronze": "Para estudantes que se candidatam regularmente",
+      "silver": "Para quem procura estágios ativamente",
+      "gold": "Melhor para quem procura emprego seriamente"
+    },
+
+    "applications": {
+      "free": "1 candidatura / mês",
+      "bronze": "3 candidaturas / mês",
+      "silver": "5 candidaturas / mês",
+      "gold": "Candidaturas ilimitadas"
+    },
+
+    "features": {
+      "free": [
+        "1 candidatura a estágio por mês",
+        "Explorar estágios",
+        "Explorar empregos",
+        "Criar perfil"
+      ],
+      "bronze": [
+        "3 candidaturas a estágio por mês",
+        "Explorar estágios",
+        "Explorar empregos",
+        "Criar perfil"
+      ],
+      "silver": [
+        "5 candidaturas a estágio por mês",
+        "Explorar estágios",
+        "Explorar empregos",
+        "Criar perfil"
+      ],
+      "gold": [
+        "Candidaturas ilimitadas a estágios",
+        "Explorar estágios",
+        "Explorar empregos",
+        "Criar perfil"
+      ]
+    },
+
+    "currentFreePlan": "Plano gratuito atual",
+    "upgradeTo": "Fazer upgrade para {{plan}}",
+
+    "bottomTitle": "Candidate-se de forma mais inteligente com o InternArea",
+    "bottomDescription": "Seu limite de candidaturas é redefinido todos os meses. Membros Gold podem se candidatar a estágios ilimitados.",
+
+    "loginRequired": "Faça login antes de comprar uma assinatura.",
+    "freePlanMessage": "O plano gratuito já está disponível sem pagamento.",
+    "invalidOrder": "Pedido de pagamento inválido recebido do servidor.",
+    "razorpayNotLoaded": "O Razorpay não foi carregado. Atualize a página e tente novamente.",
+    "activated": "Assinatura ativada com sucesso!",
+    "verificationFailed": "Falha na verificação do pagamento.",
+    "paymentCancelled": "O pagamento foi cancelado.",
+    "paymentFailed": "O pagamento falhou. Tente novamente.",
+    "createPaymentFailed": "Não foi possível criar o pagamento da assinatura."
+  }
+
+
+
+}

@@ -1,0 +1,491 @@
+{
+  "navbar": {
+    "home": "Home",
+    "internships": "Internships",
+    "jobs": "Jobs",
+    "plans": "Plans",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+
+   "home": {
+    "dreamCareer": "Make your dream career a reality",
+    "trending": "Trending on InternArea 🔥",
+
+    "growSkills": "Grow Your Skills",
+    "startCareer": "Start Your Career",
+    "learnBest": "Learn From The Best",
+    "connectCompanies": "Connect With Top Companies",
+
+    "activelyHiring": "Actively hiring",
+    "tbd": "TBD",
+    "immediate": "Immediate",
+    "internship": "Internship",
+    "viewDetails": "View Details",
+
+    "latestInternships": "Latest internships on InternArea"
+  },
+
+  "common": {
+    "applyNow": "Apply Now",
+    "viewDetails": "View details",
+    "location": "Location",
+    "duration": "Duration",
+    "stipend": "Stipend"
+  },
+
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Join InternArea today 🚀",
+    "fullName": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "creatingAccount": "Creating Account...",
+    "createAccount": "Create Account",
+    "or": "OR",
+    "continueGoogle": "Continue with Google",
+    "alreadyAccount": "Already have an account?",
+    "login": "Login"
+  },
+
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Login to continue",
+    "student": "Student",
+    "admin": "Admin",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember Me",
+    "forgotPassword": "Forgot Password?",
+    "loggingIn": "Logging In...",
+    "loginButton": "Login",
+    "or": "OR",
+    "googleLoginFailed": "Google Login Failed",
+    "noAccount": "Don't have an account?",
+    "register": "Register",
+    "loginFailed": "Login Failed",
+    "studentOption": "Please login using Student option",
+    "adminOption": "Please login using Admin option"
+  },
+
+  "forgotPassword": {
+    "title": "Forgot Password?",
+    "subtitle": "Enter your registered email or phone number.",
+    "emailOrPhone": "Email or Phone Number",
+    "placeholder": "Enter email or phone number",
+    "processing": "Processing...",
+    "resetPassword": "Reset Password",
+    "backToLogin": "Back to Login",
+    "enterRegistered": "Please enter your registered email or phone number",
+    "newPassword": "New Password",
+    "somethingWrong": "Something went wrong. Please try again."
+  },
+
+  "resumeBuilder": {
+    "title": "Create Your Resume",
+    "subtitle": "Build a professional resume and apply for internships easily.",
+    "personalInformation": "Personal Information",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter phone number",
+    "location": "Location",
+    "locationPlaceholder": "City, State",
+    "education": "Education",
+    "qualification": "Qualification",
+    "qualificationPlaceholder": "e.g. B.E. Computer Engineering",
+    "college": "College / University",
+    "collegePlaceholder": "Enter college name",
+    "graduationYear": "Graduation Year",
+    "graduationYearPlaceholder": "2027",
+    "experience": "Experience",
+    "experiencePlaceholder": "Describe your internship or work experience...",
+    "skills": "Skills",
+    "skillsPlaceholder": "e.g. React, Node.js, MongoDB, Java, SQL",
+    "projects": "Projects",
+    "projectsPlaceholder": "Describe your projects...",
+    "achievements": "Achievements",
+    "achievementsPlaceholder": "Certificates, hackathons, awards, etc.",
+    "socialProfiles": "Social Profiles",
+    "linkedin": "LinkedIn Profile",
+    "linkedinPlaceholder": "https://linkedin.com/in/username",
+    "github": "GitHub Profile",
+    "githubPlaceholder": "https://github.com/username",
+    "profilePhoto": "Profile Photo",
+    "uploadPhoto": "Upload Profile Photo",
+    "selected": "Selected",
+    "continuePreview": "Continue to Resume Preview",
+    "failedToSave": "Failed to save resume"
+  },
+
+  "adminEdit": {
+    "title": "Edit Admin Profile",
+    "uploadPhoto": "Upload Photo",
+    "removePhoto": "Remove Photo",
+    "profilePhotoUrl": "Profile Photo URL",
+    "imageUrlPlaceholder": "Or paste image URL here",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "location": "Location",
+    "saveChanges": "Save Changes",
+    "profileUpdated": "Profile Updated Successfully",
+    "profileUpdateFailed": "Profile Update Failed"
+  },
+
+  "createInternship": {
+    "title": "Create Internship",
+    "internshipTitle": "Internship Title",
+    "companyName": "Company Name",
+    "location": "Location",
+    "category": "Category",
+    "stipend": "Stipend",
+    "startDate": "Start Date",
+    "duration": "Duration",
+    "numberOfOpening": "Number Of Opening",
+    "aboutCompany": "About Company",
+    "aboutInternship": "About Internship",
+    "whoCanApply": "Who Can Apply",
+    "perks": "Perks",
+    "additionalInfo": "Additional Information",
+    "createButton": "Create Internship",
+    "success": "Internship created successfully",
+    "failed": "Failed to create internship"
+  },
+
+  "dashboard": {
+    "title": "Admin Dashboard",
+    "description": "Manage your job postings, internships, and applicant tracking from one place.",
+    "jobApplications": "Job Applications",
+    "totalApplications": "Total received applications",
+    "viewApplications": "View Applications",
+    "addJob": "Add Job",
+    "createJob": "Create Job",
+    "postNewJob": "Post a new job opening",
+    "postNewJobButton": "Post New Job",
+    "addInternship": "Add Internship",
+    "createInternship": "Create Internship",
+    "postNewInternship": "Post a new internship",
+    "postInternship": "Post Internship"
+  },
+
+  "adminProfile": {
+    "adminName": "Admin Name",
+    "admin": "ADMIN",
+    "phone": "Phone Number",
+    "location": "Location",
+    "notAdded": "Not Added",
+    "editProfile": "Edit Profile"
+  },
+
+  "editProfile": {
+    "title": "Edit Profile",
+    "subtitle": "Update your personal details and professional identity",
+    "uploadPhoto": "Upload Photo",
+    "removePhoto": "Remove Photo",
+    "profilePhotoUrl": "Profile Photo URL",
+    "imageUrlPlaceholder": "You can also paste an image URL directly",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "location": "Location",
+    "qualification": "Qualification",
+    "skills": "Skills",
+    "skillsPlaceholder": "e.g. React, Node.js, MongoDB",
+    "bio": "Bio",
+    "saveChanges": "Save Changes",
+    "photoSizeError": "Please select a photo smaller than 10MB.",
+    "profileUpdated": "Profile Updated Successfully",
+    "profileUpdateFailed": "Profile Update Failed"
+  },
+
+
+"profile": {
+  "phone": "Phone",
+  "location": "Location",
+  "qualification": "Qualification",
+  "skills": "Skills",
+  "bio": "Bio",
+  "notAdded": "Not added",
+  "noBio": "No bio added",
+  "myResume": "My Resume",
+  "loadingResume": "Loading resume...",
+  "resumeSaved": "Resume saved successfully.",
+  "viewResume": "View Resume",
+  "editResume": "Edit Resume",
+  "noResume": "No resume found.",
+  "createResume": "Create Resume",
+  "editProfile": "Edit Profile",
+  "addFriend": "Add Friend",
+  "addPost": "Add Post",
+  "loginHistory": "Login History",
+  "loadingLoginHistory": "Loading login history...",
+  "noLoginHistory": "No login history found.",
+  "browser": "Browser",
+  "operatingSystem": "Operating System",
+  "device": "Device",
+  "ipAddress": "IP Address",
+  "status": "Status",
+  "loginTime": "Login Time",
+  "unknown": "Unknown"
+},
+
+  "applications": {
+    "title": "Total Applications",
+    "subtitle": "Applications received for jobs/internships posted by you.",
+    "companyTitle": "Company / Title",
+    "category": "Category",
+    "appliedBy": "Applied By",
+    "date": "Date",
+    "status": "Status",
+    "action": "Action",
+    "noApplications": "No applications found for your postings.",
+    "internship": "Internship",
+    "job": "Job",
+    "position": "Position",
+    "anonymousUser": "Anonymous User",
+    "viewCandidate": "View Candidate Profile",
+    "accept": "Accept Application",
+    "reject": "Reject Application",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "selected": "Selected",
+    "rejected": "Rejected"
+  },
+
+  "internshipCard": {
+    "activelyHiring": "Actively Hiring",
+    "job": "Job",
+    "internship": "Internship",
+    "viewDetails": "View Details"
+  },
+
+ "internshipSection": {
+  "all": "All",
+  "internship": "Internship",
+  "jobs": "Jobs",
+  "latestInternships": "Latest Internships",
+  "noInternships": "No internships available",
+  "latestJobs": "Latest Jobs",
+  "noJobs": "No jobs available",
+  "internships": "internships",
+  "students": "students",
+  "learners": "learners"
+},
+
+"footer": {
+  "internshipsByPlaces": "Internships by Places",
+  "internshipsByStream": "Internships by Stream",
+  "jobsByPlaces": "Jobs by Places",
+  "jobsByStream": "Jobs by Stream",
+  "about": "About",
+  "ourTeam": "Our Team",
+  "legal": "Legal",
+  "quickLinks": "Quick Links",
+  "availableOn": "Available on",
+  "copyright": "© 2026 InternArea. All rights reserved.",
+  "places": {
+    "newYork": "New York",
+    "losAngeles": "Los Angeles",
+    "chicago": "Chicago",
+    "sanFrancisco": "San Francisco",
+    "miami": "Miami",
+    "seattle": "Seattle",
+    "mumbai": "Mumbai",
+    "pune": "Pune",
+    "bangalore": "Bangalore",
+    "hyderabad": "Hyderabad",
+    "delhi": "Delhi",
+    "chennai": "Chennai"
+  },
+  "streams": {
+    "webDevelopment": "Web Development",
+    "appDevelopment": "App Development",
+    "javaDevelopment": "Java Development",
+    "pythonDevelopment": "Python Development",
+    "dataScience": "Data Science",
+    "uiuxDesign": "UI/UX Design",
+    "softwareDevelopment": "Software Development",
+    "marketing": "Marketing",
+    "finance": "Finance",
+    "humanResources": "Human Resources",
+    "sales": "Sales",
+    "management": "Management"
+  },
+  "links": {
+    "About Us": "About Us",
+    "Contact Us": "Contact Us",
+    "Our Team": "Our Team",
+    "Careers": "Careers",
+    "Terms & Conditions": "Terms & Conditions",
+    "Privacy Policy": "Privacy Policy",
+    "Home": "Home",
+    "Internships": "Internships",
+    "Jobs": "Jobs"
+  }
+},
+
+  "details": { "loginToApply": 
+  "Please login to apply for this internship.",
+   "internshipOnly": "Application is currently available only for internships.",
+    "applicationSuccess": "Application submitted successfully!", "applicationFailed": "Failed to apply for internship.", "loading": "Loading details...", "notFound": "Details Not Found", "notExist": "The internship or job you are looking for does not exist.", "goBack": "Go Back", "internship": "Internship", "job": "Job", "applying": "Applying...", "applyNow": "Apply Now", "jobApplication": "Job Application", "location": "Location", "stipend": "Stipend", "duration": "Duration", "startDate": "Start Date", "notSpecified": "Not specified", 
+  "category": "Category", "aboutCompany": "About Company", "aboutInternshipJob": "About Internship / Job", "whoCanApply": "Who Can Apply", "perks": "Perks", "additionalInformation": "Additional Information", "noInformation": "No information available.", "numberOfOpenings": "Number Of Openings:", "interested": "Interested in this internship?", "nextStep": "Submit your application and take the next step in your career." },
+
+  "friendRequests": { "title": "Friend Requests", 
+  "noRequests": "No pending friend requests.", 
+  "accept": "Accept", "reject": "Reject", 
+  "fetchFailed": "Failed to fetch friend requests",
+   "acceptSuccess": "Friend request accepted successfully",
+    "acceptFailed": "Failed to accept friend request", 
+    "rejectSuccess": "Friend request rejected successfully", 
+  "rejectFailed": "Failed to reject friend request" },
+
+  "internships": {
+  "filters": "Filters",
+  "clearAll": "Clear all",
+  "category": "Category",
+  "categoryPlaceholder": "e.g. Software Development",
+  "location": "Location",
+  "locationPlaceholder": "e.g. Mumbai",
+  "workFromHome": "Work from home",
+  "partTime": "Part-time",
+  "monthlyStipend": "Monthly Stipend",
+  "internshipsFound": "{{count}} Internships found",
+  "noInternshipsFound": "No Internships Found"
+},
+
+"jobs": { "filters": "Filters", "clearAll": "Clear all", "category": "Category", "categoryPlaceholder": "e.g. Software Developer", "location": "Location", "locationPlaceholder": "e.g. Mumbai", "experience": "Experience", "experiencePlaceholder": "e.g. 2 years", "workFromHome": "Work from home", "partTime": "Part-time", "annualSalary": "Annual Salary (₹ in lakhs)", "jobsFound": "{{count}} Jobs found", "noJobsFound": "No Jobs Found" },
+
+"otherUserProfile": {
+  "fetchFailed": "Failed to load user profile",
+  "requestSent": "Friend request sent successfully",
+  "requestError": "Something went wrong while sending friend request",
+  "userNotFound": "User not found",
+  "sending": "Sending...",
+  "requestSentButton": "Request Sent",
+  "addFriend": "Add Friend",
+  "phone": "Phone",
+  "location": "Location",
+  "qualification": "Qualification",
+  "skills": "Skills",
+  "bio": "Bio"
+},
+
+"publicSpace": {
+  "title": "Public Space",
+  "description": "Share your thoughts, images, and videos with the InternArea community.",
+  "createPost": "Create a Public Post",
+  "uploadMedia": "Upload an image or video",
+  "chooseFile": "Choose File",
+  "caption": "Caption",
+  "captionPlaceholder": "Write something about your post...",
+  "uploading": "Uploading...",
+  "createPublicPost": "Create Public Post",
+  "maxFileSize": "Maximum file size: 50MB",
+  "publicPosts": "Public Posts",
+  "loadingPosts": "Loading posts...",
+  "noPosts": "No public posts yet.",
+  "user": "User",
+  "publicPostAlt": "Public post",
+  "comments": "Comments",
+  "writeComment": "Write a comment...",
+  "comment": "Comment",
+  "onlyImageVideo": "Only image and video files are allowed.",
+  "fileSizeError": "File size must be less than 50MB.",
+  "loginToLike": "Please login to like a post.",
+  "unableIdentifyUser": "Unable to identify current user.",
+  "likeError": "Something went wrong while liking the post.",
+  "loginToComment": "Please login to comment.",
+  "commentAdded": "Comment added successfully!",
+  "commentError": "Something went wrong while adding comment.",
+  "loginToShare": "Please login to share a post.",
+  "shareSuccess": "Post shared successfully!",
+  "linkCopied": "Post link copied successfully!",
+  "shareError": "Something went wrong while sharing the post.",
+  "selectFile": "Please select an image or video.",
+  "uploadSuccess": "Public post created successfully!",
+  "uploadError": "Something went wrong while uploading the post.",
+  "shareTitle": "InternArea Public Space",
+  "shareText": "Check out this post on InternArea!"
+},
+
+
+  "subscriptions": {
+    "plans": "InternArea Plans",
+    "choosePlan": "Choose Your Subscription Plan",
+    "subtitle": "Apply to more internships every month with a plan that fits your career goals.",
+    "paymentTime": "Subscription payments are available only between",
+    "paymentTimeRange": "10:00 AM and 11:00 AM IST",
+    "mostPopular": "Most Popular",
+    "month": "/month",
+
+    "planNames": {
+      "free": "Free",
+      "bronze": "Bronze",
+      "silver": "Silver",
+      "gold": "Gold"
+    },
+
+    "planDescriptions": {
+      "free": "Perfect for getting started",
+      "bronze": "For students applying regularly",
+      "silver": "For active internship seekers",
+      "gold": "Best for serious job seekers"
+    },
+
+    "applications": {
+      "free": "1 application / month",
+      "bronze": "3 applications / month",
+      "silver": "5 applications / month",
+      "gold": "Unlimited applications"
+    },
+
+    "features": {
+      "free": [
+        "1 internship application per month",
+        "Browse internships",
+        "Browse jobs",
+        "Create profile"
+      ],
+      "bronze": [
+        "3 internship applications per month",
+        "Browse internships",
+        "Browse jobs",
+        "Create profile"
+      ],
+      "silver": [
+        "5 internship applications per month",
+        "Browse internships",
+        "Browse jobs",
+        "Create profile"
+      ],
+      "gold": [
+        "Unlimited internship applications",
+        "Browse internships",
+        "Browse jobs",
+        "Create profile"
+      ]
+    },
+
+    "currentFreePlan": "Current Free Plan",
+    "upgradeTo": "Upgrade to {{plan}}",
+
+    "bottomTitle": "Apply smarter with InternArea",
+    "bottomDescription": "Your application limit resets every month. Gold members can apply to unlimited internships.",
+
+    "loginRequired": "Please login before purchasing a subscription.",
+    "freePlanMessage": "Free plan is already available without payment.",
+    "invalidOrder": "Invalid payment order received from server.",
+    "razorpayNotLoaded": "Razorpay is not loaded. Please refresh the page and try again.",
+    "activated": "Subscription activated successfully!",
+    "verificationFailed": "Payment verification failed.",
+    "paymentCancelled": "Payment was cancelled.",
+    "paymentFailed": "Payment failed. Please try again.",
+    "createPaymentFailed": "Unable to create subscription payment."
+  }
+
+}

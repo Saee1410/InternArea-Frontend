@@ -1,0 +1,471 @@
+{
+  "navbar": {
+    "home": "होम",
+    "internships": "इंटर्नशिप",
+    "jobs": "नौकरियां",
+    "plans": "प्लान",
+    "login": "लॉगिन",
+    "register": "रजिस्टर",
+    "profile": "प्रोफ़ाइल",
+    "logout": "लॉगआउट"
+  },
+
+  
+  "home": {
+    "dreamCareer": "अपने सपनों के करियर को हकीकत बनाएं",
+    "trending": "InternArea पर ट्रेंडिंग 🔥",
+
+    "growSkills": "अपने कौशल को बढ़ाएं",
+    "startCareer": "अपना करियर शुरू करें",
+    "learnBest": "सर्वश्रेष्ठ लोगों से सीखें",
+    "connectCompanies": "शीर्ष कंपनियों से जुड़ें",
+
+    "activelyHiring": "सक्रिय रूप से भर्ती",
+    "tbd": "निर्धारित किया जाना बाकी",
+    "immediate": "तुरंत",
+    "internship": "इंटर्नशिप",
+    "viewDetails": "विवरण देखें",
+
+    "latestInternships": "InternArea पर नवीनतम इंटर्नशिप"
+  },
+
+
+  "common": {
+    "applyNow": "अभी आवेदन करें",
+    "viewDetails": "विवरण देखें",
+    "location": "स्थान",
+    "duration": "अवधि",
+    "stipend": "वेतन"
+  },
+
+  "register": {
+  "title": "खाता बनाएं",
+  "subtitle": "आज ही InternArea से जुड़ें 🚀",
+  "fullName": "पूरा नाम",
+  "email": "ईमेल",
+  "password": "पासवर्ड",
+  "creatingAccount": "खाता बनाया जा रहा है...",
+  "createAccount": "खाता बनाएं",
+  "or": "या",
+  "continueGoogle": "Google के साथ जारी रखें",
+  "alreadyAccount": "क्या आपके पास पहले से खाता है?",
+  "login": "लॉग इन करें"
+},
+"login": {
+  "title": "वापसी पर स्वागत है",
+  "subtitle": "जारी रखने के लिए लॉग इन करें",
+  "student": "छात्र",
+  "admin": "प्रशासक",
+  "email": "ईमेल",
+  "password": "पासवर्ड",
+  "rememberMe": "मुझे याद रखें",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "loggingIn": "लॉग इन किया जा रहा है...",
+  "loginButton": "लॉग इन करें",
+  "or": "या",
+  "googleLoginFailed": "Google से लॉग इन करने में विफल",
+  "noAccount": "क्या आपके पास खाता नहीं है?",
+  "register": "रजिस्टर करें",
+  "loginFailed": "लॉग इन विफल",
+  "studentOption": "कृपया छात्र विकल्प का उपयोग करके लॉग इन करें",
+  "adminOption": "कृपया प्रशासक विकल्प का उपयोग करके लॉग इन करें"
+},
+"forgotPassword": {
+  "title": "पासवर्ड भूल गए?",
+  "subtitle": "अपना पंजीकृत ईमेल या फोन नंबर दर्ज करें।",
+  "emailOrPhone": "ईमेल या फोन नंबर",
+  "placeholder": "ईमेल या फोन नंबर दर्ज करें",
+  "processing": "प्रक्रिया जारी है...",
+  "resetPassword": "पासवर्ड रीसेट करें",
+  "backToLogin": "लॉगिन पर वापस जाएं",
+  "enterRegistered": "कृपया अपना पंजीकृत ईमेल या फोन नंबर दर्ज करें",
+  "newPassword": "नया पासवर्ड",
+  "somethingWrong": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।"
+},
+"resumeBuilder": {
+  "title": "अपना रिज्यूमे बनाएं",
+  "subtitle": "एक प्रोफेशनल रिज्यूमे बनाएं और आसानी से इंटर्नशिप के लिए आवेदन करें।",
+  "personalInformation": "व्यक्तिगत जानकारी",
+  "fullName": "पूरा नाम",
+  "fullNamePlaceholder": "अपना पूरा नाम दर्ज करें",
+  "email": "ईमेल",
+  "emailPlaceholder": "अपना ईमेल दर्ज करें",
+  "phone": "फोन नंबर",
+  "phonePlaceholder": "फोन नंबर दर्ज करें",
+  "location": "स्थान",
+  "locationPlaceholder": "शहर, राज्य",
+  "education": "शिक्षा",
+  "qualification": "शैक्षणिक योग्यता",
+  "qualificationPlaceholder": "जैसे B.E. Computer Engineering",
+  "college": "कॉलेज / विश्वविद्यालय",
+  "collegePlaceholder": "कॉलेज का नाम दर्ज करें",
+  "graduationYear": "ग्रेजुएशन वर्ष",
+  "graduationYearPlaceholder": "2027",
+  "experience": "अनुभव",
+  "experiencePlaceholder": "अपनी इंटर्नशिप या कार्य अनुभव का वर्णन करें...",
+  "skills": "कौशल",
+  "skillsPlaceholder": "जैसे React, Node.js, MongoDB, Java, SQL",
+  "projects": "प्रोजेक्ट्स",
+  "projectsPlaceholder": "अपने प्रोजेक्ट्स का वर्णन करें...",
+  "achievements": "उपलब्धियां",
+  "achievementsPlaceholder": "प्रमाणपत्र, हैकाथॉन, पुरस्कार आदि।",
+  "socialProfiles": "सोशल प्रोफाइल",
+  "linkedin": "LinkedIn प्रोफाइल",
+  "linkedinPlaceholder": "https://linkedin.com/in/username",
+  "github": "GitHub प्रोफाइल",
+  "githubPlaceholder": "https://github.com/username",
+  "profilePhoto": "प्रोफाइल फोटो",
+  "uploadPhoto": "प्रोफाइल फोटो अपलोड करें",
+  "selected": "चयनित",
+  "continuePreview": "रिज्यूमे प्रीव्यू पर जाएं",
+  "failedToSave": "रिज्यूमे सेव करने में विफल"
+},
+"dashboard": {
+  "title": "व्यवस्थापक डैशबोर्ड",
+  "description": "एक ही जगह से अपनी नौकरी की पोस्टिंग, इंटर्नशिप और आवेदकों को प्रबंधित करें।",
+  "jobApplications": "नौकरी के आवेदन",
+  "totalApplications": "प्राप्त आवेदनों की कुल संख्या",
+  "viewApplications": "आवेदन देखें",
+  "addJob": "नौकरी जोड़ें",
+  "createJob": "नौकरी बनाएं",
+  "postNewJob": "नई नौकरी पोस्ट करें",
+  "postNewJobButton": "नई नौकरी पोस्ट करें",
+  "addInternship": "इंटर्नशिप जोड़ें",
+  "createInternship": "इंटर्नशिप बनाएं",
+  "postNewInternship": "नई इंटर्नशिप पोस्ट करें",
+  "postInternship": "इंटर्नशिप पोस्ट करें"
+},
+"createInternship": {
+  "title": "इंटर्नशिप बनाएं",
+  "internshipTitle": "इंटर्नशिप का शीर्षक",
+  "companyName": "कंपनी का नाम",
+  "location": "स्थान",
+  "category": "श्रेणी",
+  "stipend": "स्टाइपेंड",
+  "startDate": "प्रारंभ तिथि",
+  "duration": "अवधि",
+  "numberOfOpening": "रिक्तियों की संख्या",
+  "aboutCompany": "कंपनी के बारे में",
+  "aboutInternship": "इंटर्नशिप के बारे में",
+  "whoCanApply": "कौन आवेदन कर सकता है",
+  "perks": "लाभ",
+  "additionalInfo": "अतिरिक्त जानकारी",
+  "createButton": "इंटर्नशिप बनाएं",
+  "success": "इंटर्नशिप सफलतापूर्वक बनाई गई",
+  "failed": "इंटर्नशिप बनाने में विफल"
+},
+"createJob": {
+  "title": "नौकरी बनाएं",
+  "companyName": "कंपनी का नाम",
+  "jobTitle": "नौकरी का शीर्षक",
+  "location": "स्थान",
+  "category": "श्रेणी",
+  "salaryPackage": "वेतन / पैकेज",
+  "joiningDate": "ज्वाइन करने की तारीख",
+  "experienceDuration": "अनुभव / अवधि",
+  "aboutCompany": "कंपनी के बारे में",
+  "jobDescription": "नौकरी का विवरण",
+  "whoCanApply": "कौन आवेदन कर सकता है",
+  "perks": "लाभ",
+  "additionalInfo": "अतिरिक्त जानकारी",
+  "numberOfOpenings": "रिक्तियों की संख्या",
+  "createButton": "नौकरी बनाएं",
+  "success": "नौकरी सफलतापूर्वक बनाई गई",
+  "failed": "कुछ गलत हो गया"
+},
+"editProfile": {
+  "title": "प्रोफ़ाइल संपादित करें",
+  "subtitle": "अपनी व्यक्तिगत जानकारी और पेशेवर पहचान अपडेट करें",
+  "uploadPhoto": "फोटो अपलोड करें",
+  "removePhoto": "फोटो हटाएं",
+  "profilePhotoUrl": "प्रोफ़ाइल फोटो URL",
+  "imageUrlPlaceholder": "आप सीधे इमेज URL भी पेस्ट कर सकते हैं",
+  "fullName": "पूरा नाम",
+  "email": "ईमेल",
+  "phone": "फोन नंबर",
+  "location": "स्थान",
+  "qualification": "शैक्षणिक योग्यता",
+  "skills": "कौशल",
+  "skillsPlaceholder": "जैसे React, Node.js, MongoDB",
+  "bio": "बायो",
+  "saveChanges": "परिवर्तन सहेजें",
+  "photoSizeError": "कृपया 10MB से छोटी फोटो चुनें।",
+  "profileUpdated": "प्रोफ़ाइल सफलतापूर्वक अपडेट हुई",
+  "profileUpdateFailed": "प्रोफ़ाइल अपडेट करने में विफल"
+},
+
+
+"profile": {
+  "phone": "फ़ोन",
+  "location": "स्थान",
+  "qualification": "योग्यता",
+  "skills": "कौशल",
+  "bio": "बायो",
+  "notAdded": "जोड़ा नहीं गया",
+  "noBio": "कोई बायो नहीं जोड़ा गया",
+  "myResume": "मेरा रिज़्यूमे",
+  "loadingResume": "रिज़्यूमे लोड हो रहा है...",
+  "resumeSaved": "रिज़्यूमे सफलतापूर्वक सेव हो गया।",
+  "viewResume": "रिज़्यूमे देखें",
+  "editResume": "रिज़्यूमे संपादित करें",
+  "noResume": "कोई रिज़्यूमे नहीं मिला।",
+  "createResume": "रिज़्यूमे बनाएं",
+  "editProfile": "प्रोफ़ाइल संपादित करें",
+  "addFriend": "मित्र जोड़ें",
+  "addPost": "पोस्ट जोड़ें",
+  "loginHistory": "लॉगिन इतिहास",
+  "loadingLoginHistory": "लॉगिन इतिहास लोड हो रहा है...",
+  "noLoginHistory": "कोई लॉगिन इतिहास नहीं मिला।",
+  "browser": "ब्राउज़र",
+  "operatingSystem": "ऑपरेटिंग सिस्टम",
+  "device": "डिवाइस",
+  "ipAddress": "आईपी पता",
+  "status": "स्थिति",
+  "loginTime": "लॉगिन समय",
+  "unknown": "अज्ञात"
+},
+
+  "applications": {
+    "title": "कुल आवेदन",
+    "subtitle": "आपके द्वारा पोस्ट की गई नौकरियों/इंटर्नशिप के लिए प्राप्त आवेदन।",
+    "companyTitle": "कंपनी / पद",
+    "category": "श्रेणी",
+    "appliedBy": "आवेदनकर्ता",
+    "date": "तारीख",
+    "status": "स्थिति",
+    "action": "कार्य",
+    "noApplications": "आपकी पोस्टिंग के लिए कोई आवेदन नहीं मिला।",
+    "internship": "इंटर्नशिप",
+    "job": "नौकरी",
+    "position": "पद",
+    "anonymousUser": "अनाम उपयोगकर्ता",
+    "viewCandidate": "उम्मीदवार की प्रोफ़ाइल देखें",
+    "accept": "आवेदन स्वीकार करें",
+    "reject": "आवेदन अस्वीकार करें",
+    "pending": "लंबित",
+    "accepted": "स्वीकृत",
+    "selected": "चयनित",
+    "rejected": "अस्वीकृत"
+  },
+  "internshipCard": {
+    "activelyHiring": "सक्रिय रूप से भर्ती",
+    "job": "नौकरी",
+    "internship": "इंटर्नशिप",
+    "viewDetails": "विवरण देखें"
+  },
+   
+  "internshipSection": {
+  "all": "सभी",
+  "internship": "इंटर्नशिप",
+  "jobs": "नौकरियां",
+  "latestInternships": "नवीनतम इंटर्नशिप",
+  "noInternships": "कोई इंटर्नशिप उपलब्ध नहीं है",
+  "latestJobs": "नवीनतम नौकरियां",
+  "noJobs": "कोई नौकरी उपलब्ध नहीं है",
+  "internships": "इंटर्नशिप",
+  "students": "छात्र",
+  "learners": "शिक्षार्थी"
+},
+
+   
+  "footer": {
+  "internshipsByPlaces": "स्थान के अनुसार इंटर्नशिप",
+  "internshipsByStream": "स्ट्रीम के अनुसार इंटर्नशिप",
+  "jobsByPlaces": "स्थान के अनुसार नौकरियां",
+  "jobsByStream": "स्ट्रीम के अनुसार नौकरियां",
+  "about": "हमारे बारे में",
+  "ourTeam": "हमारी टीम",
+  "legal": "कानूनी",
+  "quickLinks": "त्वरित लिंक",
+  "availableOn": "उपलब्ध है",
+  "copyright": "© 2026 InternArea. सर्वाधिकार सुरक्षित।",
+  "places": {
+    "newYork": "न्यूयॉर्क",
+    "losAngeles": "लॉस एंजिल्स",
+    "chicago": "शिकागो",
+    "sanFrancisco": "सैन फ्रांसिस्को",
+    "miami": "मियामी",
+    "seattle": "सिएटल",
+    "mumbai": "मुंबई",
+    "pune": "पुणे",
+    "bangalore": "बैंगलोर",
+    "hyderabad": "हैदराबाद",
+    "delhi": "दिल्ली",
+    "chennai": "चेन्नई"
+  },
+  "streams": {
+    "webDevelopment": "वेब डेवलपमेंट",
+    "appDevelopment": "ऐप डेवलपमेंट",
+    "javaDevelopment": "जावा डेवलपमेंट",
+    "pythonDevelopment": "पायथन डेवलपमेंट",
+    "dataScience": "डेटा साइंस",
+    "uiuxDesign": "UI/UX डिज़ाइन",
+    "softwareDevelopment": "सॉफ्टवेयर डेवलपमेंट",
+    "marketing": "मार्केटिंग",
+    "finance": "वित्त",
+    "humanResources": "मानव संसाधन",
+    "sales": "बिक्री",
+    "management": "प्रबंधन"
+  },
+  "links": {
+    "About Us": "हमारे बारे में",
+    "Contact Us": "संपर्क करें",
+    "Our Team": "हमारी टीम",
+    "Careers": "करियर",
+    "Terms & Conditions": "नियम और शर्तें",
+    "Privacy Policy": "गोपनीयता नीति",
+    "Home": "होम",
+    "Internships": "इंटर्नशिप",
+    "Jobs": "नौकरियां"
+  }
+},
+
+  "details": { "loginToApply": "इस इंटर्नशिप के लिए आवेदन करने के लिए कृपया लॉगिन करें।", "internshipOnly": "आवेदन वर्तमान में केवल इंटर्नशिप के लिए उपलब्ध है।", "applicationSuccess": "आवेदन सफलतापूर्वक जमा किया गया!", "applicationFailed": "इंटर्नशिप के लिए आवेदन करने में विफल।", "loading": "विवरण लोड हो रहा है...", "notFound": "विवरण नहीं मिला", "notExist": "आप जिस इंटर्नशिप या नौकरी की तलाश कर रहे हैं वह मौजूद नहीं है।", "goBack": "वापस जाएं", "internship": "इंटर्नशिप", "job": "नौकरी", "applying": "आवेदन हो रहा है...", "applyNow": "अभी आवेदन करें", "jobApplication": "नौकरी के लिए आवेदन", "location": "स्थान", "stipend": "स्टाइपेंड", "duration": "अवधि", "startDate": "शुरुआत की तारीख", "notSpecified": "निर्दिष्ट नहीं है", "category": "श्रेणी", "aboutCompany": "कंपनी के बारे में", "aboutInternshipJob": "इंटर्नशिप / नौकरी के बारे में", "whoCanApply": "कौन आवेदन कर सकता है", "perks": "लाभ", "additionalInformation": "अतिरिक्त जानकारी", "noInformation": "कोई जानकारी उपलब्ध नहीं है।", "numberOfOpenings": "कुल रिक्तियां:", "interested": "क्या आप इस इंटर्नशिप में रुचि रखते हैं?", "nextStep": "अपना आवेदन जमा करें और अपने करियर में अगला कदम उठाएं।" },
+
+  "friendRequests": { "title": "मित्र अनुरोध", "noRequests": "कोई लंबित मित्र अनुरोध नहीं है।", "accept": "स्वीकार करें", "reject": "अस्वीकार करें", "fetchFailed": "मित्र अनुरोध प्राप्त करने में विफल", "acceptSuccess": "मित्र अनुरोध सफलतापूर्वक स्वीकार किया गया", "acceptFailed": "मित्र अनुरोध स्वीकार करने में विफल", "rejectSuccess": "मित्र अनुरोध सफलतापूर्वक अस्वीकार किया गया", "rejectFailed": "मित्र अनुरोध अस्वीकार करने में विफल" },
+
+  "internships": {
+  "filters": "फ़िल्टर",
+  "clearAll": "सभी साफ़ करें",
+  "category": "श्रेणी",
+  "categoryPlaceholder": "जैसे सॉफ्टवेयर डेवलपमेंट",
+  "location": "स्थान",
+  "locationPlaceholder": "जैसे मुंबई",
+  "workFromHome": "घर से काम",
+  "partTime": "पार्ट-टाइम",
+  "monthlyStipend": "मासिक स्टाइपेंड",
+  "internshipsFound": "{{count}} इंटर्नशिप मिलीं",
+  "noInternshipsFound": "कोई इंटर्नशिप नहीं मिली"
+},
+
+"jobs": { "filters": "फ़िल्टर", "clearAll": "सभी साफ़ करें", "category": "श्रेणी", "categoryPlaceholder": "जैसे सॉफ्टवेयर डेवलपर", "location": "स्थान", "locationPlaceholder": "जैसे मुंबई", "experience": "अनुभव", "experiencePlaceholder": "जैसे 2 वर्ष", "workFromHome": "घर से काम", "partTime": "पार्ट-टाइम", "annualSalary": "वार्षिक वेतन (₹ लाख में)", "jobsFound": "{{count}} नौकरियां मिलीं", "noJobsFound": "कोई नौकरी नहीं मिली" },
+
+"otherUserProfile": {
+  "fetchFailed": "यूज़र प्रोफ़ाइल लोड करने में विफल",
+  "requestSent": "मित्र अनुरोध सफलतापूर्वक भेजा गया",
+  "requestError": "मित्र अनुरोध भेजते समय कुछ गलत हो गया",
+  "userNotFound": "यूज़र नहीं मिला",
+  "sending": "भेजा जा रहा है...",
+  "requestSentButton": "अनुरोध भेजा गया",
+  "addFriend": "मित्र जोड़ें",
+  "phone": "फ़ोन",
+  "location": "स्थान",
+  "qualification": "योग्यता",
+  "skills": "कौशल",
+  "bio": "बायो"
+},
+
+"publicSpace": {
+  "title": "पब्लिक स्पेस",
+  "description": "InternArea समुदाय के साथ अपने विचार, चित्र और वीडियो साझा करें।",
+  "createPost": "पब्लिक पोस्ट बनाएं",
+  "uploadMedia": "चित्र या वीडियो अपलोड करें",
+  "chooseFile": "फ़ाइल चुनें",
+  "caption": "कैप्शन",
+  "captionPlaceholder": "अपनी पोस्ट के बारे में कुछ लिखें...",
+  "uploading": "अपलोड हो रहा है...",
+  "createPublicPost": "पब्लिक पोस्ट बनाएं",
+  "maxFileSize": "अधिकतम फ़ाइल आकार: 50MB",
+  "publicPosts": "पब्लिक पोस्ट",
+  "loadingPosts": "पोस्ट लोड हो रही हैं...",
+  "noPosts": "अभी तक कोई पब्लिक पोस्ट नहीं है।",
+  "user": "यूज़र",
+  "publicPostAlt": "पब्लिक पोस्ट",
+  "comments": "टिप्पणियां",
+  "writeComment": "एक टिप्पणी लिखें...",
+  "comment": "टिप्पणी",
+  "onlyImageVideo": "केवल चित्र और वीडियो फ़ाइलें स्वीकार की जाती हैं।",
+  "fileSizeError": "फ़ाइल का आकार 50MB से कम होना चाहिए।",
+  "loginToLike": "पोस्ट को लाइक करने के लिए कृपया लॉगिन करें।",
+  "unableIdentifyUser": "वर्तमान यूज़र की पहचान करने में असमर्थ।",
+  "likeError": "पोस्ट को लाइक करते समय कुछ गलत हो गया।",
+  "loginToComment": "टिप्पणी करने के लिए कृपया लॉगिन करें।",
+  "commentAdded": "टिप्पणी सफलतापूर्वक जोड़ दी गई!",
+  "commentError": "टिप्पणी जोड़ते समय कुछ गलत हो गया।",
+  "loginToShare": "पोस्ट साझा करने के लिए कृपया लॉगिन करें।",
+  "shareSuccess": "पोस्ट सफलतापूर्वक साझा की गई!",
+  "linkCopied": "पोस्ट लिंक सफलतापूर्वक कॉपी किया गया!",
+  "shareError": "पोस्ट साझा करते समय कुछ गलत हो गया।",
+  "selectFile": "कृपया कोई चित्र या वीडियो चुनें।",
+  "uploadSuccess": "पब्लिक पोस्ट सफलतापूर्वक बनाई गई!",
+  "uploadError": "पोस्ट अपलोड करते समय कुछ गलत हो गया।",
+  "shareTitle": "InternArea पब्लिक स्पेस",
+  "shareText": "InternArea पर यह पोस्ट देखें!"
+},
+
+  "subscriptions": {
+    "plans": "InternArea प्लान",
+    "choosePlan": "अपना सब्सक्रिप्शन प्लान चुनें",
+    "subtitle": "अपने करियर लक्ष्यों के अनुसार प्लान चुनकर हर महीने अधिक इंटर्नशिप के लिए आवेदन करें।",
+    "paymentTime": "सब्सक्रिप्शन भुगतान केवल",
+    "paymentTimeRange": "सुबह 10:00 बजे से 11:00 बजे IST तक",
+    "mostPopular": "सबसे लोकप्रिय",
+    "month": "/महीना",
+
+    "planNames": {
+      "free": "फ्री",
+      "bronze": "ब्रॉन्ज",
+      "silver": "सिल्वर",
+      "gold": "गोल्ड"
+    },
+
+    "planDescriptions": {
+      "free": "शुरुआत करने के लिए बिल्कुल सही",
+      "bronze": "नियमित रूप से आवेदन करने वाले छात्रों के लिए",
+      "silver": "सक्रिय इंटर्नशिप खोजने वालों के लिए",
+      "gold": "गंभीर नौकरी खोजने वालों के लिए सबसे अच्छा"
+    },
+
+    "applications": {
+      "free": "1 आवेदन / महीना",
+      "bronze": "3 आवेदन / महीना",
+      "silver": "5 आवेदन / महीना",
+      "gold": "असीमित आवेदन"
+    },
+
+    "features": {
+      "free": [
+        "प्रति माह 1 इंटर्नशिप आवेदन",
+        "इंटर्नशिप देखें",
+        "नौकरियां देखें",
+        "प्रोफ़ाइल बनाएं"
+      ],
+      "bronze": [
+        "प्रति माह 3 इंटर्नशिप आवेदन",
+        "इंटर्नशिप देखें",
+        "नौकरियां देखें",
+        "प्रोफ़ाइल बनाएं"
+      ],
+      "silver": [
+        "प्रति माह 5 इंटर्नशिप आवेदन",
+        "इंटर्नशिप देखें",
+        "नौकरियां देखें",
+        "प्रोफ़ाइल बनाएं"
+      ],
+      "gold": [
+        "असीमित इंटर्नशिप आवेदन",
+        "इंटर्नशिप देखें",
+        "नौकरियां देखें",
+        "प्रोफ़ाइल बनाएं"
+      ]
+    },
+
+    "currentFreePlan": "वर्तमान फ्री प्लान",
+    "upgradeTo": "{{plan}} में अपग्रेड करें",
+
+    "bottomTitle": "InternArea के साथ स्मार्ट तरीके से आवेदन करें",
+    "bottomDescription": "आपकी आवेदन सीमा हर महीने रीसेट होती है। गोल्ड सदस्य असीमित इंटर्नशिप के लिए आवेदन कर सकते हैं।",
+
+    "loginRequired": "सब्सक्रिप्शन खरीदने से पहले कृपया लॉगिन करें।",
+    "freePlanMessage": "फ्री प्लान बिना भुगतान के पहले से उपलब्ध है।",
+    "invalidOrder": "सर्वर से अमान्य भुगतान ऑर्डर प्राप्त हुआ।",
+    "razorpayNotLoaded": "Razorpay लोड नहीं हुआ है। कृपया पेज को रिफ्रेश करके दोबारा प्रयास करें।",
+    "activated": "सब्सक्रिप्शन सफलतापूर्वक सक्रिय हो गया!",
+    "verificationFailed": "भुगतान सत्यापन विफल हुआ।",
+    "paymentCancelled": "भुगतान रद्द कर दिया गया।",
+    "paymentFailed": "भुगतान विफल हुआ। कृपया दोबारा प्रयास करें।",
+    "createPaymentFailed": "सब्सक्रिप्शन भुगतान बनाने में असमर्थ।"
+  }
+
+
+}

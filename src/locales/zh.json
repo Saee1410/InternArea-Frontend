@@ -1,0 +1,488 @@
+{
+  "navbar": {
+    "home": "首页",
+    "internships": "实习",
+    "jobs": "工作",
+    "plans": "套餐",
+    "login": "登录",
+    "register": "注册",
+    "profile": "个人资料",
+    "logout": "退出登录"
+    
+  },
+
+  "home": {
+    "dreamCareer": "让你的梦想职业成为现实",
+    "trending": "InternArea 热门推荐 🔥",
+
+    "growSkills": "提升你的技能",
+    "startCareer": "开启你的职业生涯",
+    "learnBest": "向优秀的人学习",
+    "connectCompanies": "与顶尖公司建立联系",
+
+    "activelyHiring": "正在积极招聘",
+    "tbd": "待定",
+    "immediate": "立即",
+    "internship": "实习",
+    "viewDetails": "查看详情",
+
+    "latestInternships": "InternArea 最新实习机会"
+  },
+
+  "common": {
+    "applyNow": "立即申请",
+    "viewDetails": "查看详情",
+    "location": "地点",
+    "duration": "时长",
+    "stipend": "津贴"
+  },
+
+  "register": {
+  "title": "创建账户",
+  "subtitle": "立即加入 InternArea 🚀",
+  "fullName": "姓名",
+  "email": "电子邮箱",
+  "password": "密码",
+  "creatingAccount": "正在创建账户...",
+  "createAccount": "创建账户",
+  "or": "或",
+  "continueGoogle": "使用 Google 继续",
+  "alreadyAccount": "已经有账户了吗？",
+  "login": "登录"
+},
+"login": {
+  "title": "欢迎回来",
+  "subtitle": "登录以继续",
+  "student": "学生",
+  "admin": "管理员",
+  "email": "电子邮箱",
+  "password": "密码",
+  "rememberMe": "记住我",
+  "forgotPassword": "忘记密码？",
+  "loggingIn": "正在登录...",
+  "loginButton": "登录",
+  "or": "或",
+  "googleLoginFailed": "Google 登录失败",
+  "noAccount": "还没有账户？",
+  "register": "注册",
+  "loginFailed": "登录失败",
+  "studentOption": "请使用学生选项登录",
+  "adminOption": "请使用管理员选项登录"
+},
+"forgotPassword": {
+  "title": "忘记密码？",
+  "subtitle": "请输入您注册的电子邮箱或电话号码。",
+  "emailOrPhone": "电子邮箱或电话号码",
+  "placeholder": "请输入电子邮箱或电话号码"
+},
+"resumeBuilder": {
+  "title": "创建您的简历",
+  "subtitle": "创建专业简历，轻松申请实习机会。",
+  "personalInformation": "个人信息",
+  "fullName": "姓名",
+  "fullNamePlaceholder": "请输入您的姓名",
+  "email": "电子邮箱",
+  "emailPlaceholder": "请输入您的电子邮箱",
+  "phone": "电话号码",
+  "phonePlaceholder": "请输入电话号码",
+  "location": "所在地",
+  "locationPlaceholder": "城市，州",
+  "education": "教育背景",
+  "qualification": "学历",
+  "qualificationPlaceholder": "例如：计算机工程学士",
+  "college": "学院 / 大学",
+  "collegePlaceholder": "请输入学院名称",
+  "graduationYear": "毕业年份",
+  "graduationYearPlaceholder": "2027",
+  "experience": "工作经验",
+  "experiencePlaceholder": "描述您的实习或工作经验...",
+  "skills": "技能",
+  "skillsPlaceholder": "例如：React、Node.js、MongoDB、Java、SQL",
+  "projects": "项目",
+  "projectsPlaceholder": "描述您的项目...",
+  "achievements": "成就",
+  "achievementsPlaceholder": "证书、黑客马拉松、奖项等。",
+  "socialProfiles": "社交资料",
+  "linkedin": "LinkedIn 个人资料",
+  "linkedinPlaceholder": "https://linkedin.com/in/username",
+  "github": "GitHub 个人资料",
+  "githubPlaceholder": "https://github.com/username",
+  "profilePhoto": "个人照片",
+  "uploadPhoto": "上传个人照片",
+  "selected": "已选择",
+  "continuePreview": "继续查看简历预览",
+  "failedToSave": "保存简历失败"
+},
+"adminProfile": {
+  "adminName": "管理员姓名",
+  "admin": "管理员",
+  "phone": "电话号码",
+  "location": "所在地",
+  "notAdded": "未添加",
+  "editProfile": "编辑个人资料"
+},
+
+"adminEdit": {
+  "title": "编辑管理员个人资料",
+  "uploadPhoto": "上传照片",
+  "removePhoto": "删除照片",
+  "profilePhotoUrl": "个人资料照片 URL",
+  "imageUrlPlaceholder": "或在此粘贴图片 URL",
+  "fullName": "姓名",
+  "email": "电子邮箱",
+  "phone": "电话号码",
+  "location": "所在地",
+  "saveChanges": "保存更改",
+  "profileUpdated": "个人资料更新成功",
+  "profileUpdateFailed": "个人资料更新失败"
+},
+"dashboard": {
+  "title": "管理员仪表板",
+  "description": "在一个地方管理您的职位发布、实习机会和申请人跟踪。",
+  "jobApplications": "工作申请",
+  "totalApplications": "收到的申请总数",
+  "viewApplications": "查看申请",
+  "addJob": "添加工作",
+  "createJob": "创建工作",
+  "postNewJob": "发布新的工作职位",
+  "postNewJobButton": "发布新工作",
+  "addInternship": "添加实习",
+  "createInternship": "创建实习",
+  "postNewInternship": "发布新的实习机会",
+  "postInternship": "发布实习"
+},
+"createInternship": {
+  "title": "创建实习",
+  "internshipTitle": "实习职位名称",
+  "companyName": "公司名称",
+  "location": "所在地",
+  "category": "类别",
+  "stipend": "津贴",
+  "startDate": "开始日期",
+  "duration": "持续时间",
+  "numberOfOpening": "职位数量",
+  "aboutCompany": "关于公司",
+  "aboutInternship": "关于实习",
+  "whoCanApply": "谁可以申请",
+  "perks": "福利",
+  "additionalInfo": "其他信息",
+  "createButton": "创建实习",
+  "success": "实习创建成功",
+  "failed": "创建实习失败"
+},
+"createJob": {
+  "title": "创建职位",
+  "companyName": "公司名称",
+  "jobTitle": "职位名称",
+  "location": "所在地",
+  "category": "类别",
+  "salaryPackage": "薪资 / 薪酬方案",
+  "joiningDate": "入职日期",
+  "experienceDuration": "经验 / 工作期限",
+  "aboutCompany": "关于公司",
+  "jobDescription": "职位描述",
+  "whoCanApply": "谁可以申请",
+  "perks": "福利",
+  "additionalInfo": "其他信息",
+  "numberOfOpenings": "职位数量",
+  "createButton": "创建职位",
+  "success": "职位创建成功",
+  "failed": "出了点问题"
+},
+"editProfile": {
+  "title": "编辑个人资料",
+  "subtitle": "更新您的个人信息和职业身份",
+  "uploadPhoto": "上传照片",
+  "removePhoto": "删除照片",
+  "profilePhotoUrl": "个人资料照片 URL",
+  "imageUrlPlaceholder": "您也可以直接粘贴图片 URL",
+  "fullName": "姓名",
+  "email": "电子邮箱",
+  "phone": "电话号码",
+  "location": "所在地",
+  "qualification": "学历",
+  "skills": "技能",
+  "skillsPlaceholder": "例如：React、Node.js、MongoDB",
+  "bio": "个人简介",
+  "saveChanges": "保存更改",
+  "photoSizeError": "请选择小于 10MB 的照片。",
+  "profileUpdated": "个人资料更新成功",
+  "profileUpdateFailed": "个人资料更新失败"
+},
+
+
+"profile": {
+  "phone": "电话",
+  "location": "地点",
+  "qualification": "学历",
+  "skills": "技能",
+  "bio": "个人简介",
+  "notAdded": "未添加",
+  "noBio": "未添加个人简介",
+  "myResume": "我的简历",
+  "loadingResume": "正在加载简历...",
+  "resumeSaved": "简历保存成功。",
+  "viewResume": "查看简历",
+  "editResume": "编辑简历",
+  "noResume": "未找到简历。",
+  "createResume": "创建简历",
+  "editProfile": "编辑个人资料",
+  "addFriend": "添加好友",
+  "addPost": "添加帖子",
+  "loginHistory": "登录历史",
+  "loadingLoginHistory": "正在加载登录历史...",
+  "noLoginHistory": "未找到登录历史。",
+  "browser": "浏览器",
+  "operatingSystem": "操作系统",
+  "device": "设备",
+  "ipAddress": "IP 地址",
+  "status": "状态",
+  "loginTime": "登录时间",
+  "unknown": "未知"
+},
+
+"applications": {
+    "title": "申请总数",
+    "subtitle": "您发布的工作/实习岗位收到的申请。",
+    "companyTitle": "公司 / 职位",
+    "category": "类别",
+    "appliedBy": "申请人",
+    "date": "日期",
+    "status": "状态",
+    "action": "操作",
+    "noApplications": "未找到您发布的岗位申请。",
+    "internship": "实习",
+    "job": "工作",
+    "position": "职位",
+    "anonymousUser": "匿名用户",
+    "viewCandidate": "查看候选人资料",
+    "accept": "接受申请",
+    "reject": "拒绝申请",
+    "pending": "待处理",
+    "accepted": "已接受",
+    "selected": "已选中",
+    "rejected": "已拒绝"
+  },
+   "internshipCard": {
+    "activelyHiring": "正在招聘",
+    "job": "工作",
+    "internship": "实习",
+    "viewDetails": "查看详情"
+  },
+   
+  "internshipSection": {
+  "all": "全部",
+  "internship": "实习",
+  "jobs": "工作",
+  "latestInternships": "最新实习机会",
+  "noInternships": "暂无可用实习",
+  "latestJobs": "最新工作",
+  "noJobs": "暂无可用工作",
+  "internships": "实习",
+  "students": "学生",
+  "learners": "学习者"
+},
+
+"footer": {
+  "internshipsByPlaces": "按地点查看实习",
+  "internshipsByStream": "按领域查看实习",
+  "jobsByPlaces": "按地点查看工作",
+  "jobsByStream": "按领域查看工作",
+  "about": "关于我们",
+  "ourTeam": "我们的团队",
+  "legal": "法律信息",
+  "quickLinks": "快速链接",
+  "availableOn": "可在以下平台使用",
+  "copyright": "© 2026 InternArea. 保留所有权利。",
+  "places": {
+    "newYork": "纽约",
+    "losAngeles": "洛杉矶",
+    "chicago": "芝加哥",
+    "sanFrancisco": "旧金山",
+    "miami": "迈阿密",
+    "seattle": "西雅图",
+    "mumbai": "孟买",
+    "pune": "浦那",
+    "bangalore": "班加罗尔",
+    "hyderabad": "海得拉巴",
+    "delhi": "德里",
+    "chennai": "金奈"
+  },
+  "streams": {
+    "webDevelopment": "网页开发",
+    "appDevelopment": "应用开发",
+    "javaDevelopment": "Java 开发",
+    "pythonDevelopment": "Python 开发",
+    "dataScience": "数据科学",
+    "uiuxDesign": "UI/UX 设计",
+    "softwareDevelopment": "软件开发",
+    "marketing": "市场营销",
+    "finance": "金融",
+    "humanResources": "人力资源",
+    "sales": "销售",
+    "management": "管理"
+  },
+  "links": {
+    "About Us": "关于我们",
+    "Contact Us": "联系我们",
+    "Our Team": "我们的团队",
+    "Careers": "职业机会",
+    "Terms & Conditions": "条款和条件",
+    "Privacy Policy": "隐私政策",
+    "Home": "首页",
+    "Internships": "实习",
+    "Jobs": "工作"
+    
+  }
+},
+
+  "details": { "loginToApply": "请登录以申请此实习。", "internshipOnly": "目前申请功能仅适用于实习。", "applicationSuccess": "申请提交成功！", "applicationFailed": "申请实习失败。", "loading": "正在加载详情...", "notFound": "未找到详情", "notExist": "您要查找的实习或工作不存在。", "goBack": "返回", "internship": "实习", "job": "工作", "applying": "申请中...", "applyNow": "立即申请", "jobApplication": "工作申请", "location": "地点", "stipend": "津贴", "duration": "持续时间", "startDate": "开始日期", "notSpecified": "未指定", "category": "类别", "aboutCompany": "关于公司", "aboutInternshipJob": "关于实习 / 工作", "whoCanApply": "申请资格", "perks": "福利", "additionalInformation": "其他信息", "noInformation": "暂无可用信息。", "numberOfOpenings": "招聘人数：", "interested": "对这个实习感兴趣吗？", "nextStep": "提交申请，迈出职业生涯的下一步。" },
+
+  "friendRequests": { "title": "好友请求", "noRequests": "没有待处理的好友请求。", "accept": "接受", "reject": "拒绝", "fetchFailed": "获取好友请求失败", "acceptSuccess": "好友请求已成功接受", "acceptFailed": "接受好友请求失败", "rejectSuccess": "好友请求已成功拒绝", "rejectFailed": "拒绝好友请求失败" },
+
+  "internships": {
+  "filters": "筛选",
+  "clearAll": "清除全部",
+  "category": "类别",
+  "categoryPlaceholder": "例如：软件开发",
+  "location": "地点",
+  "locationPlaceholder": "例如：孟买",
+  "workFromHome": "居家办公",
+  "partTime": "兼职",
+  "monthlyStipend": "月津贴",
+  "internshipsFound": "找到 {{count}} 个实习机会",
+  "noInternshipsFound": "未找到实习机会"
+},
+
+"jobs": { "filters": "筛选", "clearAll": "清除全部", "category": "类别", "categoryPlaceholder": "例如：软件开发工程师", "location": "地点", "locationPlaceholder": "例如：孟买", "experience": "经验", "experiencePlaceholder": "例如：2年", "workFromHome": "居家办公", "partTime": "兼职", "annualSalary": "年薪（₹，单位：十万）", "jobsFound": "找到 {{count}} 个工作", "noJobsFound": "未找到工作" },
+
+"otherUserProfile": {
+  "fetchFailed": "加载用户资料失败",
+  "requestSent": "好友请求已成功发送",
+  "requestError": "发送好友请求时出现问题",
+  "userNotFound": "未找到用户",
+  "sending": "发送中...",
+  "requestSentButton": "请求已发送",
+  "addFriend": "添加好友",
+  "phone": "电话",
+  "location": "地点",
+  "qualification": "学历",
+  "skills": "技能",
+  "bio": "个人简介"
+},
+
+"publicSpace": {
+  "title": "公共空间",
+  "description": "与 InternArea 社区分享你的想法、图片和视频。",
+  "createPost": "创建公共帖子",
+  "uploadMedia": "上传图片或视频",
+  "chooseFile": "选择文件",
+  "caption": "说明",
+  "captionPlaceholder": "写一些关于你帖子的内容...",
+  "uploading": "正在上传...",
+  "createPublicPost": "创建公共帖子",
+  "maxFileSize": "最大文件大小：50MB",
+  "publicPosts": "公共帖子",
+  "loadingPosts": "正在加载帖子...",
+  "noPosts": "暂无公共帖子。",
+  "user": "用户",
+  "publicPostAlt": "公共帖子",
+  "comments": "评论",
+  "writeComment": "写一条评论...",
+  "comment": "评论",
+  "onlyImageVideo": "只允许上传图片和视频文件。",
+  "fileSizeError": "文件大小必须小于 50MB。",
+  "loginToLike": "请登录后点赞帖子。",
+  "unableIdentifyUser": "无法识别当前用户。",
+  "likeError": "点赞帖子时出现问题。",
+  "loginToComment": "请登录后发表评论。",
+  "commentAdded": "评论添加成功！",
+  "commentError": "添加评论时出现问题。",
+  "loginToShare": "请登录后分享帖子。",
+  "shareSuccess": "帖子分享成功！",
+  "linkCopied": "帖子链接复制成功！",
+  "shareError": "分享帖子时出现问题。",
+  "selectFile": "请选择图片或视频。",
+  "uploadSuccess": "公共帖子创建成功！",
+  "uploadError": "上传帖子时出现问题。",
+  "shareTitle": "InternArea 公共空间",
+  "shareText": "来看看 InternArea 上的这篇帖子！"
+},
+
+
+  "subscriptions": {
+    "plans": "InternArea 套餐",
+    "choosePlan": "选择你的订阅套餐",
+    "subtitle": "选择符合职业目标的套餐，每月申请更多实习机会。",
+    "paymentTime": "订阅付款仅在",
+    "paymentTimeRange": "印度标准时间上午 10:00 至 11:00",
+    "mostPopular": "最受欢迎",
+    "month": "/月",
+
+    "planNames": {
+      "free": "免费",
+      "bronze": "青铜",
+      "silver": "白银",
+      "gold": "黄金"
+    },
+
+    "planDescriptions": {
+      "free": "非常适合刚开始使用的用户",
+      "bronze": "适合经常申请的学生",
+      "silver": "适合积极寻找实习机会的用户",
+      "gold": "最适合认真寻找工作的用户"
+    },
+
+    "applications": {
+      "free": "每月 1 次申请",
+      "bronze": "每月 3 次申请",
+      "silver": "每月 5 次申请",
+      "gold": "无限次申请"
+    },
+
+    "features": {
+      "free": [
+        "每月 1 次实习申请",
+        "浏览实习机会",
+        "浏览工作机会",
+        "创建个人资料"
+      ],
+      "bronze": [
+        "每月 3 次实习申请",
+        "浏览实习机会",
+        "浏览工作机会",
+        "创建个人资料"
+      ],
+      "silver": [
+        "每月 5 次实习申请",
+        "浏览实习机会",
+        "浏览工作机会",
+        "创建个人资料"
+      ],
+      "gold": [
+        "无限次实习申请",
+        "浏览实习机会",
+        "浏览工作机会",
+        "创建个人资料"
+      ]
+    },
+
+    "currentFreePlan": "当前免费套餐",
+    "upgradeTo": "升级到 {{plan}}",
+
+    "bottomTitle": "使用 InternArea 更智能地申请",
+    "bottomDescription": "你的申请次数每月重置。黄金会员可以申请无限数量的实习机会。",
+
+    "loginRequired": "购买订阅前请先登录。",
+    "freePlanMessage": "免费套餐无需付款即可使用。",
+    "invalidOrder": "服务器返回了无效的支付订单。",
+    "razorpayNotLoaded": "Razorpay 未加载。请刷新页面后重试。",
+    "activated": "订阅已成功激活！",
+    "verificationFailed": "支付验证失败。",
+    "paymentCancelled": "支付已取消。",
+    "paymentFailed": "支付失败，请重试。",
+    "createPaymentFailed": "无法创建订阅支付。"
+  }
+
+
+}
