@@ -9,6 +9,14 @@ import App from "./App";
 import "./index.css";
 import "./i18n";
 
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  if (args[0] && typeof args[0] === 'string' && args[0].includes('razorpay.com')) {
+    return; // Razorpay che preloading warnings ignore hotil
+  }
+  originalWarn(...args);
+};
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

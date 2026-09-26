@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
   Box,
@@ -16,6 +17,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
 const Users = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -51,7 +53,7 @@ const Users = () => {
 
       setError(
         error.response?.data?.message ||
-          "Failed to fetch users"
+          t("users.failedToFetch")
       );
     } finally {
       setLoading(false);
@@ -84,7 +86,7 @@ const Users = () => {
 
       setMessage(
         response.data.message ||
-          "Friend request sent successfully!"
+          t("users.friendRequestSent")
       );
     } catch (error) {
       console.error(
@@ -94,7 +96,7 @@ const Users = () => {
 
       setError(
         error.response?.data?.message ||
-          "Failed to send friend request"
+          t("users.friendRequestFailed")
       );
     } finally {
       setSendingId(null);
@@ -147,7 +149,7 @@ const Users = () => {
           fontWeight="bold"
           mb={3}
         >
-          Users
+          {t("users.title")}
         </Typography>
 
         {/* SUCCESS MESSAGE */}
@@ -176,7 +178,7 @@ const Users = () => {
 
         {users.length === 0 ? (
           <Typography color="text.secondary">
-            No other users found.
+            {t("users.noUsers")}
           </Typography>
         ) : (
           users.map((user) => (
@@ -252,7 +254,7 @@ const Users = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    View Profile
+                    {t("users.viewProfile")}
                   </Button>
 
                   {/* SEND FRIEND REQUEST */}
@@ -272,8 +274,8 @@ const Users = () => {
                     }}
                   >
                     {sendingId === user._id
-                      ? "Sending..."
-                      : "Add Friend"}
+                      ? t("users.sending")
+                      : t("users.addFriend")}
                   </Button>
                 </Box>
               </CardContent>
@@ -288,8 +290,6 @@ const Users = () => {
 };
 
 export default Users;
-
-
 
 
 // import { useEffect, useState } from "react";
@@ -313,6 +313,8 @@ export default Users;
 //   const [users, setUsers] = useState([]);
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState("");
+//   const [message, setMessage] = useState("");
+//   const [sendingId, setSendingId] = useState(null);
 
 //   const navigate = useNavigate();
 
@@ -347,6 +349,49 @@ export default Users;
 //       );
 //     } finally {
 //       setLoading(false);
+//     }
+//   };
+
+//   // =========================================
+//   // SEND FRIEND REQUEST
+//   // =========================================
+
+//   const sendFriendRequest = async (userId) => {
+//     try {
+//       setSendingId(userId);
+//       setMessage("");
+//       setError("");
+
+//       const token = localStorage.getItem("token");
+
+//       const response = await axios.post(
+//         "http://localhost:8000/api/friends/request",
+//         {
+//           receiverId: userId,
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//       setMessage(
+//         response.data.message ||
+//           "Friend request sent successfully!"
+//       );
+//     } catch (error) {
+//       console.error(
+//         "Send Friend Request Error:",
+//         error
+//       );
+
+//       setError(
+//         error.response?.data?.message ||
+//           "Failed to send friend request"
+//       );
+//     } finally {
+//       setSendingId(null);
 //     }
 //   };
 
@@ -391,8 +436,6 @@ export default Users;
 //           minHeight: "70vh",
 //         }}
 //       >
-//         {/* PAGE TITLE */}
-
 //         <Typography
 //           variant="h4"
 //           fontWeight="bold"
@@ -400,6 +443,17 @@ export default Users;
 //         >
 //           Users
 //         </Typography>
+
+//         {/* SUCCESS MESSAGE */}
+
+//         {message && (
+//           <Typography
+//             color="success.main"
+//             mb={2}
+//           >
+//             {message}
+//           </Typography>
+//         )}
 
 //         {/* ERROR MESSAGE */}
 
@@ -412,7 +466,7 @@ export default Users;
 //           </Typography>
 //         )}
 
-//         {/* NO USERS */}
+//         {/* USERS */}
 
 //         {users.length === 0 ? (
 //           <Typography color="text.secondary">
@@ -445,9 +499,11 @@ export default Users;
 //                   }}
 //                 >
 //                   <Avatar
-//                     src={
-//                       user.profilePhoto || ""
-//                     }
+//                     src={user.profilePhoto || ""}
+//                     sx={{
+//                       width: 50,
+//                       height: 50,
+//                     }}
 //                   >
 //                     {user.name
 //                       ?.charAt(0)
@@ -455,9 +511,7 @@ export default Users;
 //                   </Avatar>
 
 //                   <Box>
-//                     <Typography
-//                       fontWeight="bold"
-//                     >
+//                     <Typography fontWeight="bold">
 //                       {user.name}
 //                     </Typography>
 
@@ -470,25 +524,52 @@ export default Users;
 //                   </Box>
 //                 </Box>
 
-//                 {/* VIEW PROFILE BUTTON */}
+//                 {/* BUTTONS */}
 
-//                 <Button
-//                   variant="contained"
-//                   onClick={() =>
-//                     navigate(
-//                       ("/friend-requests")
-//                       // `/profile/${user._id}`
-//                     )
-//                   }
+//                 <Box
 //                   sx={{
-//                     borderRadius: "25px",
-//                     px: 3,
-//                     textTransform: "none",
-//                     fontWeight: "bold",
+//                     display: "flex",
+//                     gap: 1,
 //                   }}
 //                 >
-//                   View Profile
-//                 </Button>
+//                   {/* VIEW PROFILE */}
+
+//                   <Button
+//                     variant="outlined"
+//                     onClick={() =>
+//                       navigate(`/profile/${user._id}`)
+//                     }
+//                     sx={{
+//                       borderRadius: "25px",
+//                       px: 3,
+//                       textTransform: "none",
+//                       fontWeight: "bold",
+//                     }}
+//                   >
+//                     View Profile
+//                   </Button>
+
+//                   {/* SEND FRIEND REQUEST */}
+
+//                   <Button
+//                     variant="contained"
+//                     disabled={sendingId === user._id}
+//                     onClick={() =>
+//                       sendFriendRequest(user._id)
+//                     }
+//                     sx={{
+//                       borderRadius: "25px",
+//                       px: 3,
+//                       textTransform: "none",
+//                       fontWeight: "bold",
+//                       whiteSpace: "nowrap",
+//                     }}
+//                   >
+//                     {sendingId === user._id
+//                       ? "Sending..."
+//                       : "Add Friend"}
+//                   </Button>
+//                 </Box>
 //               </CardContent>
 //             </Card>
 //           ))
@@ -501,3 +582,4 @@ export default Users;
 // };
 
 // export default Users;
+

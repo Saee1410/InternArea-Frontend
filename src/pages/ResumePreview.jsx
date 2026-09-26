@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   Box,
   Container,
@@ -13,64 +12,87 @@ import {
   Avatar,
   Snackbar,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { getMyResume } from "../services/resumeService";
 import { checkPremium } from "../services/premiumService";
 import { sendResumeOTP, verifyResumeOTP } from "../services/resumeOtpService";
 import { createResumeOrder, verifyResumePayment } from "../services/paymentService";
 
-import { useNavigate } from "react-router-dom";
+// Helper Component for Section Titles
+const SectionTitle = ({ title }) => (
+  <Typography
+    variant="h6"
+    fontWeight={700}
+    sx={{
+      color: "#1e293b",
+      letterSpacing: "1px",
+      borderBottom: "2px solid #2563eb",
+      display: "inline-block",
+      pb: 0.5,
+      mb: 1,
+    }}
+  >
+    {title}
+  </Typography>
+);
 
 const ResumePreview = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-  open: false,
-  message: "",
-  severity: "info",
-});
 
-const [otpModal, setOtpModal] = useState(false);
-const [otp, setOtp] = useState("");
-const [otpLoading, setOtpLoading] = useState(false);
-  const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const [otpModal, setOtpModal] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
 
   // ==========================================
   // CHECK PREMIUM STATUS
   // ==========================================
-
   const verifyPremium = async () => {
     try {
       const data = await checkPremium();
-
       console.log("Premium status:", data);
-
       setIsPremium(data.isPremium);
     } catch (error) {
       console.error(
         "Premium check error:",
         error.response?.data || error.message
       );
-
       setIsPremium(false);
     }
   };
 
   // ==========================================
-  // FETCH RESUME
+  // FETCH RESUME (WITH TRANSLATION PARAM)
   // ==========================================
-
   const fetchResume = async () => {
     try {
-      const data = await getMyResume();
+      setLoading(true);
+      // 🟢 निवडलेली भाषा पॅरामीटर म्हणून पाठवणे (i18n.language)
+      const currentLang = i18n.language || "en";
+      const data = await getMyResume(currentLang);
 
-      console.log("Resume:", data);
-
+      console.log("Resume Data:", data);
       setResume(data.resume);
     } catch (error) {
       console.error(
@@ -80,7 +102,9 @@ const [otpLoading, setOtpLoading] = useState(false);
 
       setSnackbar({
         open: true,
-        message: error.response?.data?.message || "Unable to load resume",
+        message:
+          error.response?.data?.message ||
+          t("resumePreview.unableToLoadResume"),
         severity: "error",
       });
     } finally {
@@ -88,16 +112,18 @@ const [otpLoading, setOtpLoading] = useState(false);
     }
   };
 
+  // ==========================================
+  // GENERATE PDF
+  // ==========================================
   const generatePDF = async () => {
     try {
-      const resumeElement = 
-      document.getElementById("resume-content");
+      const resumeElement = document.getElementById("resume-content");
 
       if (!resumeElement) {
         setSnackbar({
-           open: true,
-        message: "Resume content not found",
-        severity: "error",
+          open: true,
+          message: t("resumePreview.resumeContentNotFound"),
+          severity: "error",
         });
         return;
       }
@@ -109,7 +135,6 @@ const [otpLoading, setOtpLoading] = useState(false);
       });
 
       const imgData = canvas.toDataURL("image/png");
-
       const pdf = new jsPDF("p", "mm", "a4");
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -121,27 +146,13 @@ const [otpLoading, setOtpLoading] = useState(false);
       let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        position,
-        imgWidth,
-        imgHeight
-      );
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
 
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(
-          imgData,
-          "PNG",
-          0,
-          position,
-          imgWidth,
-          imgHeight
-        );
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pdfHeight;
       }
 
@@ -149,23 +160,21 @@ const [otpLoading, setOtpLoading] = useState(false);
         ? `${resume.fullName.replace(/\s+/g, "_")}_Resume.pdf`
         : "Resume.pdf";
       pdf.save(fileName);
-
     } catch (error) {
       console.error("PDF generation error:", error);
       setSnackbar({
         open: true,
-        message: "Failed to generate PDF",
+        message: t("resumePreview.failedToGeneratePDF"),
         severity: "error",
       });
     }
-  }
+  };
 
   // ==========================================
   // DOWNLOAD PDF
   // ==========================================
-
-   const downloadPDF = async () => {
-    if (isPremium){
+  const downloadPDF = async () => {
+    if (isPremium) {
       await generatePDF();
       return;
     }
@@ -173,38 +182,39 @@ const [otpLoading, setOtpLoading] = useState(false);
     try {
       setOtpLoading(true);
       console.log("Sending OTP to email:", resume.email);
-      
+
       const response = await sendResumeOTP(resume.email);
       console.log("OTP sent response:", response);
 
-      if(response.success) {
+      if (response.success) {
         setOtpModal(true);
 
         setSnackbar({
           open: true,
-          message: "OTP sent to your email. Please check your inbox.",
+          message: t("resumePreview.otpSent"),
           severity: "info",
         });
       }
-
     } catch (error) {
       console.error("Send OTP error:", error.response?.data || error.message);
       setSnackbar({
         open: true,
-        message: "Failed to send OTP",
+        message: t("resumePreview.failedToSendOTP"),
         severity: "error",
       });
-    }
-    finally {
+    } finally {
       setOtpLoading(false);
     }
   };
 
+  // ==========================================
+  // VERIFY OTP
+  // ==========================================
   const handleVerifyOTP = async () => {
-    if(!otp || otp.length !== 6){
+    if (!otp || otp.length !== 6) {
       setSnackbar({
         open: true,
-        message: "Please enter a valid 6-digit OTP",
+        message: t("resumePreview.validOTP"),
         severity: "warning",
       });
       return;
@@ -213,26 +223,21 @@ const [otpLoading, setOtpLoading] = useState(false);
     try {
       setOtpLoading(true);
 
-      const response = await verifyResumeOTP(
-        resume.email,
-        otp
-      );
-
+      const response = await verifyResumeOTP(resume.email, otp);
       console.log("OTP verification:", response);
 
-      if(response.success) {
+      if (response.success) {
         setOtpModal(false);
         setOtp("");
 
         setSnackbar({
           open: true,
-          message: "OTP verified successfully. Opening payment...",
+          message: t("resumePreview.otpVerified"),
           severity: "success",
         });
 
         await handlePayment();
       }
-
     } catch (error) {
       console.error(
         "OTP verification error:",
@@ -241,165 +246,135 @@ const [otpLoading, setOtpLoading] = useState(false);
 
       setSnackbar({
         open: true,
-        message: error.response?.data?.message ||
-         "Invalid OTP",
+        message:
+          error.response?.data?.message ||
+          t("resumePreview.invalidOTP"),
         severity: "error",
-  });
+      });
     } finally {
       setOtpLoading(false);
     }
   };
 
+  // ==========================================
+  // HANDLE PAYMENT
+  // ==========================================
   const handlePayment = async () => {
-  try {
-    setOtpLoading(true);
+    try {
+      setOtpLoading(true);
 
-    console.log("========== PAYMENT START ==========");
+      const orderData = await createResumeOrder();
 
-    console.log("1. Creating Razorpay order...");
+      if (!orderData.success) {
+        throw new Error(
+          orderData.message ||
+            t("resumePreview.unableToStartPayment")
+        );
+      }
 
-    const orderData = await createResumeOrder();
+      if (!window.Razorpay) {
+        throw new Error("Razorpay SDK not loaded");
+      }
 
-    console.log("2. Order response:", orderData);
+      const options = {
+        key: orderData.key,
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: "Internshala Clone",
+        description: "Resume Premium - ₹50",
+        order_id: orderData.order.id,
 
-    if (!orderData.success) {
-      throw new Error(
-        orderData.message || "Unable to create payment order"
-      );
-    }
-
-    console.log("3. Razorpay key:", orderData.key);
-    console.log("4. Razorpay order:", orderData.order);
-
-    console.log("5. Razorpay SDK:", window.Razorpay);
-
-    if (!window.Razorpay) {
-      throw new Error("Razorpay SDK not loaded");
-    }
-
-    const options = {
-      key: orderData.key,
-      amount: orderData.order.amount,
-      currency: orderData.order.currency,
-      name: "Internshala Clone",
-      description: "Resume Premium - ₹50",
-      order_id: orderData.order.id,
-
-      handler: async function (response) {
-        console.log("6. PAYMENT SUCCESS:", response);
-
-        try {
-          const verifyResponse = await verifyResumePayment({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          });
-
-          console.log("7. Payment verification:", verifyResponse);
-
-          if (verifyResponse.success) {
-            setIsPremium(true);
-
-            setSnackbar({
-              open: true,
-              message: "Payment successful! Resume is now premium.",
-              severity: "success",
+        handler: async function (response) {
+          try {
+            const verifyResponse = await verifyResumePayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
             });
 
-            await generatePDF();
+            if (verifyResponse.success) {
+              setIsPremium(true);
+
+              setSnackbar({
+                open: true,
+                message: t("resumePreview.paymentSuccessful"),
+                severity: "success",
+              });
+
+              await generatePDF();
+            }
+          } catch (error) {
+            console.error(
+              "Payment verification error:",
+              error.response?.data || error.message
+            );
           }
-        } catch (error) {
-          console.error(
-            "Payment verification error:",
-            error.response?.data || error.message
-          );
-        }
-      },
-
-      prefill: {
-        name: resume.fullName,
-        email: resume.email,
-        contact: resume.phone,
-      },
-
-      theme: {
-        color: "#2563eb",
-      },
-
-      modal: {
-        ondismiss: function () {
-          console.log("Razorpay modal closed");
-
-          setSnackbar({
-            open: true,
-            message: "Payment cancelled",
-            severity: "warning",
-          });
         },
-      },
-    };
 
-    console.log("8. Razorpay options:", options);
+        prefill: {
+          name: resume.fullName,
+          email: resume.email,
+          contact: resume.phone,
+        },
 
-    const razorpay = new window.Razorpay(options);
+        theme: {
+          color: "#2563eb",
+        },
 
-    console.log("9. Razorpay instance created");
+        modal: {
+          ondismiss: function () {
+            setSnackbar({
+              open: true,
+              message: t("resumePreview.paymentCancelled"),
+              severity: "warning",
+            });
+          },
+        },
+      };
 
-    razorpay.on("payment.failed", function (response) {
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.on("payment.failed", function (response) {
+        setSnackbar({
+          open: true,
+          message:
+            response.error?.description ||
+            t("resumePreview.paymentFailed"),
+          severity: "error",
+        });
+      });
+
+      razorpay.open();
+    } catch (error) {
       console.error(
-        "PAYMENT FAILED:",
-        response.error
+        "PAYMENT ERROR:",
+        error.response?.data || error.message
       );
 
       setSnackbar({
         open: true,
         message:
-          response.error?.description ||
-          "Payment failed",
+          error.response?.data?.message ||
+          error.message ||
+          t("resumePreview.unableToStartPayment"),
         severity: "error",
       });
-    });
-
-    console.log("10. Opening Razorpay...");
-
-    razorpay.open();
-
-    console.log("11. razorpay.open() called");
-
-  } catch (error) {
-    console.error(
-      "========== PAYMENT ERROR ==========",
-      error.response?.data || error.message
-    );
-
-    setSnackbar({
-      open: true,
-      message:
-        error.response?.data?.message ||
-        error.message ||
-        "Unable to start payment",
-      severity: "error",
-    });
-  } finally {
-    setOtpLoading(false);
-  }
-};
-
-  
+    } finally {
+      setOtpLoading(false);
+    }
+  };
 
   // ==========================================
-  // USE EFFECT
+  // USE EFFECT (DEPENDENCY ON i18n.language)
   // ==========================================
-
   useEffect(() => {
     fetchResume();
     verifyPremium();
-  }, []);
+  }, [i18n.language]);
 
   // ==========================================
-  // LOADING
+  // LOADING STATE
   // ==========================================
-
   if (loading) {
     return (
       <Box
@@ -418,32 +393,19 @@ const [otpLoading, setOtpLoading] = useState(false);
   // ==========================================
   // RESUME NOT FOUND
   // ==========================================
-
   if (!resume) {
     return (
       <Container sx={{ py: 8 }}>
-        <Typography
-          variant="h5"
-          sx={{
-            textAlign: "center",
-          }}
-        >
-          Resume not found
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          {t("resumePreview.resumeNotFound")}
         </Typography>
 
-        <Box
-          sx={{
-            textAlign: "center",
-            mt: 3,
-          }}
-        >
+        <Box sx={{ textAlign: "center", mt: 3 }}>
           <Button
             variant="contained"
-            onClick={() =>
-              navigate("/resume")
-            }
+            onClick={() => navigate("/resume")}
           >
-            Create Resume
+            {t("resumePreview.createResume")}
           </Button>
         </Box>
       </Container>
@@ -453,7 +415,6 @@ const [otpLoading, setOtpLoading] = useState(false);
   // ==========================================
   // SKILLS ARRAY
   // ==========================================
-
   const skillsArray = resume.skills
     ? resume.skills
         .split(",")
@@ -462,9 +423,8 @@ const [otpLoading, setOtpLoading] = useState(false);
     : [];
 
   // ==========================================
-  // UI
+  // MAIN RENDER
   // ==========================================
-
   return (
     <Box
       sx={{
@@ -474,153 +434,98 @@ const [otpLoading, setOtpLoading] = useState(false);
       }}
     >
       <Container maxWidth="md">
-
-        {/* =====================================
-            ACTION BUTTONS
-        ====================================== */}
-
+        {/* ACTION BUTTONS */}
         <Stack
-          direction={{
-            xs: "column",
-            sm: "row",
-          }}
+          direction={{ xs: "column", sm: "row" }}
           spacing={2}
           justifyContent="space-between"
-          alignItems={{
-            xs: "stretch",
-            sm: "center",
-          }}
+          alignItems={{ xs: "stretch", sm: "center" }}
           sx={{ mb: 3 }}
         >
-
           {/* Edit Resume */}
-
           <Button
             variant="outlined"
-            onClick={() =>
-              navigate("/resume")
-            }
+            onClick={() => navigate("/resume")}
           >
-            ← Edit Resume
+            {t("resumePreview.editResume")}
           </Button>
 
           {/* Premium + Download */}
-
           <Stack
-            direction={{
-              xs: "column",
-              sm: "row",
-            }}
+            direction={{ xs: "column", sm: "row" }}
             spacing={2}
             alignItems="center"
           >
-
-            {/* Premium Status */}
-
             {isPremium ? (
               <Chip
-                label="Premium Active"
+                label={t("resumePreview.premiumActive")}
                 color="success"
-                sx={{
-                  fontWeight: 600,
-                }}
+                sx={{ fontWeight: 600 }}
               />
             ) : (
               <Chip
-                label="₹50 Premium Required"
+                label={t("resumePreview.premiumRequired")}
                 color="warning"
-                sx={{
-                  fontWeight: 600,
-                }}
+                sx={{ fontWeight: 600 }}
               />
             )}
-
-            {/* Download */}
 
             <Button
               variant="contained"
               onClick={downloadPDF}
+              disabled={otpLoading}
             >
-              Download PDF
+              {otpLoading ? (
+                <CircularProgress
+                  size={24}
+                  color="inherit"
+                />
+              ) : (
+                t("resumePreview.downloadPDF")
+              )}
             </Button>
-
           </Stack>
         </Stack>
 
-        {/* =====================================
-            RESUME PAPER
-        ====================================== */}
-
+        {/* RESUME PAPER */}
         <Paper
           id="resume-content"
           elevation={5}
           sx={{
             backgroundColor: "#ffffff",
-            p: {
-              xs: 3,
-              sm: 5,
-              md: 7,
-            },
+            p: { xs: 3, sm: 5, md: 7 },
           }}
         >
-
-          {/* =====================================
-              HEADER
-          ====================================== */}
-
+          {/* HEADER SECTION */}
           <Box
             sx={{
               display: "flex",
-
-              flexDirection: {
-                xs: "column",
-                sm: "row",
-              },
-
-              alignItems: {
-                xs: "center",
-                sm: "flex-start",
-              },
-
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "center", sm: "flex-start" },
               gap: 3,
             }}
           >
-
             {/* Profile Photo */}
-
             {resume.photo && (
               <Avatar
                 src={resume.photo}
                 alt={resume.fullName}
-                sx={{
-                  width: 110,
-                  height: 110,
-                }}
+                sx={{ width: 110, height: 110 }}
               />
             )}
 
             {/* Personal Information */}
-
             <Box
               sx={{
                 flex: 1,
-
-                textAlign: {
-                  xs: "center",
-                  sm: "left",
-                },
+                textAlign: { xs: "center", sm: "left" },
               }}
             >
-
               <Typography
                 variant="h3"
                 fontWeight={800}
                 sx={{
-                  fontSize: {
-                    xs: "28px",
-                    sm: "36px",
-                  },
-
+                  fontSize: { xs: "28px", sm: "36px" },
                   color: "#1f2937",
                 }}
               >
@@ -628,7 +533,6 @@ const [otpLoading, setOtpLoading] = useState(false);
               </Typography>
 
               {/* Qualification */}
-
               {resume.qualification && (
                 <Typography
                   variant="h6"
@@ -642,39 +546,29 @@ const [otpLoading, setOtpLoading] = useState(false);
                 </Typography>
               )}
 
-              {/* Contact */}
-
+              {/* Contact Information */}
               <Typography
                 variant="body2"
                 color="text.secondary"
-                sx={{
-                  mt: 1,
-                }}
+                sx={{ mt: 1 }}
               >
                 {resume.email}
-
-                {resume.phone &&
-                  `  |  ${resume.phone}`}
-
-                {resume.location &&
-                  `  |  ${resume.location}`}
+                {resume.phone && `  |  ${resume.phone}`}
+                {resume.location && `  |  ${resume.location}`}
               </Typography>
 
               {/* Social Links */}
-
               <Stack
                 direction="row"
                 spacing={2}
                 sx={{
                   mt: 1.5,
-
                   justifyContent: {
                     xs: "center",
                     sm: "flex-start",
                   },
                 }}
               >
-
                 {resume.linkedin && (
                   <Typography
                     component="a"
@@ -706,35 +600,25 @@ const [otpLoading, setOtpLoading] = useState(false);
                     GitHub
                   </Typography>
                 )}
-
               </Stack>
-
             </Box>
-
           </Box>
 
           <Divider sx={{ my: 3 }} />
 
-          {/* =====================================
-              EDUCATION
-          ====================================== */}
-
+          {/* EDUCATION SECTION */}
           {(resume.qualification ||
             resume.college ||
             resume.graduationYear) && (
-
             <Box sx={{ mb: 3 }}>
-
               <SectionTitle
-                title="EDUCATION"
+                title={t("resumePreview.education")}
               />
 
               {resume.qualification && (
                 <Typography
                   fontWeight={700}
-                  sx={{
-                    mt: 1,
-                  }}
+                  sx={{ mt: 1 }}
                 >
                   {resume.qualification}
                 </Typography>
@@ -751,24 +635,18 @@ const [otpLoading, setOtpLoading] = useState(false);
                   variant="body2"
                   color="text.secondary"
                 >
-                  Graduation Year:{" "}
+                  {t("resumePreview.graduationYear")}:{" "}
                   {resume.graduationYear}
                 </Typography>
               )}
-
             </Box>
           )}
 
-          {/* =====================================
-              EXPERIENCE
-          ====================================== */}
-
+          {/* EXPERIENCE SECTION */}
           {resume.experience && (
-
             <Box sx={{ mb: 3 }}>
-
               <SectionTitle
-                title="EXPERIENCE"
+                title={t("resumePreview.experience")}
               />
 
               <Typography
@@ -780,20 +658,14 @@ const [otpLoading, setOtpLoading] = useState(false);
               >
                 {resume.experience}
               </Typography>
-
             </Box>
           )}
 
-          {/* =====================================
-              SKILLS
-          ====================================== */}
-
+          {/* SKILLS SECTION */}
           {skillsArray.length > 0 && (
-
             <Box sx={{ mb: 3 }}>
-
               <SectionTitle
-                title="SKILLS"
+                title={t("resumePreview.skills")}
               />
 
               <Box
@@ -804,32 +676,22 @@ const [otpLoading, setOtpLoading] = useState(false);
                   mt: 1.5,
                 }}
               >
-
-                {skillsArray.map(
-                  (skill, index) => (
-                    <Chip
-                      key={index}
-                      label={skill}
-                      variant="outlined"
-                    />
-                  )
-                )}
-
+                {skillsArray.map((skill, index) => (
+                  <Chip
+                    key={index}
+                    label={skill}
+                    variant="outlined"
+                  />
+                ))}
               </Box>
-
             </Box>
           )}
 
-          {/* =====================================
-              PROJECTS
-          ====================================== */}
-
+          {/* PROJECTS SECTION */}
           {resume.projects && (
-
             <Box sx={{ mb: 3 }}>
-
               <SectionTitle
-                title="PROJECTS"
+                title={t("resumePreview.projects")}
               />
 
               <Typography
@@ -841,20 +703,14 @@ const [otpLoading, setOtpLoading] = useState(false);
               >
                 {resume.projects}
               </Typography>
-
             </Box>
           )}
 
-          {/* =====================================
-              ACHIEVEMENTS
-          ====================================== */}
-
+          {/* ACHIEVEMENTS SECTION */}
           {resume.achievements && (
-
             <Box sx={{ mb: 3 }}>
-
               <SectionTitle
-                title="ACHIEVEMENTS"
+                title={t("resumePreview.achievements")}
               />
 
               <Typography
@@ -866,20 +722,11 @@ const [otpLoading, setOtpLoading] = useState(false);
               >
                 {resume.achievements}
               </Typography>
-
             </Box>
           )}
 
-          {/* =====================================
-              FOOTER
-          ====================================== */}
-
-          <Divider
-            sx={{
-              mt: 4,
-              mb: 2,
-            }}
-          />
+          {/* FOOTER */}
+          <Divider sx={{ mt: 4, mb: 2 }} />
 
           <Typography
             variant="caption"
@@ -889,116 +736,77 @@ const [otpLoading, setOtpLoading] = useState(false);
               textAlign: "center",
             }}
           >
-            Resume created using Internshala Clone
+            {t("resumePreview.resumeCreatedUsing")}
+          </Typography>
+        </Paper>
+      </Container>
+
+      {/* OTP MODAL DIALOG */}
+      <Dialog
+        open={otpModal}
+        onClose={() => setOtpModal(false)}
+      >
+        <DialogTitle>
+          {t("resumePreview.verifyEmailOTP")}
+        </DialogTitle>
+
+        <DialogContent>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            mb={2}
+          >
+            {t("resumePreview.otpSentMessage")}{" "}
+            <strong>{resume?.email}</strong>.{" "}
+            {t("resumePreview.otpProceedMessage")}
           </Typography>
 
-          {otpModal && (
-  <Box
-    sx={{
-      position: "fixed",
-      inset: 0,
-      backgroundColor: "rgba(0,0,0,0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 9999,
-    }}
-  >
-    <Paper
-      elevation={10}
-      sx={{
-        width: "90%",
-        maxWidth: 420,
-        p: 4,
-        borderRadius: 3,
-      }}
-    >
-      <Typography
-        variant="h5"
-        fontWeight={700}
-        textAlign="center"
-        mb={1}
-      >
-        Verify Email
-      </Typography>
+          <TextField
+            fullWidth
+            label={t("resumePreview.enterOTP")}
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            inputProps={{ maxLength: 6 }}
+          />
+        </DialogContent>
 
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        textAlign="center"
-        mb={3}
-      >
-        OTP sent to {resume.email}
-      </Typography>
-
-      <input
-        type="text"
-        value={otp}
-        maxLength={6}
-        onChange={(e) =>
-          setOtp(e.target.value.replace(/\D/g, ""))
-        }
-        placeholder="Enter 6 digit OTP"
-        style={{
-          width: "100%",
-          padding: "14px",
-          fontSize: "20px",
-          textAlign: "center",
-          letterSpacing: "6px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          boxSizing: "border-box",
-        }}
-      />
-
-      <Stack
-        direction="row"
-        spacing={2}
-        mt={3}
-      >
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => {
-            setOtpModal(false);
-            setOtp("");
-          }}
+        <DialogActions
+          sx={{ px: 3, pb: 2 }}
         >
-          Cancel
-        </Button>
+          <Button
+            onClick={() => setOtpModal(false)}
+            color="inherit"
+          >
+            {t("resumePreview.cancel")}
+          </Button>
 
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={handleVerifyOTP}
-          disabled={otpLoading}
-        >
-          {otpLoading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            "Verify & Download"
-          )}
-        </Button>
-      </Stack>
-    </Paper>
-  </Box>
-)}
+          <Button
+            onClick={handleVerifyOTP}
+            variant="contained"
+            disabled={otpLoading}
+          >
+            {otpLoading ? (
+              <CircularProgress
+                size={20}
+                color="inherit"
+              />
+            ) : (
+              t("resumePreview.verifyAndPay")
+            )}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        </Paper>
-
-          <Snackbar
+      {/* SNACKBAR ALERT */}
+      <Snackbar
         open={snackbar.open}
-        autoHideDuration={4000}
+        autoHideDuration={6000}
         onClose={() =>
           setSnackbar((prev) => ({
             ...prev,
             open: false,
           }))
         }
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
       >
         <Alert
           onClose={() =>
@@ -1008,37 +816,1784 @@ const [otpLoading, setOtpLoading] = useState(false);
             }))
           }
           severity={snackbar.severity}
-          variant="filled"
           sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>
       </Snackbar>
-      </Container>
     </Box>
   );
 };
 
-// ==========================================
-// SECTION TITLE COMPONENT
-// ==========================================
-
-const SectionTitle = ({ title }) => {
-  return (
-    <Typography
-      variant="h6"
-      fontWeight={800}
-      sx={{
-        color: "#1f2937",
-        borderBottom:
-          "2px solid #2563eb",
-        display: "inline-block",
-        pb: 0.5,
-      }}
-    >
-      {title}
-    </Typography>
-  );
-};
-
 export default ResumePreview;
+
+
+// import { useEffect, useState } from "react";
+// import {
+//   Box,
+//   Container,
+//   Paper,
+//   Typography,
+//   Divider,
+//   Button,
+//   CircularProgress,
+//   Stack,
+//   Chip,
+//   Avatar,
+//   Snackbar,
+//   Alert,
+//   Dialog,
+//   DialogTitle,
+//   DialogContent,
+//   DialogActions,
+//   TextField,
+// } from "@mui/material";
+
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
+// import { useTranslation } from "react-i18next";
+// import { useNavigate } from "react-router-dom";
+
+// import { getMyResume } from "../services/resumeService";
+// import { checkPremium } from "../services/premiumService";
+// import { sendResumeOTP, verifyResumeOTP } from "../services/resumeOtpService";
+// import { createResumeOrder, verifyResumePayment } from "../services/paymentService";
+
+// // Helper Component for Section Titles
+// const SectionTitle = ({ title }) => (
+//   <Typography
+//     variant="h6"
+//     fontWeight={700}
+//     sx={{
+//       color: "#1e293b",
+//       letterSpacing: "1px",
+//       borderBottom: "2px solid #2563eb",
+//       display: "inline-block",
+//       pb: 0.5,
+//       mb: 1,
+//     }}
+//   >
+//     {title}
+//   </Typography>
+// );
+
+// const ResumePreview = () => {
+//   const { t, i18n } = useTranslation();
+//   const navigate = useNavigate();
+
+//   const [resume, setResume] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [isPremium, setIsPremium] = useState(false);
+
+//   const [snackbar, setSnackbar] = useState({
+//     open: false,
+//     message: "",
+//     severity: "info",
+//   });
+
+//   const [otpModal, setOtpModal] = useState(false);
+//   const [otp, setOtp] = useState("");
+//   const [otpLoading, setOtpLoading] = useState(false);
+
+//   // ==========================================
+//   // CHECK PREMIUM STATUS
+//   // ==========================================
+//   const verifyPremium = async () => {
+//     try {
+//       const data = await checkPremium();
+//       console.log("Premium status:", data);
+//       setIsPremium(data.isPremium);
+//     } catch (error) {
+//       console.error(
+//         "Premium check error:",
+//         error.response?.data || error.message
+//       );
+//       setIsPremium(false);
+//     }
+//   };
+
+//   // ==========================================
+//   // FETCH RESUME (WITH TRANSLATION PARAM)
+//   // ==========================================
+//   const fetchResume = async () => {
+//     try {
+//       setLoading(true);
+//       // 🟢 निवडलेली भाषा पॅरामीटर म्हणून पाठवणे (i18n.language)
+//       const currentLang = i18n.language || "en";
+//       const data = await getMyResume(currentLang);
+
+//       console.log("Resume Data:", data);
+//       setResume(data.resume);
+//     } catch (error) {
+//       console.error(
+//         "Fetch resume error:",
+//         error.response?.data || error.message
+//       );
+
+//       setSnackbar({
+//         open: true,
+//         message: error.response?.data?.message || "Unable to load resume",
+//         severity: "error",
+//       });
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   // ==========================================
+//   // GENERATE PDF
+//   // ==========================================
+//   const generatePDF = async () => {
+//     try {
+//       const resumeElement = document.getElementById("resume-content");
+
+//       if (!resumeElement) {
+//         setSnackbar({
+//           open: true,
+//           message: "Resume content not found",
+//           severity: "error",
+//         });
+//         return;
+//       }
+
+//       const canvas = await html2canvas(resumeElement, {
+//         scale: 2,
+//         useCORS: true,
+//         backgroundColor: "#ffffff",
+//       });
+
+//       const imgData = canvas.toDataURL("image/png");
+//       const pdf = new jsPDF("p", "mm", "a4");
+
+//       const pdfWidth = pdf.internal.pageSize.getWidth();
+//       const pdfHeight = pdf.internal.pageSize.getHeight();
+
+//       const imgWidth = pdfWidth;
+//       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+//       let heightLeft = imgHeight;
+//       let position = 0;
+
+//       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+//       heightLeft -= pdfHeight;
+
+//       while (heightLeft > 0) {
+//         position = heightLeft - imgHeight;
+//         pdf.addPage();
+//         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+//         heightLeft -= pdfHeight;
+//       }
+
+//       const fileName = resume.fullName
+//         ? `${resume.fullName.replace(/\s+/g, "_")}_Resume.pdf`
+//         : "Resume.pdf";
+//       pdf.save(fileName);
+//     } catch (error) {
+//       console.error("PDF generation error:", error);
+//       setSnackbar({
+//         open: true,
+//         message: "Failed to generate PDF",
+//         severity: "error",
+//       });
+//     }
+//   };
+
+//   // ==========================================
+//   // DOWNLOAD PDF
+//   // ==========================================
+//   const downloadPDF = async () => {
+//     if (isPremium) {
+//       await generatePDF();
+//       return;
+//     }
+
+//     try {
+//       setOtpLoading(true);
+//       console.log("Sending OTP to email:", resume.email);
+
+//       const response = await sendResumeOTP(resume.email);
+//       console.log("OTP sent response:", response);
+
+//       if (response.success) {
+//         setOtpModal(true);
+
+//         setSnackbar({
+//           open: true,
+//           message: "OTP sent to your email. Please check your inbox.",
+//           severity: "info",
+//         });
+//       }
+//     } catch (error) {
+//       console.error("Send OTP error:", error.response?.data || error.message);
+//       setSnackbar({
+//         open: true,
+//         message: "Failed to send OTP",
+//         severity: "error",
+//       });
+//     } finally {
+//       setOtpLoading(false);
+//     }
+//   };
+
+//   // ==========================================
+//   // VERIFY OTP
+//   // ==========================================
+//   const handleVerifyOTP = async () => {
+//     if (!otp || otp.length !== 6) {
+//       setSnackbar({
+//         open: true,
+//         message: "Please enter a valid 6-digit OTP",
+//         severity: "warning",
+//       });
+//       return;
+//     }
+
+//     try {
+//       setOtpLoading(true);
+
+//       const response = await verifyResumeOTP(resume.email, otp);
+//       console.log("OTP verification:", response);
+
+//       if (response.success) {
+//         setOtpModal(false);
+//         setOtp("");
+
+//         setSnackbar({
+//           open: true,
+//           message: "OTP verified successfully. Opening payment...",
+//           severity: "success",
+//         });
+
+//         await handlePayment();
+//       }
+//     } catch (error) {
+//       console.error(
+//         "OTP verification error:",
+//         error.response?.data || error.message
+//       );
+
+//       setSnackbar({
+//         open: true,
+//         message: error.response?.data?.message || "Invalid OTP",
+//         severity: "error",
+//       });
+//     } finally {
+//       setOtpLoading(false);
+//     }
+//   };
+
+//   // ==========================================
+//   // HANDLE PAYMENT
+//   // ==========================================
+//   const handlePayment = async () => {
+//     try {
+//       setOtpLoading(true);
+
+//       const orderData = await createResumeOrder();
+
+//       if (!orderData.success) {
+//         throw new Error(orderData.message || "Unable to create payment order");
+//       }
+
+//       if (!window.Razorpay) {
+//         throw new Error("Razorpay SDK not loaded");
+//       }
+
+//       const options = {
+//         key: orderData.key,
+//         amount: orderData.order.amount,
+//         currency: orderData.order.currency,
+//         name: "Internshala Clone",
+//         description: "Resume Premium - ₹50",
+//         order_id: orderData.order.id,
+
+//         handler: async function (response) {
+//           try {
+//             const verifyResponse = await verifyResumePayment({
+//               razorpay_order_id: response.razorpay_order_id,
+//               razorpay_payment_id: response.razorpay_payment_id,
+//               razorpay_signature: response.razorpay_signature,
+//             });
+
+//             if (verifyResponse.success) {
+//               setIsPremium(true);
+
+//               setSnackbar({
+//                 open: true,
+//                 message: "Payment successful! Resume is now premium.",
+//                 severity: "success",
+//               });
+
+//               await generatePDF();
+//             }
+//           } catch (error) {
+//             console.error(
+//               "Payment verification error:",
+//               error.response?.data || error.message
+//             );
+//           }
+//         },
+
+//         prefill: {
+//           name: resume.fullName,
+//           email: resume.email,
+//           contact: resume.phone,
+//         },
+
+//         theme: {
+//           color: "#2563eb",
+//         },
+
+//         modal: {
+//           ondismiss: function () {
+//             setSnackbar({
+//               open: true,
+//               message: "Payment cancelled",
+//               severity: "warning",
+//             });
+//           },
+//         },
+//       };
+
+//       const razorpay = new window.Razorpay(options);
+
+//       razorpay.on("payment.failed", function (response) {
+//         setSnackbar({
+//           open: true,
+//           message: response.error?.description || "Payment failed",
+//           severity: "error",
+//         });
+//       });
+
+//       razorpay.open();
+//     } catch (error) {
+//       console.error(
+//         "PAYMENT ERROR:",
+//         error.response?.data || error.message
+//       );
+
+//       setSnackbar({
+//         open: true,
+//         message:
+//           error.response?.data?.message ||
+//           error.message ||
+//           "Unable to start payment",
+//         severity: "error",
+//       });
+//     } finally {
+//       setOtpLoading(false);
+//     }
+//   };
+
+//   // ==========================================
+//   // USE EFFECT (DEPENDENCY ON i18n.language)
+//   // ==========================================
+//   useEffect(() => {
+//     fetchResume();
+//     verifyPremium();
+//   }, [i18n.language]); // 🟢 भाषा बदलल्यास ऑटोमॅटिक री-फेच होईल
+
+//   // ==========================================
+//   // LOADING STATE
+//   // ==========================================
+//   if (loading) {
+//     return (
+//       <Box
+//         sx={{
+//           minHeight: "80vh",
+//           display: "flex",
+//           justifyContent: "center",
+//           alignItems: "center",
+//         }}
+//       >
+//         <CircularProgress />
+//       </Box>
+//     );
+//   }
+
+//   // ==========================================
+//   // RESUME NOT FOUND
+//   // ==========================================
+//   if (!resume) {
+//     return (
+//       <Container sx={{ py: 8 }}>
+//         <Typography variant="h5" sx={{ textAlign: "center" }}>
+//           Resume not found
+//         </Typography>
+
+//         <Box sx={{ textAlign: "center", mt: 3 }}>
+//           <Button variant="contained" onClick={() => navigate("/resume")}>
+//             Create Resume
+//           </Button>
+//         </Box>
+//       </Container>
+//     );
+//   }
+
+//   // ==========================================
+//   // SKILLS ARRAY
+//   // ==========================================
+//   const skillsArray = resume.skills
+//     ? resume.skills
+//         .split(",")
+//         .map((skill) => skill.trim())
+//         .filter(Boolean)
+//     : [];
+
+//   // ==========================================
+//   // MAIN RENDER
+//   // ==========================================
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         backgroundColor: "#eef1f5",
+//         py: 5,
+//       }}
+//     >
+//       <Container maxWidth="md">
+//         {/* ACTION BUTTONS */}
+//         <Stack
+//           direction={{ xs: "column", sm: "row" }}
+//           spacing={2}
+//           justifyContent="space-between"
+//           alignItems={{ xs: "stretch", sm: "center" }}
+//           sx={{ mb: 3 }}
+//         >
+//           {/* Edit Resume */}
+//           <Button variant="outlined" onClick={() => navigate("/resume")}>
+//             ← Edit Resume
+//           </Button>
+
+//           {/* Premium + Download */}
+//           <Stack
+//             direction={{ xs: "column", sm: "row" }}
+//             spacing={2}
+//             alignItems="center"
+//           >
+//             {isPremium ? (
+//               <Chip
+//                 label="Premium Active"
+//                 color="success"
+//                 sx={{ fontWeight: 600 }}
+//               />
+//             ) : (
+//               <Chip
+//                 label="₹50 Premium Required"
+//                 color="warning"
+//                 sx={{ fontWeight: 600 }}
+//               />
+//             )}
+
+//             <Button
+//               variant="contained"
+//               onClick={downloadPDF}
+//               disabled={otpLoading}
+//             >
+//               {otpLoading ? <CircularProgress size={24} color="inherit" /> : "Download PDF"}
+//             </Button>
+//           </Stack>
+//         </Stack>
+
+//         {/* RESUME PAPER */}
+//         <Paper
+//           id="resume-content"
+//           elevation={5}
+//           sx={{
+//             backgroundColor: "#ffffff",
+//             p: { xs: 3, sm: 5, md: 7 },
+//           }}
+//         >
+//           {/* HEADER SECTION */}
+//           <Box
+//             sx={{
+//               display: "flex",
+//               flexDirection: { xs: "column", sm: "row" },
+//               alignItems: { xs: "center", sm: "flex-start" },
+//               gap: 3,
+//             }}
+//           >
+//             {/* Profile Photo */}
+//             {resume.photo && (
+//               <Avatar
+//                 src={resume.photo}
+//                 alt={resume.fullName}
+//                 sx={{ width: 110, height: 110 }}
+//               />
+//             )}
+
+//             {/* Personal Information */}
+//             <Box
+//               sx={{
+//                 flex: 1,
+//                 textAlign: { xs: "center", sm: "left" },
+//               }}
+//             >
+//               <Typography
+//                 variant="h3"
+//                 fontWeight={800}
+//                 sx={{
+//                   fontSize: { xs: "28px", sm: "36px" },
+//                   color: "#1f2937",
+//                 }}
+//               >
+//                 {resume.fullName}
+//               </Typography>
+
+//               {/* Qualification */}
+//               {resume.qualification && (
+//                 <Typography
+//                   variant="h6"
+//                   sx={{ mt: 0.5, color: "#2563eb", fontWeight: 600 }}
+//                 >
+//                   {resume.qualification}
+//                 </Typography>
+//               )}
+
+//               {/* Contact Information */}
+//               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+//                 {resume.email}
+//                 {resume.phone && `  |  ${resume.phone}`}
+//                 {resume.location && `  |  ${resume.location}`}
+//               </Typography>
+
+//               {/* Social Links */}
+//               <Stack
+//                 direction="row"
+//                 spacing={2}
+//                 sx={{
+//                   mt: 1.5,
+//                   justifyContent: { xs: "center", sm: "flex-start" },
+//                 }}
+//               >
+//                 {resume.linkedin && (
+//                   <Typography
+//                     component="a"
+//                     href={resume.linkedin}
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     sx={{
+//                       color: "#2563eb",
+//                       textDecoration: "none",
+//                       fontWeight: 600,
+//                     }}
+//                   >
+//                     LinkedIn
+//                   </Typography>
+//                 )}
+
+//                 {resume.github && (
+//                   <Typography
+//                     component="a"
+//                     href={resume.github}
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     sx={{
+//                       color: "#111827",
+//                       textDecoration: "none",
+//                       fontWeight: 600,
+//                     }}
+//                   >
+//                     GitHub
+//                   </Typography>
+//                 )}
+//               </Stack>
+//             </Box>
+//           </Box>
+
+//           <Divider sx={{ my: 3 }} />
+
+//           {/* EDUCATION SECTION */}
+//           {(resume.qualification || resume.college || resume.graduationYear) && (
+//             <Box sx={{ mb: 3 }}>
+//               <SectionTitle title="EDUCATION" />
+
+//               {resume.qualification && (
+//                 <Typography fontWeight={700} sx={{ mt: 1 }}>
+//                   {resume.qualification}
+//                 </Typography>
+//               )}
+
+//               {resume.college && <Typography>{resume.college}</Typography>}
+
+//               {resume.graduationYear && (
+//                 <Typography variant="body2" color="text.secondary">
+//                   Graduation Year: {resume.graduationYear}
+//                 </Typography>
+//               )}
+//             </Box>
+//           )}
+
+//           {/* EXPERIENCE SECTION */}
+//           {resume.experience && (
+//             <Box sx={{ mb: 3 }}>
+//               <SectionTitle title="EXPERIENCE" />
+//               <Typography
+//                 sx={{
+//                   mt: 1,
+//                   whiteSpace: "pre-line",
+//                   lineHeight: 1.8,
+//                 }}
+//               >
+//                 {resume.experience}
+//               </Typography>
+//             </Box>
+//           )}
+
+//           {/* SKILLS SECTION */}
+//           {skillsArray.length > 0 && (
+//             <Box sx={{ mb: 3 }}>
+//               <SectionTitle title="SKILLS" />
+//               <Box
+//                 sx={{
+//                   display: "flex",
+//                   flexWrap: "wrap",
+//                   gap: 1,
+//                   mt: 1.5,
+//                 }}
+//               >
+//                 {skillsArray.map((skill, index) => (
+//                   <Chip key={index} label={skill} variant="outlined" />
+//                 ))}
+//               </Box>
+//             </Box>
+//           )}
+
+//           {/* PROJECTS SECTION */}
+//           {resume.projects && (
+//             <Box sx={{ mb: 3 }}>
+//               <SectionTitle title="PROJECTS" />
+//               <Typography
+//                 sx={{
+//                   mt: 1,
+//                   whiteSpace: "pre-line",
+//                   lineHeight: 1.8,
+//                 }}
+//               >
+//                 {resume.projects}
+//               </Typography>
+//             </Box>
+//           )}
+
+//           {/* ACHIEVEMENTS SECTION */}
+//           {resume.achievements && (
+//             <Box sx={{ mb: 3 }}>
+//               <SectionTitle title="ACHIEVEMENTS" />
+//               <Typography
+//                 sx={{
+//                   mt: 1,
+//                   whiteSpace: "pre-line",
+//                   lineHeight: 1.8,
+//                 }}
+//               >
+//                 {resume.achievements}
+//               </Typography>
+//             </Box>
+//           )}
+
+//           {/* FOOTER */}
+//           <Divider sx={{ mt: 4, mb: 2 }} />
+//           <Typography
+//             variant="caption"
+//             color="text.secondary"
+//             sx={{ display: "block", textAlign: "center" }}
+//           >
+//             Resume created using Internshala Clone
+//           </Typography>
+//         </Paper>
+//       </Container>
+
+//       {/* OTP MODAL DIALOG */}
+//       <Dialog open={otpModal} onClose={() => setOtpModal(false)}>
+//         <DialogTitle>Verify Email OTP</DialogTitle>
+//         <DialogContent>
+//           <Typography variant="body2" color="text.secondary" mb={2}>
+//             An OTP has been sent to <strong>{resume?.email}</strong>. Please enter the 6-digit code below to proceed with payment.
+//           </Typography>
+//           <TextField
+//             fullWidth
+//             label="Enter 6-digit OTP"
+//             value={otp}
+//             onChange={(e) => setOtp(e.target.value)}
+//             inputProps={{ maxLength: 6 }}
+//           />
+//         </DialogContent>
+//         <DialogActions sx={{ px: 3, pb: 2 }}>
+//           <Button onClick={() => setOtpModal(false)} color="inherit">
+//             Cancel
+//           </Button>
+//           <Button
+//             onClick={handleVerifyOTP}
+//             variant="contained"
+//             disabled={otpLoading}
+//           >
+//             {otpLoading ? <CircularProgress size={20} color="inherit" /> : "Verify & Pay"}
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+
+//       {/* SNACKBAR ALERT */}
+//       <Snackbar
+//         open={snackbar.open}
+//         autoHideDuration={6000}
+//         onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+//       >
+//         <Alert
+//           onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+//           severity={snackbar.severity}
+//           sx={{ width: "100%" }}
+//         >
+//           {snackbar.message}
+//         </Alert>
+//       </Snackbar>
+//     </Box>
+//   );
+// };
+
+// export default ResumePreview;
+
+
+// import { useEffect, useState } from "react";
+
+// import {
+//   Box,
+//   Container,
+//   Paper,
+//   Typography,
+//   Divider,
+//   Button,
+//   CircularProgress,
+//   Stack,
+//   Chip,
+//   Avatar,
+//   Snackbar,
+//   Alert,
+// } from "@mui/material";
+
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
+
+// import { getMyResume } from "../services/resumeService";
+// import { checkPremium } from "../services/premiumService";
+// import { sendResumeOTP, verifyResumeOTP } from "../services/resumeOtpService";
+// import { createResumeOrder, verifyResumePayment } from "../services/paymentService";
+
+// import { useNavigate } from "react-router-dom";
+
+// const ResumePreview = () => {
+//   const [resume, setResume] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [isPremium, setIsPremium] = useState(false);
+//   const [snackbar, setSnackbar] = useState({
+//   open: false,
+//   message: "",
+//   severity: "info",
+// });
+
+// const [otpModal, setOtpModal] = useState(false);
+// const [otp, setOtp] = useState("");
+// const [otpLoading, setOtpLoading] = useState(false);
+//   const navigate = useNavigate();
+
+//   // ==========================================
+//   // CHECK PREMIUM STATUS
+//   // ==========================================
+
+//   const verifyPremium = async () => {
+//     try {
+//       const data = await checkPremium();
+
+//       console.log("Premium status:", data);
+
+//       setIsPremium(data.isPremium);
+//     } catch (error) {
+//       console.error(
+//         "Premium check error:",
+//         error.response?.data || error.message
+//       );
+
+//       setIsPremium(false);
+//     }
+//   };
+
+//   // ==========================================
+//   // FETCH RESUME
+//   // ==========================================
+
+//   const fetchResume = async () => {
+//     try {
+//       const data = await getMyResume();
+
+//       console.log("Resume:", data);
+
+//       setResume(data.resume);
+//     } catch (error) {
+//       console.error(
+//         "Fetch resume error:",
+//         error.response?.data || error.message
+//       );
+
+//       setSnackbar({
+//         open: true,
+//         message: error.response?.data?.message || "Unable to load resume",
+//         severity: "error",
+//       });
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const generatePDF = async () => {
+//     try {
+//       const resumeElement = 
+//       document.getElementById("resume-content");
+
+//       if (!resumeElement) {
+//         setSnackbar({
+//            open: true,
+//         message: "Resume content not found",
+//         severity: "error",
+//         });
+//         return;
+//       }
+
+//       const canvas = await html2canvas(resumeElement, {
+//         scale: 2,
+//         useCORS: true,
+//         backgroundColor: "#ffffff",
+//       });
+
+//       const imgData = canvas.toDataURL("image/png");
+
+//       const pdf = new jsPDF("p", "mm", "a4");
+
+//       const pdfWidth = pdf.internal.pageSize.getWidth();
+//       const pdfHeight = pdf.internal.pageSize.getHeight();
+
+//       const imgWidth = pdfWidth;
+//       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+//       let heightLeft = imgHeight;
+//       let position = 0;
+
+//       pdf.addImage(
+//         imgData,
+//         "PNG",
+//         0,
+//         position,
+//         imgWidth,
+//         imgHeight
+//       );
+//       heightLeft -= pdfHeight;
+
+//       while (heightLeft > 0) {
+//         position = heightLeft - imgHeight;
+//         pdf.addPage();
+//         pdf.addImage(
+//           imgData,
+//           "PNG",
+//           0,
+//           position,
+//           imgWidth,
+//           imgHeight
+//         );
+//         heightLeft -= pdfHeight;
+//       }
+
+//       const fileName = resume.fullName
+//         ? `${resume.fullName.replace(/\s+/g, "_")}_Resume.pdf`
+//         : "Resume.pdf";
+//       pdf.save(fileName);
+
+//     } catch (error) {
+//       console.error("PDF generation error:", error);
+//       setSnackbar({
+//         open: true,
+//         message: "Failed to generate PDF",
+//         severity: "error",
+//       });
+//     }
+//   }
+
+//   // ==========================================
+//   // DOWNLOAD PDF
+//   // ==========================================
+
+//    const downloadPDF = async () => {
+//     if (isPremium){
+//       await generatePDF();
+//       return;
+//     }
+
+//     try {
+//       setOtpLoading(true);
+//       console.log("Sending OTP to email:", resume.email);
+      
+//       const response = await sendResumeOTP(resume.email);
+//       console.log("OTP sent response:", response);
+
+//       if(response.success) {
+//         setOtpModal(true);
+
+//         setSnackbar({
+//           open: true,
+//           message: "OTP sent to your email. Please check your inbox.",
+//           severity: "info",
+//         });
+//       }
+
+//     } catch (error) {
+//       console.error("Send OTP error:", error.response?.data || error.message);
+//       setSnackbar({
+//         open: true,
+//         message: "Failed to send OTP",
+//         severity: "error",
+//       });
+//     }
+//     finally {
+//       setOtpLoading(false);
+//     }
+//   };
+
+//   const handleVerifyOTP = async () => {
+//     if(!otp || otp.length !== 6){
+//       setSnackbar({
+//         open: true,
+//         message: "Please enter a valid 6-digit OTP",
+//         severity: "warning",
+//       });
+//       return;
+//     }
+
+//     try {
+//       setOtpLoading(true);
+
+//       const response = await verifyResumeOTP(
+//         resume.email,
+//         otp
+//       );
+
+//       console.log("OTP verification:", response);
+
+//       if(response.success) {
+//         setOtpModal(false);
+//         setOtp("");
+
+//         setSnackbar({
+//           open: true,
+//           message: "OTP verified successfully. Opening payment...",
+//           severity: "success",
+//         });
+
+//         await handlePayment();
+//       }
+
+//     } catch (error) {
+//       console.error(
+//         "OTP verification error:",
+//         error.response?.data || error.message
+//       );
+
+//       setSnackbar({
+//         open: true,
+//         message: error.response?.data?.message ||
+//          "Invalid OTP",
+//         severity: "error",
+//   });
+//     } finally {
+//       setOtpLoading(false);
+//     }
+//   };
+
+//   const handlePayment = async () => {
+//   try {
+//     setOtpLoading(true);
+
+//     console.log("========== PAYMENT START ==========");
+
+//     console.log("1. Creating Razorpay order...");
+
+//     const orderData = await createResumeOrder();
+
+//     console.log("2. Order response:", orderData);
+
+//     if (!orderData.success) {
+//       throw new Error(
+//         orderData.message || "Unable to create payment order"
+//       );
+//     }
+
+//     console.log("3. Razorpay key:", orderData.key);
+//     console.log("4. Razorpay order:", orderData.order);
+
+//     console.log("5. Razorpay SDK:", window.Razorpay);
+
+//     if (!window.Razorpay) {
+//       throw new Error("Razorpay SDK not loaded");
+//     }
+
+//     const options = {
+//       key: orderData.key,
+//       amount: orderData.order.amount,
+//       currency: orderData.order.currency,
+//       name: "Internshala Clone",
+//       description: "Resume Premium - ₹50",
+//       order_id: orderData.order.id,
+
+//       handler: async function (response) {
+//         console.log("6. PAYMENT SUCCESS:", response);
+
+//         try {
+//           const verifyResponse = await verifyResumePayment({
+//             razorpay_order_id: response.razorpay_order_id,
+//             razorpay_payment_id: response.razorpay_payment_id,
+//             razorpay_signature: response.razorpay_signature,
+//           });
+
+//           console.log("7. Payment verification:", verifyResponse);
+
+//           if (verifyResponse.success) {
+//             setIsPremium(true);
+
+//             setSnackbar({
+//               open: true,
+//               message: "Payment successful! Resume is now premium.",
+//               severity: "success",
+//             });
+
+//             await generatePDF();
+//           }
+//         } catch (error) {
+//           console.error(
+//             "Payment verification error:",
+//             error.response?.data || error.message
+//           );
+//         }
+//       },
+
+//       prefill: {
+//         name: resume.fullName,
+//         email: resume.email,
+//         contact: resume.phone,
+//       },
+
+//       theme: {
+//         color: "#2563eb",
+//       },
+
+//       modal: {
+//         ondismiss: function () {
+//           console.log("Razorpay modal closed");
+
+//           setSnackbar({
+//             open: true,
+//             message: "Payment cancelled",
+//             severity: "warning",
+//           });
+//         },
+//       },
+//     };
+
+//     console.log("8. Razorpay options:", options);
+
+//     const razorpay = new window.Razorpay(options);
+
+//     console.log("9. Razorpay instance created");
+
+//     razorpay.on("payment.failed", function (response) {
+//       console.error(
+//         "PAYMENT FAILED:",
+//         response.error
+//       );
+
+//       setSnackbar({
+//         open: true,
+//         message:
+//           response.error?.description ||
+//           "Payment failed",
+//         severity: "error",
+//       });
+//     });
+
+//     console.log("10. Opening Razorpay...");
+
+//     razorpay.open();
+
+//     console.log("11. razorpay.open() called");
+
+//   } catch (error) {
+//     console.error(
+//       "========== PAYMENT ERROR ==========",
+//       error.response?.data || error.message
+//     );
+
+//     setSnackbar({
+//       open: true,
+//       message:
+//         error.response?.data?.message ||
+//         error.message ||
+//         "Unable to start payment",
+//       severity: "error",
+//     });
+//   } finally {
+//     setOtpLoading(false);
+//   }
+// };
+
+  
+
+//   // ==========================================
+//   // USE EFFECT
+//   // ==========================================
+
+//   useEffect(() => {
+//     fetchResume();
+//     verifyPremium();
+//   }, []);
+
+//   // ==========================================
+//   // LOADING
+//   // ==========================================
+
+//   if (loading) {
+//     return (
+//       <Box
+//         sx={{
+//           minHeight: "80vh",
+//           display: "flex",
+//           justifyContent: "center",
+//           alignItems: "center",
+//         }}
+//       >
+//         <CircularProgress />
+//       </Box>
+//     );
+//   }
+
+//   // ==========================================
+//   // RESUME NOT FOUND
+//   // ==========================================
+
+//   if (!resume) {
+//     return (
+//       <Container sx={{ py: 8 }}>
+//         <Typography
+//           variant="h5"
+//           sx={{
+//             textAlign: "center",
+//           }}
+//         >
+//           Resume not found
+//         </Typography>
+
+//         <Box
+//           sx={{
+//             textAlign: "center",
+//             mt: 3,
+//           }}
+//         >
+//           <Button
+//             variant="contained"
+//             onClick={() =>
+//               navigate("/resume")
+//             }
+//           >
+//             Create Resume
+//           </Button>
+//         </Box>
+//       </Container>
+//     );
+//   }
+
+//   // ==========================================
+//   // SKILLS ARRAY
+//   // ==========================================
+
+//   const skillsArray = resume.skills
+//     ? resume.skills
+//         .split(",")
+//         .map((skill) => skill.trim())
+//         .filter(Boolean)
+//     : [];
+
+//   // ==========================================
+//   // UI
+//   // ==========================================
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         backgroundColor: "#eef1f5",
+//         py: 5,
+//       }}
+//     >
+//       <Container maxWidth="md">
+
+//         {/* =====================================
+//             ACTION BUTTONS
+//         ====================================== */}
+
+//         <Stack
+//           direction={{
+//             xs: "column",
+//             sm: "row",
+//           }}
+//           spacing={2}
+//           justifyContent="space-between"
+//           alignItems={{
+//             xs: "stretch",
+//             sm: "center",
+//           }}
+//           sx={{ mb: 3 }}
+//         >
+
+//           {/* Edit Resume */}
+
+//           <Button
+//             variant="outlined"
+//             onClick={() =>
+//               navigate("/resume")
+//             }
+//           >
+//             ← Edit Resume
+//           </Button>
+
+//           {/* Premium + Download */}
+
+//           <Stack
+//             direction={{
+//               xs: "column",
+//               sm: "row",
+//             }}
+//             spacing={2}
+//             alignItems="center"
+//           >
+
+//             {/* Premium Status */}
+
+//             {isPremium ? (
+//               <Chip
+//                 label="Premium Active"
+//                 color="success"
+//                 sx={{
+//                   fontWeight: 600,
+//                 }}
+//               />
+//             ) : (
+//               <Chip
+//                 label="₹50 Premium Required"
+//                 color="warning"
+//                 sx={{
+//                   fontWeight: 600,
+//                 }}
+//               />
+//             )}
+
+//             {/* Download */}
+
+//             <Button
+//               variant="contained"
+//               onClick={downloadPDF}
+//             >
+//               Download PDF
+//             </Button>
+
+//           </Stack>
+//         </Stack>
+
+//         {/* =====================================
+//             RESUME PAPER
+//         ====================================== */}
+
+//         <Paper
+//           id="resume-content"
+//           elevation={5}
+//           sx={{
+//             backgroundColor: "#ffffff",
+//             p: {
+//               xs: 3,
+//               sm: 5,
+//               md: 7,
+//             },
+//           }}
+//         >
+
+//           {/* =====================================
+//               HEADER
+//           ====================================== */}
+
+//           <Box
+//             sx={{
+//               display: "flex",
+
+//               flexDirection: {
+//                 xs: "column",
+//                 sm: "row",
+//               },
+
+//               alignItems: {
+//                 xs: "center",
+//                 sm: "flex-start",
+//               },
+
+//               gap: 3,
+//             }}
+//           >
+
+//             {/* Profile Photo */}
+
+//             {resume.photo && (
+//               <Avatar
+//                 src={resume.photo}
+//                 alt={resume.fullName}
+//                 sx={{
+//                   width: 110,
+//                   height: 110,
+//                 }}
+//               />
+//             )}
+
+//             {/* Personal Information */}
+
+//             <Box
+//               sx={{
+//                 flex: 1,
+
+//                 textAlign: {
+//                   xs: "center",
+//                   sm: "left",
+//                 },
+//               }}
+//             >
+
+//               <Typography
+//                 variant="h3"
+//                 fontWeight={800}
+//                 sx={{
+//                   fontSize: {
+//                     xs: "28px",
+//                     sm: "36px",
+//                   },
+
+//                   color: "#1f2937",
+//                 }}
+//               >
+//                 {resume.fullName}
+//               </Typography>
+
+//               {/* Qualification */}
+
+//               {resume.qualification && (
+//                 <Typography
+//                   variant="h6"
+//                   sx={{
+//                     mt: 0.5,
+//                     color: "#2563eb",
+//                     fontWeight: 600,
+//                   }}
+//                 >
+//                   {resume.qualification}
+//                 </Typography>
+//               )}
+
+//               {/* Contact */}
+
+//               <Typography
+//                 variant="body2"
+//                 color="text.secondary"
+//                 sx={{
+//                   mt: 1,
+//                 }}
+//               >
+//                 {resume.email}
+
+//                 {resume.phone &&
+//                   `  |  ${resume.phone}`}
+
+//                 {resume.location &&
+//                   `  |  ${resume.location}`}
+//               </Typography>
+
+//               {/* Social Links */}
+
+//               <Stack
+//                 direction="row"
+//                 spacing={2}
+//                 sx={{
+//                   mt: 1.5,
+
+//                   justifyContent: {
+//                     xs: "center",
+//                     sm: "flex-start",
+//                   },
+//                 }}
+//               >
+
+//                 {resume.linkedin && (
+//                   <Typography
+//                     component="a"
+//                     href={resume.linkedin}
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     sx={{
+//                       color: "#2563eb",
+//                       textDecoration: "none",
+//                       fontWeight: 600,
+//                     }}
+//                   >
+//                     LinkedIn
+//                   </Typography>
+//                 )}
+
+//                 {resume.github && (
+//                   <Typography
+//                     component="a"
+//                     href={resume.github}
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     sx={{
+//                       color: "#111827",
+//                       textDecoration: "none",
+//                       fontWeight: 600,
+//                     }}
+//                   >
+//                     GitHub
+//                   </Typography>
+//                 )}
+
+//               </Stack>
+
+//             </Box>
+
+//           </Box>
+
+//           <Divider sx={{ my: 3 }} />
+
+//           {/* =====================================
+//               EDUCATION
+//           ====================================== */}
+
+//           {(resume.qualification ||
+//             resume.college ||
+//             resume.graduationYear) && (
+
+//             <Box sx={{ mb: 3 }}>
+
+//               <SectionTitle
+//                 title="EDUCATION"
+//               />
+
+//               {resume.qualification && (
+//                 <Typography
+//                   fontWeight={700}
+//                   sx={{
+//                     mt: 1,
+//                   }}
+//                 >
+//                   {resume.qualification}
+//                 </Typography>
+//               )}
+
+//               {resume.college && (
+//                 <Typography>
+//                   {resume.college}
+//                 </Typography>
+//               )}
+
+//               {resume.graduationYear && (
+//                 <Typography
+//                   variant="body2"
+//                   color="text.secondary"
+//                 >
+//                   Graduation Year:{" "}
+//                   {resume.graduationYear}
+//                 </Typography>
+//               )}
+
+//             </Box>
+//           )}
+
+//           {/* =====================================
+//               EXPERIENCE
+//           ====================================== */}
+
+//           {resume.experience && (
+
+//             <Box sx={{ mb: 3 }}>
+
+//               <SectionTitle
+//                 title="EXPERIENCE"
+//               />
+
+//               <Typography
+//                 sx={{
+//                   mt: 1,
+//                   whiteSpace: "pre-line",
+//                   lineHeight: 1.8,
+//                 }}
+//               >
+//                 {resume.experience}
+//               </Typography>
+
+//             </Box>
+//           )}
+
+//           {/* =====================================
+//               SKILLS
+//           ====================================== */}
+
+//           {skillsArray.length > 0 && (
+
+//             <Box sx={{ mb: 3 }}>
+
+//               <SectionTitle
+//                 title="SKILLS"
+//               />
+
+//               <Box
+//                 sx={{
+//                   display: "flex",
+//                   flexWrap: "wrap",
+//                   gap: 1,
+//                   mt: 1.5,
+//                 }}
+//               >
+
+//                 {skillsArray.map(
+//                   (skill, index) => (
+//                     <Chip
+//                       key={index}
+//                       label={skill}
+//                       variant="outlined"
+//                     />
+//                   )
+//                 )}
+
+//               </Box>
+
+//             </Box>
+//           )}
+
+//           {/* =====================================
+//               PROJECTS
+//           ====================================== */}
+
+//           {resume.projects && (
+
+//             <Box sx={{ mb: 3 }}>
+
+//               <SectionTitle
+//                 title="PROJECTS"
+//               />
+
+//               <Typography
+//                 sx={{
+//                   mt: 1,
+//                   whiteSpace: "pre-line",
+//                   lineHeight: 1.8,
+//                 }}
+//               >
+//                 {resume.projects}
+//               </Typography>
+
+//             </Box>
+//           )}
+
+//           {/* =====================================
+//               ACHIEVEMENTS
+//           ====================================== */}
+
+//           {resume.achievements && (
+
+//             <Box sx={{ mb: 3 }}>
+
+//               <SectionTitle
+//                 title="ACHIEVEMENTS"
+//               />
+
+//               <Typography
+//                 sx={{
+//                   mt: 1,
+//                   whiteSpace: "pre-line",
+//                   lineHeight: 1.8,
+//                 }}
+//               >
+//                 {resume.achievements}
+//               </Typography>
+
+//             </Box>
+//           )}
+
+//           {/* =====================================
+//               FOOTER
+//           ====================================== */}
+
+//           <Divider
+//             sx={{
+//               mt: 4,
+//               mb: 2,
+//             }}
+//           />
+
+//           <Typography
+//             variant="caption"
+//             color="text.secondary"
+//             sx={{
+//               display: "block",
+//               textAlign: "center",
+//             }}
+//           >
+//             Resume created using Internshala Clone
+//           </Typography>
+
+//           {otpModal && (
+//   <Box
+//     sx={{
+//       position: "fixed",
+//       inset: 0,
+//       backgroundColor: "rgba(0,0,0,0.5)",
+//       display: "flex",
+//       justifyContent: "center",
+//       alignItems: "center",
+//       zIndex: 9999,
+//     }}
+//   >
+//     <Paper
+//       elevation={10}
+//       sx={{
+//         width: "90%",
+//         maxWidth: 420,
+//         p: 4,
+//         borderRadius: 3,
+//       }}
+//     >
+//       <Typography
+//         variant="h5"
+//         fontWeight={700}
+//         textAlign="center"
+//         mb={1}
+//       >
+//         Verify Email
+//       </Typography>
+
+//       <Typography
+//         variant="body2"
+//         color="text.secondary"
+//         textAlign="center"
+//         mb={3}
+//       >
+//         OTP sent to {resume.email}
+//       </Typography>
+
+//       <input
+//         type="text"
+//         value={otp}
+//         maxLength={6}
+//         onChange={(e) =>
+//           setOtp(e.target.value.replace(/\D/g, ""))
+//         }
+//         placeholder="Enter 6 digit OTP"
+//         style={{
+//           width: "100%",
+//           padding: "14px",
+//           fontSize: "20px",
+//           textAlign: "center",
+//           letterSpacing: "6px",
+//           border: "1px solid #ccc",
+//           borderRadius: "8px",
+//           boxSizing: "border-box",
+//         }}
+//       />
+
+//       <Stack
+//         direction="row"
+//         spacing={2}
+//         mt={3}
+//       >
+//         <Button
+//           fullWidth
+//           variant="outlined"
+//           onClick={() => {
+//             setOtpModal(false);
+//             setOtp("");
+//           }}
+//         >
+//           Cancel
+//         </Button>
+
+//         <Button
+//           fullWidth
+//           variant="contained"
+//           onClick={handleVerifyOTP}
+//           disabled={otpLoading}
+//         >
+//           {otpLoading ? (
+//             <CircularProgress size={24} color="inherit" />
+//           ) : (
+//             "Verify & Download"
+//           )}
+//         </Button>
+//       </Stack>
+//     </Paper>
+//   </Box>
+// )}
+
+//         </Paper>
+
+//           <Snackbar
+//         open={snackbar.open}
+//         autoHideDuration={4000}
+//         onClose={() =>
+//           setSnackbar((prev) => ({
+//             ...prev,
+//             open: false,
+//           }))
+//         }
+//         anchorOrigin={{
+//           vertical: "bottom",
+//           horizontal: "center",
+//         }}
+//       >
+//         <Alert
+//           onClose={() =>
+//             setSnackbar((prev) => ({
+//               ...prev,
+//               open: false,
+//             }))
+//           }
+//           severity={snackbar.severity}
+//           variant="filled"
+//           sx={{ width: "100%" }}
+//         >
+//           {snackbar.message}
+//         </Alert>
+//       </Snackbar>
+//       </Container>
+//     </Box>
+//   );
+// };
+
+// // ==========================================
+// // SECTION TITLE COMPONENT
+// // ==========================================
+
+// const SectionTitle = ({ title }) => {
+//   return (
+//     <Typography
+//       variant="h6"
+//       fontWeight={800}
+//       sx={{
+//         color: "#1f2937",
+//         borderBottom:
+//           "2px solid #2563eb",
+//         display: "inline-block",
+//         pb: 0.5,
+//       }}
+//     >
+//       {title}
+//     </Typography>
+//   );
+// };
+
+// export default ResumePreview;

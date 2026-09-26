@@ -1,961 +1,3 @@
-import { useState } from "react";
-import axios from "axios";
-
-import {
-  Box,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  InputAdornment,
-  IconButton,
-  Tabs,
-  Tab,
-  Checkbox,
-  FormControlLabel,
-  Link
-} from "@mui/material";
-
-import {
-  Visibility,
-  VisibilityOff,
-  Email,
-  Lock
-} from "@mui/icons-material";
-
-import { GoogleLogin } from "@react-oauth/google";
-
-import { useNavigate, Link as RouterLink } from "react-router-dom";
-
-import { useTranslation } from "react-i18next";
-
-import logo2 from "../assets/logo2.jpg";
-
-
-function Login() {
-
-  const navigate = useNavigate();
-
-  const { t } = useTranslation();
-
-  const [loading, setLoading] = useState(false);
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [remember, setRemember] = useState(false);
-
-  const [loginType, setLoginType] = useState("student");
-
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
-
-  const [showOTP, setShowOTP] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [otpUserId, setOtpUserId] = useState(null);
-  const [otpEmail, setOtpEmail] = useState("");
-
-
-
-
-  const handleChange = (e) => {
-
-    setFormData({
-
-      ...formData,
-
-      [e.target.name]: e.target.value
-
-    });
-
-  };
-
-
-  const handleGoogleLogin = async (response) => {
-
-    try {
-
-      const res = await axios.post(
-        "http://localhost:8000/api/auth/google",
-        {
-          credential: response.credential
-        }
-      );
-
-      if (res.data.requiresOTP) {
-
-        setOtpUserId(res.data.userId);
-        setOtpEmail(res.data.email);
-        setShowOTP(true);
-
-        return;
-      }
-
-      const user = res.data.user;
-
-      localStorage.setItem(
-        "token",
-        res.data.token
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(user)
-      );
-
-      if (user.role === "admin") {
-
-        navigate("/admin/dashboard");
-
-      } else {
-
-        navigate("/");
-
-      }
-
-    }
-    catch (err) {
-
-      console.log(err);
-
-      alert(
-        err.response?.data?.message ||
-        t("login.googleLoginFailed")
-      );
-
-    }
-
-  };
-
-
-  const handleSubmit = async (e) => {
-
-    e.preventDefault();
-
-    try {
-
-      setLoading(true);
-
-      const res = await axios.post(
-        "http://localhost:8000/api/auth/login",
-        formData
-      );
-
-      if (res.data.requiresOTP) {
-
-        setOtpUserId(res.data.userId);
-        setOtpEmail(res.data.email);
-        setShowOTP(true);
-
-        return;
-      }
-
-      const user = res.data.user;
-
-
-      localStorage.setItem(
-        "token",
-        res.data.token
-      );
-
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(user)
-      );
-
-
-      if (loginType === "admin" && user.role !== "admin") {
-
-        alert(t("login.studentOption"));
-
-        return;
-
-      }
-
-
-      if (loginType === "student" && user.role === "admin") {
-
-        alert(t("login.adminOption"));
-
-        return;
-
-      }
-
-
-      if (user.role === "admin") {
-
-        navigate("/admin/dashboard");
-
-      }
-      else {
-
-        navigate("/");
-
-      }
-
-    }
-
-    catch (error) {
-
-      alert(
-        error.response?.data?.message ||
-        t("login.loginFailed")
-      );
-
-    }
-
-    finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-
-  const handleVerifyOTP = async () => {
-
-    if (!otp) {
-
-      alert(
-        t("login.enterOTP") ||
-        "Please enter OTP"
-      );
-
-      return;
-
-    }
-
-    try {
-
-      setLoading(true);
-
-      const res = await axios.post(
-        "http://localhost:8000/api/auth/verify-login-otp",
-        {
-          userId: otpUserId,
-          otp: otp
-        }
-      );
-
-      const user = res.data.user;
-
-      localStorage.setItem(
-        "token",
-        res.data.token
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(user)
-      );
-
-
-      if (loginType === "admin" && user.role !== "admin") {
-
-        alert(t("login.studentOption"));
-
-        return;
-
-      }
-
-
-      if (loginType === "student" && user.role === "admin") {
-
-        alert(t("login.adminOption"));
-
-        return;
-
-      }
-
-
-      if (user.role === "admin") {
-
-        navigate("/admin/dashboard");
-
-      }
-      else {
-
-        navigate("/");
-
-      }
-
-    }
-    catch (error) {
-
-      alert(
-        error.response?.data?.message ||
-        "Invalid OTP"
-      );
-
-    }
-    finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-
-  if (showOTP) {
-
-    return (
-
-      <Box
-
-        sx={{
-
-          minHeight: "100vh",
-
-          display: "flex",
-
-          alignItems: "center",
-
-          justifyContent: "center",
-
-          backgroundImage: `linear-gradient(
-            rgba(255,255,255,0.75),
-            rgba(255,255,255,0.75)
-          ),url(${logo2})`,
-
-          backgroundSize: "cover",
-
-          backgroundPosition: "center",
-
-          p: 3
-
-        }}
-
-      >
-
-
-        <Paper
-
-          elevation={8}
-
-          sx={{
-
-            width: "100%",
-
-            maxWidth: 520,
-
-            p: 5,
-
-            borderRadius: 5,
-
-            backdropFilter: "blur(10px)"
-
-          }}
-
-        >
-
-
-          <Box textAlign="center">
-
-
-            <Box
-
-              component="img"
-
-              src={logo2}
-
-              sx={{
-
-                width: 90,
-
-                height: 90,
-
-                borderRadius: "50%",
-
-                objectFit: "cover",
-
-                mb: 2
-
-              }}
-
-            />
-
-
-            <Typography
-
-              variant="h4"
-
-              fontWeight="bold"
-
-            >
-
-              Verify Login
-
-            </Typography>
-
-
-            <Typography
-
-              color="text.secondary"
-
-              mt={1}
-
-            >
-
-              OTP has been sent to
-
-            </Typography>
-
-
-            <Typography
-
-              fontWeight="bold"
-
-              mt={1}
-
-            >
-
-              {otpEmail}
-
-            </Typography>
-
-
-          </Box>
-
-
-          <Box
-
-            sx={{
-
-              mt: 4,
-
-              display: "flex",
-
-              flexDirection: "column",
-
-              gap: 3
-
-            }}
-
-          >
-
-
-            <TextField
-
-              label="Enter 6 Digit OTP"
-
-              value={otp}
-
-              onChange={(e) => {
-
-                const value = e.target.value.replace(
-                  /\D/g,
-                  ""
-                );
-
-                setOtp(value);
-
-              }}
-
-              fullWidth
-
-              inputProps={{
-
-                maxLength: 6
-
-              }}
-
-            />
-
-
-            <Button
-
-              variant="contained"
-
-              size="large"
-
-              disabled={loading}
-
-              onClick={handleVerifyOTP}
-
-              sx={{
-
-                py: 1.5,
-
-                borderRadius: 2,
-
-                background: "#008BDC",
-
-                fontSize: 18
-
-              }}
-
-            >
-
-              {
-
-                loading
-
-                  ?
-
-                  "Verifying..."
-
-                  :
-
-                  "Verify OTP"
-
-              }
-
-            </Button>
-
-
-            <Button
-
-              variant="text"
-
-              onClick={() => {
-
-                setShowOTP(false);
-
-                setOtp("");
-
-                setOtpUserId(null);
-
-                setOtpEmail("");
-
-              }}
-
-            >
-
-              Back to Login
-
-            </Button>
-
-
-          </Box>
-
-
-        </Paper>
-
-
-      </Box>
-
-    );
-
-  }
-
-
-  return (
-
-    <Box
-
-      sx={{
-
-        minHeight: "100vh",
-
-        display: "flex",
-
-        alignItems: "center",
-
-        justifyContent: "center",
-
-        backgroundImage: `linear-gradient(
-          rgba(255,255,255,0.75),
-          rgba(255,255,255,0.75)
-        ),url(${logo2})`,
-
-        backgroundSize: "cover",
-
-        backgroundPosition: "center",
-
-        p: 3
-
-      }}
-
-    >
-
-
-      <Paper
-
-        elevation={8}
-
-        sx={{
-
-          width: "100%",
-
-          maxWidth: 520,
-
-          p: 5,
-
-          borderRadius: 5,
-
-          backdropFilter: "blur(10px)"
-
-        }}
-
-      >
-
-
-        <Box textAlign="center">
-
-
-          <Box
-
-            component="img"
-
-            src={logo2}
-
-            sx={{
-
-              width: 90,
-
-              height: 90,
-
-              borderRadius: "50%",
-
-              objectFit: "cover",
-
-              mb: 2
-
-            }}
-
-          />
-
-
-          <Typography
-
-            variant="h4"
-
-            fontWeight="bold"
-
-          >
-
-            {t("login.title")}
-
-          </Typography>
-
-
-          <Typography
-
-            color="text.secondary"
-
-            mt={1}
-
-          >
-
-            {t("login.subtitle")}
-
-          </Typography>
-
-
-        </Box>
-
-
-        {/* Student Admin Toggle */}
-
-        <Tabs
-
-          value={loginType}
-
-          onChange={(e, value) => setLoginType(value)}
-
-          variant="fullWidth"
-
-          sx={{
-
-            mt: 4,
-
-            background: "#f3f4f6",
-
-            borderRadius: 2
-
-          }}
-
-        >
-
-          <Tab
-
-            value="student"
-
-            label={t("login.student")}
-
-          />
-
-          <Tab
-
-            value="admin"
-
-            label={t("login.admin")}
-
-          />
-
-        </Tabs>
-
-
-        <Box
-
-          component="form"
-
-          onSubmit={handleSubmit}
-
-          sx={{
-
-            mt: 4,
-
-            display: "flex",
-
-            flexDirection: "column",
-
-            gap: 3
-
-          }}
-
-        >
-
-
-          <TextField
-
-            label={t("login.email")}
-
-            name="email"
-
-            value={formData.email}
-
-            onChange={handleChange}
-
-            fullWidth
-
-            InputProps={{
-
-              startAdornment: (
-
-                <InputAdornment position="start">
-
-                  <Email color="primary" />
-
-                </InputAdornment>
-
-              )
-
-            }}
-
-          />
-
-
-          <TextField
-
-            label={t("login.password")}
-
-            name="password"
-
-            type={showPassword ? "text" : "password"}
-
-            value={formData.password}
-
-            onChange={handleChange}
-
-            fullWidth
-
-            InputProps={{
-
-              startAdornment: (
-
-                <InputAdornment position="start">
-
-                  <Lock color="primary" />
-
-                </InputAdornment>
-
-              ),
-
-              endAdornment: (
-
-                <IconButton
-
-                  onClick={() => setShowPassword(!showPassword)}
-
-                >
-
-                  {
-
-                    showPassword
-
-                      ?
-
-                      <VisibilityOff />
-
-                      :
-
-                      <Visibility />
-
-                  }
-
-                </IconButton>
-
-              )
-
-            }}
-
-          />
-
-
-          <Box
-
-            display="flex"
-
-            justifyContent="space-between"
-
-            alignItems="center"
-
-          >
-
-            <FormControlLabel
-
-              control={
-
-                <Checkbox
-
-                  checked={remember}
-
-                  onChange={() => setRemember(!remember)}
-
-                />
-
-              }
-
-              label={t("login.rememberMe")}
-
-            />
-
-
-            <Link
-              component={RouterLink}
-              to="/forgot"
-              
-
-              underline="hover"
-
-            >
-
-              {t("login.forgotPassword")}
-
-            </Link>
-
-          </Box>
-
-
-          <Button
-
-            type="submit"
-
-            variant="contained"
-
-            size="large"
-
-            disabled={loading}
-
-            sx={{
-
-              py: 1.5,
-
-              borderRadius: 2,
-
-              background: "#008BDC",
-
-              fontSize: 18
-
-            }}
-
-          >
-
-            {
-
-              loading
-
-                ?
-
-                t("login.loggingIn")
-
-                :
-
-                t("login.loginButton")
-
-            }
-
-          </Button>
-
-        </Box>
-
-
-        <Typography
-
-          textAlign="center"
-
-          my={3}
-
-          color="text.secondary"
-
-        >
-
-          {t("login.or")}
-
-        </Typography>
-
-
-        <Box
-
-          display="flex"
-
-          justifyContent="center"
-
-        >
-
-          <GoogleLogin
-
-            onSuccess={handleGoogleLogin}
-
-            onError={() => console.log(t("login.googleLoginFailed"))}
-
-          />
-
-        </Box>
-
-
-        <Typography
-
-          textAlign="center"
-
-          mt={3}
-
-        >
-
-          {t("login.noAccount")}{" "}
-
-          <Link 
-          component={RouterLink}
-          to="/register"
-          underline="hover"
-          >
-
-            {t("login.register")}
-
-          </Link>
-
-        </Typography>
-
-
-      </Paper>
-
-    </Box>
-
-  );
-
-}
-
-
-export default Login;
-
-
-
 // import { useState } from "react";
 // import axios from "axios";
 
@@ -983,7 +25,7 @@ export default Login;
 
 // import { GoogleLogin } from "@react-oauth/google";
 
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 // import { useTranslation } from "react-i18next";
 
@@ -1042,12 +84,46 @@ export default Login;
 //         }
 //       );
 
-//       console.log(res.data);
+//       if (res.data.requiresOTP) {
+
+//         setOtpUserId(res.data.userId);
+//         setOtpEmail(res.data.email);
+//         setShowOTP(true);
+
+//         return;
+//       }
+
+//       const user = res.data.user;
+
+//       localStorage.setItem(
+//         "token",
+//         res.data.token
+//       );
+
+//       localStorage.setItem(
+//         "user",
+//         JSON.stringify(user)
+//       );
+
+//       if (user.role === "admin") {
+
+//         navigate("/admin/dashboard");
+
+//       } else {
+
+//         navigate("/");
+
+//       }
 
 //     }
 //     catch (err) {
 
 //       console.log(err);
+
+//       alert(
+//         err.response?.data?.message ||
+//         t("login.googleLoginFailed")
+//       );
 
 //     }
 
@@ -1068,11 +144,16 @@ export default Login;
 //       );
 
 //       if (res.data.requiresOTP) {
-//   setOtpUserId(res.data.userId);
-//   setOtpEmail(res.data.email);
-//   setShowOTP(true);
-//   return;
-// }
+//         console.log("OTP required for:", res.data.email);
+//   console.log("Login Type:", loginType);
+//   console.log("User ID:", res.data.userId);
+
+//         setOtpUserId(res.data.userId);
+//         setOtpEmail(res.data.email);
+//         setShowOTP(true);
+
+//         return;
+//       }
 
 //       const user = res.data.user;
 
@@ -1139,12 +220,20 @@ export default Login;
 
 
 //   const handleVerifyOTP = async () => {
-//     if(!otp){
-//       alert(t("login.enterOTP"));
+
+//     if (!otp) {
+
+//       alert(
+//         t("login.enterOTP") ||
+//         "Please enter OTP"
+//       );
+
 //       return;
+
 //     }
 
 //     try {
+
 //       setLoading(true);
 
 //       const res = await axios.post(
@@ -1167,26 +256,295 @@ export default Login;
 //         JSON.stringify(user)
 //       );
 
+
 //       if (loginType === "admin" && user.role !== "admin") {
+
 //         alert(t("login.studentOption"));
+
 //         return;
+
 //       }
+
+
+//       if (loginType === "student" && user.role === "admin") {
+
+//         alert(t("login.adminOption"));
+
+//         return;
+
+//       }
+
 
 //       if (user.role === "admin") {
+
 //         navigate("/admin/dashboard");
 
-//       } else {
-//         navigate("/");
 //       }
-//     } catch (error){
+//       else {
+
+//         navigate("/");
+
+//       }
+
+//     }
+//     catch (error) {
+
 //       alert(
 //         error.response?.data?.message ||
 //         "Invalid OTP"
 //       );
-//     } finally {
-//       setLoading(false);
+
 //     }
+//     finally {
+
+//       setLoading(false);
+
+//     }
+
 //   };
+
+
+//   if (showOTP) {
+
+//     return (
+
+//       <Box
+
+//         sx={{
+
+//           minHeight: "100vh",
+
+//           display: "flex",
+
+//           alignItems: "center",
+
+//           justifyContent: "center",
+
+//           backgroundImage: `linear-gradient(
+//             rgba(255,255,255,0.75),
+//             rgba(255,255,255,0.75)
+//           ),url(${logo2})`,
+
+//           backgroundSize: "cover",
+
+//           backgroundPosition: "center",
+
+//           p: 3
+
+//         }}
+
+//       >
+
+
+//         <Paper
+
+//           elevation={8}
+
+//           sx={{
+
+//             width: "100%",
+
+//             maxWidth: 520,
+
+//             p: 5,
+
+//             borderRadius: 5,
+
+//             backdropFilter: "blur(10px)"
+
+//           }}
+
+//         >
+
+
+//           <Box textAlign="center">
+
+
+//             <Box
+
+//               component="img"
+
+//               src={logo2}
+
+//               sx={{
+
+//                 width: 90,
+
+//                 height: 90,
+
+//                 borderRadius: "50%",
+
+//                 objectFit: "cover",
+
+//                 mb: 2
+
+//               }}
+
+//             />
+
+
+//             <Typography
+
+//               variant="h4"
+
+//               fontWeight="bold"
+
+//             >
+
+//               Verify Login
+
+//             </Typography>
+
+
+//             <Typography
+
+//               color="text.secondary"
+
+//               mt={1}
+
+//             >
+
+//               OTP has been sent to
+
+//             </Typography>
+
+
+//             <Typography
+
+//               fontWeight="bold"
+
+//               mt={1}
+
+//             >
+
+//               {otpEmail}
+
+//             </Typography>
+
+
+//           </Box>
+
+
+//           <Box
+
+//             sx={{
+
+//               mt: 4,
+
+//               display: "flex",
+
+//               flexDirection: "column",
+
+//               gap: 3
+
+//             }}
+
+//           >
+
+
+//             <TextField
+
+//               label="Enter 6 Digit OTP"
+
+//               value={otp}
+
+//               onChange={(e) => {
+
+//                 const value = e.target.value.replace(
+//                   /\D/g,
+//                   ""
+//                 );
+
+//                 setOtp(value);
+
+//               }}
+
+//               fullWidth
+
+//               inputProps={{
+
+//                 maxLength: 6
+
+//               }}
+
+//             />
+
+
+//             <Button
+
+//               variant="contained"
+
+//               size="large"
+
+//               disabled={loading}
+
+//               onClick={handleVerifyOTP}
+
+//               sx={{
+
+//                 py: 1.5,
+
+//                 borderRadius: 2,
+
+//                 background: "#008BDC",
+
+//                 fontSize: 18
+
+//               }}
+
+//             >
+
+//               {
+
+//                 loading
+
+//                   ?
+
+//                   "Verifying..."
+
+//                   :
+
+//                   "Verify OTP"
+
+//               }
+
+//             </Button>
+
+
+//             <Button
+
+//               variant="text"
+
+//               onClick={() => {
+
+//                 setShowOTP(false);
+
+//                 setOtp("");
+
+//                 setOtpUserId(null);
+
+//                 setOtpEmail("");
+
+//               }}
+
+//             >
+
+//               Back to Login
+
+//             </Button>
+
+
+//           </Box>
+
+
+//         </Paper>
+
+
+//       </Box>
+
+//     );
+
+//   }
 
 
 //   return (
@@ -1473,8 +831,9 @@ export default Login;
 
 
 //             <Link
-
-//               href="/forgot"
+//               component={RouterLink}
+//               to="/forgot"
+              
 
 //               underline="hover"
 
@@ -1574,7 +933,11 @@ export default Login;
 
 //           {t("login.noAccount")}{" "}
 
-//           <Link href="/register">
+//           <Link 
+//           component={RouterLink}
+//           to="/register"
+//           underline="hover"
+//           >
 
 //             {t("login.register")}
 
@@ -1595,667 +958,1006 @@ export default Login;
 // export default Login;
 
 
+import { useState } from "react";
+import axios from "axios";
 
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  Tabs,
+  Tab,
+  Checkbox,
+  FormControlLabel,
+  Link,
+} from "@mui/material";
 
+import {
+  Visibility,
+  VisibilityOff,
+  Email,
+  Lock,
+} from "@mui/icons-material";
 
+import { GoogleLogin } from "@react-oauth/google";
 
+import {
+  useNavigate,
+  Link as RouterLink,
+} from "react-router-dom";
 
+import { useTranslation } from "react-i18next";
 
+import logo2 from "../assets/logo2.jpg";
 
+function Login() {
+  const navigate = useNavigate();
 
+  const { t } = useTranslation();
 
+  const [loading, setLoading] = useState(false);
 
-// import { useState } from "react";
-// import axios from "axios";
+  const [showPassword, setShowPassword] = useState(false);
 
-// import {
-//   Box,
-//   Paper,
-//   Typography,
-//   TextField,
-//   Button,
-//   InputAdornment,
-//   IconButton,
-//   Tabs,
-//   Tab,
-//   Checkbox,
-//   FormControlLabel,
-//   Link
-// } from "@mui/material";
+  const [remember, setRemember] = useState(false);
 
+  const [loginType, setLoginType] = useState("student");
 
-// import {
-//   Visibility,
-//   VisibilityOff,
-//   Email,
-//   Lock
-// } from "@mui/icons-material";
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
+  // =====================================================
+  // OTP STATES
+  // =====================================================
 
-// import { GoogleLogin } from "@react-oauth/google";
+  const [showOTP, setShowOTP] = useState(false);
 
-// import { useNavigate } from "react-router-dom";
+  const [otp, setOtp] = useState("");
 
+  const [otpUserId, setOtpUserId] = useState(null);
 
-// import logo2 from "../assets/logo2.jpg";
+  const [otpEmail, setOtpEmail] = useState("");
 
 
+  // =====================================================
+  // HANDLE INPUT CHANGE
+  // =====================================================
 
-// function Login() {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
 
-//   const navigate = useNavigate();
+  // =====================================================
+  // SUCCESSFUL LOGIN
+  // =====================================================
 
+  const handleSuccessfulLogin = (user, token) => {
 
-//   const [loading,setLoading] = useState(false);
+    if (!user || !token) {
+      alert("Invalid login response");
+      return;
+    }
 
-//   const [showPassword,setShowPassword] = useState(false);
+    console.log("LOGIN USER:", user);
 
-//   const [remember,setRemember] = useState(false);
+    console.log("LOGIN ROLE:", user.role);
 
-//   const [loginType,setLoginType] = useState("student");
 
+    // Save token
+    localStorage.setItem(
+      "token",
+      token
+    );
 
 
-//   const [formData,setFormData] = useState({
+    // Save user
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
 
-//     email:"",
-//     password:""
 
-//   });
+    // ---------------------------------------------
+    // ADMIN
+    // ---------------------------------------------
 
+    if (user.role === "admin") {
 
+      navigate("/admin/dashboard");
 
+      return;
+    }
 
-//   const handleChange=(e)=>{
 
-//     setFormData({
+    // ---------------------------------------------
+    // STUDENT
+    // ---------------------------------------------
 
-//       ...formData,
+    navigate("/");
+  };
 
-//       [e.target.name]:e.target.value
 
-//     });
+  // =====================================================
+  // GOOGLE LOGIN
+  // =====================================================
 
-//   };
+  const handleGoogleLogin = async (response) => {
 
+    try {
 
+      setLoading(true);
 
 
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/google",
+        {
+          credential: response.credential,
+        }
+      );
 
-//   const handleGoogleLogin = async(response)=>{
 
-//     try{
+      console.log(
+        "GOOGLE LOGIN RESPONSE:",
+        res.data
+      );
 
-//       const res = await axios.post(
-//         "http://localhost:8000/api/auth/google",
-//         {
-//           credential:response.credential
-//         }
-//       );
 
+      // ---------------------------------------------
+      // OTP REQUIRED
+      // ---------------------------------------------
 
-//       console.log(res.data);
+      if (res.data.requiresOTP) {
 
+        setOtpUserId(
+          res.data.userId
+        );
 
-//     }
-//     catch(err){
+        setOtpEmail(
+          res.data.email
+        );
 
-//       console.log(err);
+        setOtp("");
 
-//     }
+        setShowOTP(true);
 
-//   };
+        return;
+      }
 
 
+      // ---------------------------------------------
+      // NORMAL GOOGLE LOGIN
+      // ---------------------------------------------
 
+      const user = res.data.user;
 
 
+      handleSuccessfulLogin(
+        user,
+        res.data.token
+      );
 
+    }
 
-//   const handleSubmit = async(e)=>{
+    catch (err) {
 
+      console.error(
+        "Google Login Error:",
+        err
+      );
 
-//     e.preventDefault();
 
+      alert(
+        err.response?.data?.message ||
+        t("login.googleLoginFailed")
+      );
 
-//     try{
+    }
 
+    finally {
 
-//       setLoading(true);
+      setLoading(false);
 
+    }
+  };
 
 
-//       const res = await axios.post(
+  // =====================================================
+  // NORMAL LOGIN
+  // =====================================================
 
-//         "http://localhost:8000/api/auth/login",
+  const handleSubmit = async (e) => {
 
-//         formData
+    e.preventDefault();
 
-//       );
 
+    if (
+      !formData.email ||
+      !formData.password
+    ) {
 
+      alert(
+        "Please enter email and password"
+      );
 
-//       const user=res.data.user;
+      return;
+    }
 
 
+    try {
 
-//       localStorage.setItem(
-//         "token",
-//         res.data.token
-//       );
+      setLoading(true);
 
 
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/login",
+        formData
+      );
 
-//       localStorage.setItem(
-//         "user",
-//         JSON.stringify(user)
-//       );
 
+      console.log(
+        "LOGIN RESPONSE:",
+        res.data
+      );
 
 
+      // =================================================
+      // OTP REQUIRED
+      // =================================================
 
+      if (res.data.requiresOTP) {
 
-//       if(loginType==="admin" && user.role!=="admin"){
+        console.log(
+          "OTP required for:",
+          res.data.email
+        );
 
-//         alert("Please login using Student option");
+        console.log(
+          "Login Type:",
+          loginType
+        );
 
-//         return;
+        console.log(
+          "User ID:",
+          res.data.userId
+        );
 
-//       }
 
+        setOtpUserId(
+          res.data.userId
+        );
 
+        setOtpEmail(
+          res.data.email
+        );
 
+        setOtp("");
 
-//       if(loginType==="student" && user.role==="admin"){
+        setShowOTP(true);
 
-//         alert("Please login using Admin option");
+        return;
+      }
 
-//         return;
 
-//       }
+      // =================================================
+      // NORMAL LOGIN WITHOUT OTP
+      // =================================================
 
+      const user = res.data.user;
 
 
+      // ---------------------------------------------
+      // LOGIN TYPE VALIDATION
+      //
+      // This is kept for normal login.
+      // ---------------------------------------------
 
-//       if(user.role==="admin"){
+      if (
+        loginType === "admin" &&
+        user.role !== "admin"
+      ) {
 
-//         navigate("/admin/dashboard");
+        alert(
+          "This account is not an admin account. Please select Student option."
+        );
 
-//       }
-//       else{
+        return;
+      }
 
-//         navigate("/");
 
-//       }
+      if (
+        loginType === "student" &&
+        user.role === "admin"
+      ) {
 
+        alert(
+          "This is an admin account. Please select Admin option."
+        );
 
+        return;
+      }
 
-//     }
 
-//     catch(error){
+      // ---------------------------------------------
+      // SUCCESSFUL LOGIN
+      // ---------------------------------------------
 
-//       alert(
-//         error.response?.data?.message ||
-//         "Login Failed"
-//       );
+      handleSuccessfulLogin(
+        user,
+        res.data.token
+      );
 
-//     }
+    }
 
-//     finally{
+    catch (error) {
 
-//       setLoading(false);
+      console.error(
+        "Login Error:",
+        error
+      );
 
-//     }
 
+      alert(
+        error.response?.data?.message ||
+        t("login.loginFailed")
+      );
 
+    }
 
-//   };
+    finally {
 
+      setLoading(false);
 
+    }
+  };
 
 
+  // =====================================================
+  // VERIFY LOGIN OTP
+  // =====================================================
 
+  const handleVerifyOTP = async () => {
 
+    if (!otp || otp.length !== 6) {
 
-//   return (
+      alert(
+        "Please enter a valid 6 digit OTP"
+      );
 
+      return;
+    }
 
-//     <Box
 
-//       sx={{
+    if (!otpUserId) {
 
-//         minHeight:"100vh",
+      alert(
+        "Login session expired. Please login again."
+      );
 
-//         display:"flex",
+      return;
+    }
 
-//         alignItems:"center",
 
-//         justifyContent:"center",
+    try {
 
-//         backgroundImage:`linear-gradient(
-//         rgba(255,255,255,0.75),
-//         rgba(255,255,255,0.75)
-//         ),url(${logo2})`,
+      setLoading(true);
 
-//         backgroundSize:"cover",
 
-//         backgroundPosition:"center",
+      console.log(
+        "VERIFYING OTP:",
+        otp
+      );
 
-//         p:3
+      console.log(
+        "OTP USER ID:",
+        otpUserId
+      );
 
-//       }}
 
-//     >
+      const res = await axios.post(
+        "http://localhost:8000/api/auth/verify-login-otp",
+        {
+          userId: otpUserId,
+          otp: otp.trim(),
+        }
+      );
 
 
+      console.log(
+        "OTP VERIFY RESPONSE:",
+        res.data
+      );
 
 
+      const user = res.data.user;
 
-//       <Paper
 
-//         elevation={8}
+      // =================================================
+      // IMPORTANT
+      //
+      // DO NOT CHECK loginType HERE.
+      //
+      // Backend gives actual user.role.
+      // =================================================
 
-//         sx={{
+      handleSuccessfulLogin(
+        user,
+        res.data.token
+      );
 
-//           width:"100%",
+    }
 
-//           maxWidth:520,
+    catch (error) {
 
-//           p:5,
+      console.error(
+        "OTP Verification Error:",
+        error
+      );
 
-//           borderRadius:5,
 
-//           backdropFilter:"blur(10px)"
+      alert(
+        error.response?.data?.message ||
+        "Invalid OTP"
+      );
 
-//         }}
+    }
 
-//       >
+    finally {
 
+      setLoading(false);
 
+    }
+  };
 
 
+  // =====================================================
+  // OTP SCREEN
+  // =====================================================
 
-//         <Box textAlign="center">
+  if (showOTP) {
 
+    return (
 
-//           <Box
+      <Box
+        sx={{
+          minHeight: "100vh",
 
-//             component="img"
+          display: "flex",
 
-//             src={logo2}
+          alignItems: "center",
 
-//             sx={{
+          justifyContent: "center",
 
-//               width:90,
+          backgroundImage: `
+            linear-gradient(
+              rgba(255,255,255,0.75),
+              rgba(255,255,255,0.75)
+            ),
+            url(${logo2})
+          `,
 
-//               height:90,
+          backgroundSize: "cover",
 
-//               borderRadius:"50%",
+          backgroundPosition: "center",
 
-//               objectFit:"cover",
+          p: 3,
+        }}
+      >
 
-//               mb:2
+        <Paper
+          elevation={8}
+          sx={{
+            width: "100%",
 
-//             }}
+            maxWidth: 520,
 
-//           />
+            p: 5,
 
+            borderRadius: 5,
 
+            backdropFilter: "blur(10px)",
+          }}
+        >
 
+          <Box textAlign="center">
 
+            <Box
+              component="img"
+              src={logo2}
+              sx={{
+                width: 90,
 
-//           <Typography
+                height: 90,
 
-//             variant="h4"
+                borderRadius: "50%",
 
-//             fontWeight="bold"
+                objectFit: "cover",
 
-//           >
+                mb: 2,
+              }}
+            />
 
-//             Welcome Back
 
-//           </Typography>
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+            >
+              Verify Login
+            </Typography>
 
 
+            <Typography
+              color="text.secondary"
+              mt={1}
+            >
+              OTP has been sent to
+            </Typography>
 
-//           <Typography
 
-//             color="text.secondary"
+            <Typography
+              fontWeight="bold"
+              mt={1}
+            >
+              {otpEmail}
+            </Typography>
 
-//             mt={1}
+          </Box>
 
-//           >
 
-//             Login to continue
+          <Box
+            sx={{
+              mt: 4,
 
-//           </Typography>
+              display: "flex",
 
+              flexDirection: "column",
 
+              gap: 3,
+            }}
+          >
 
+            <TextField
+              label="Enter 6 Digit OTP"
 
-//         </Box>
+              value={otp}
 
+              onChange={(e) => {
 
+                const value =
+                  e.target.value.replace(
+                    /\D/g,
+                    ""
+                  );
 
+                setOtp(value);
+              }}
 
+              fullWidth
 
+              inputProps={{
+                maxLength: 6,
+              }}
+            />
 
 
-//         {/* Student Admin Toggle */}
+            <Button
+              variant="contained"
 
+              size="large"
 
+              disabled={
+                loading ||
+                otp.length !== 6
+              }
 
-//         <Tabs
+              onClick={
+                handleVerifyOTP
+              }
 
-//           value={loginType}
+              sx={{
+                py: 1.5,
 
-//           onChange={(e,value)=>setLoginType(value)}
+                borderRadius: 2,
 
-//           variant="fullWidth"
+                background: "#008BDC",
 
-//           sx={{
+                fontSize: 18,
+              }}
+            >
 
-//             mt:4,
+              {
+                loading
+                  ? "Verifying..."
+                  : "Verify OTP"
+              }
 
-//             background:"#f3f4f6",
+            </Button>
 
-//             borderRadius:2
 
-//           }}
+            <Button
+              variant="text"
 
-//         >
+              onClick={() => {
 
+                setShowOTP(false);
 
-//           <Tab
+                setOtp("");
 
-//             value="student"
+                setOtpUserId(null);
 
-//             label="Student"
+                setOtpEmail("");
 
-//           />
+              }}
+            >
+              Back to Login
+            </Button>
 
+          </Box>
 
-//           <Tab
+        </Paper>
 
-//             value="admin"
+      </Box>
+    );
+  }
 
-//             label="Admin"
 
-//           />
+  // =====================================================
+  // LOGIN PAGE
+  // =====================================================
 
+  return (
 
-//         </Tabs>
+    <Box
+      sx={{
+        minHeight: "100vh",
 
+        display: "flex",
 
+        alignItems: "center",
 
+        justifyContent: "center",
 
+        backgroundImage: `
+          linear-gradient(
+            rgba(255,255,255,0.75),
+            rgba(255,255,255,0.75)
+          ),
+          url(${logo2})
+        `,
 
+        backgroundSize: "cover",
 
+        backgroundPosition: "center",
 
+        p: 3,
+      }}
+    >
 
-//         <Box
+      <Paper
+        elevation={8}
+        sx={{
+          width: "100%",
 
-//           component="form"
+          maxWidth: 520,
 
-//           onSubmit={handleSubmit}
+          p: 5,
 
-//           sx={{
+          borderRadius: 5,
 
-//             mt:4,
+          backdropFilter: "blur(10px)",
+        }}
+      >
 
-//             display:"flex",
+        <Box textAlign="center">
 
-//             flexDirection:"column",
+          <Box
+            component="img"
+            src={logo2}
+            sx={{
+              width: 90,
 
-//             gap:3
+              height: 90,
 
-//           }}
+              borderRadius: "50%",
 
-//         >
+              objectFit: "cover",
 
+              mb: 2,
+            }}
+          />
 
 
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+          >
+            {t("login.title")}
+          </Typography>
 
 
-//           <TextField
+          <Typography
+            color="text.secondary"
+            mt={1}
+          >
+            {t("login.subtitle")}
+          </Typography>
 
-//             label="Email"
+        </Box>
 
-//             name="email"
 
-//             value={formData.email}
+        {/* Student / Admin Toggle */}
 
-//             onChange={handleChange}
+        <Tabs
+          value={loginType}
 
-//             fullWidth
+          onChange={(e, value) =>
+            setLoginType(value)
+          }
 
-//             InputProps={{
+          variant="fullWidth"
 
-//               startAdornment:(
+          sx={{
+            mt: 4,
 
-//                 <InputAdornment position="start">
+            background: "#f3f4f6",
 
-//                   <Email color="primary"/>
+            borderRadius: 2,
+          }}
+        >
 
-//                 </InputAdornment>
+          <Tab
+            value="student"
+            label={t("login.student")}
+          />
 
-//               )
+          <Tab
+            value="admin"
+            label={t("login.admin")}
+          />
 
-//             }}
+        </Tabs>
 
-//           />
 
+        <Box
+          component="form"
 
+          onSubmit={handleSubmit}
 
+          sx={{
+            mt: 4,
 
+            display: "flex",
 
+            flexDirection: "column",
 
+            gap: 3,
+          }}
+        >
 
-//           <TextField
+          <TextField
+            label={t("login.email")}
 
-//             label="Password"
+            name="email"
 
-//             name="password"
+            value={formData.email}
 
-//             type={showPassword?"text":"password"}
+            onChange={handleChange}
 
-//             value={formData.password}
+            fullWidth
 
-//             onChange={handleChange}
+            InputProps={{
+              startAdornment: (
 
-//             fullWidth
+                <InputAdornment position="start">
 
+                  <Email color="primary" />
 
-//             InputProps={
+                </InputAdornment>
 
-//               {
+              ),
+            }}
+          />
 
-//                 startAdornment:(
 
-//                   <InputAdornment position="start">
+          <TextField
+            label={t("login.password")}
 
-//                     <Lock color="primary"/>
+            name="password"
 
-//                   </InputAdornment>
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
 
-//                 ),
+            value={formData.password}
 
+            onChange={handleChange}
 
+            fullWidth
 
-//                 endAdornment:(
+            InputProps={{
 
-//                   <IconButton
+              startAdornment: (
 
-//                     onClick={()=>setShowPassword(!showPassword)}
+                <InputAdornment position="start">
 
-//                   >
+                  <Lock color="primary" />
 
-//                     {
-//                       showPassword
-//                       ?
-//                       <VisibilityOff/>
-//                       :
-//                       <Visibility/>
-//                     }
+                </InputAdornment>
 
+              ),
 
-//                   </IconButton>
 
-//                 )
+              endAdornment: (
 
-//               }
+                <IconButton
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
+                >
 
-//             }
+                  {
+                    showPassword
+                      ? <VisibilityOff />
+                      : <Visibility />
+                  }
 
-//           />
+                </IconButton>
 
+              ),
+            }}
+          />
 
 
+          <Box
+            display="flex"
 
+            justifyContent="space-between"
 
+            alignItems="center"
+          >
 
+            <FormControlLabel
 
+              control={
 
-//           <Box
+                <Checkbox
+                  checked={remember}
 
-//             display="flex"
+                  onChange={() =>
+                    setRemember(
+                      !remember
+                    )
+                  }
+                />
 
-//             justifyContent="space-between"
+              }
 
-//             alignItems="center"
+              label={
+                t("login.rememberMe")
+              }
 
-//           >
+            />
 
 
-//             <FormControlLabel
+            <Link
+              component={RouterLink}
 
-//               control={
+              to="/forgot"
 
-//                 <Checkbox
+              underline="hover"
+            >
+              {
+                t(
+                  "login.forgotPassword"
+                )
+              }
+            </Link>
 
-//                   checked={remember}
+          </Box>
 
-//                   onChange={()=>setRemember(!remember)}
 
-//                 />
+          <Button
+            type="submit"
 
-//               }
+            variant="contained"
 
-//               label="Remember Me"
+            size="large"
 
-//             />
+            disabled={loading}
 
-//             <Link
+            sx={{
+              py: 1.5,
 
-//               href="/forgot"
+              borderRadius: 2,
 
-//               underline="hover"
-//             >
-//               Forgot Password?
+              background: "#008BDC",
 
-//             </Link>
-//           </Box>
-//           <Button
+              fontSize: 18,
+            }}
+          >
 
-//             type="submit"
+            {
+              loading
+                ? t("login.loggingIn")
+                : t("login.loginButton")
+            }
 
-//             variant="contained"
+          </Button>
 
-//             size="large"
+        </Box>
 
-//             disabled={loading}
 
-//             sx={{
+        <Typography
+          textAlign="center"
 
-//               py:1.5,
+          my={3}
 
-//               borderRadius:2,
+          color="text.secondary"
+        >
+          {t("login.or")}
+        </Typography>
 
-//               background:"#008BDC",
 
-//               fontSize:18
+        <Box
+          display="flex"
 
-//             }}
+          justifyContent="center"
+        >
 
-//           >
+          <GoogleLogin
+            onSuccess={
+              handleGoogleLogin
+            }
 
-//             {
-//               loading
-//               ?
-//               "Logging In..."
-//               :
-//               "Login"
-//             }
+            onError={() =>
+              console.log(
+                t(
+                  "login.googleLoginFailed"
+                )
+              )
+            }
+          />
 
+        </Box>
 
-//           </Button>
 
-//         </Box>
+        <Typography
+          textAlign="center"
 
+          mt={3}
+        >
 
-//         <Typography
+          {t("login.noAccount")}{" "}
 
-//           textAlign="center"
+          <Link
+            component={RouterLink}
 
-//           my={3}
+            to="/register"
 
-//           color="text.secondary"
+            underline="hover"
+          >
+            {t("login.register")}
+          </Link>
 
-//         >
+        </Typography>
 
-//           OR
+      </Paper>
 
-//         </Typography>
+    </Box>
+  );
+}
 
-//         <Box
-
-//           display="flex"
-
-//           justifyContent="center"
-
-//         >
-
-
-//           <GoogleLogin
-
-//             onSuccess={handleGoogleLogin}
-
-//             onError={()=>console.log("Google Login Failed")}
-
-//           />
-
-
-//         </Box>
-
-//         <Typography
-
-//           textAlign="center"
-
-//           mt={3}
-
-//         >
-
-//           Don't have an account?{" "}
-
-
-//           <Link href="/register">
-
-//             Register
-
-//           </Link>
-
-
-//         </Typography>
-
-//       </Paper>
-
-//     </Box>
-
-
-//   );
-
-// }
-
-
-// export default Login;
+export default Login;

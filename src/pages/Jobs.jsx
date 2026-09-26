@@ -23,7 +23,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
 const Jobs = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,14 +43,19 @@ const Jobs = () => {
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [i18n.language]);
 
   const fetchJobs = async () => {
     try {
       setLoading(true);
 
+      const currentLang = i18n.language || "en";
+
       const res = await axios.get(
-        "http://localhost:8000/api/jobs"
+        "http://localhost:8000/api/jobs",
+        {
+          params: { lang: currentLang },
+        }
       );
 
       console.log("Jobs:", res.data);
@@ -510,6 +515,7 @@ export default Jobs;
 
 // import { useEffect, useState } from "react";
 // import axios from "axios";
+// import { useTranslation } from "react-i18next";
 
 // import {
 //   Box,
@@ -532,6 +538,8 @@ export default Jobs;
 // import Footer from "../components/layout/Footer";
 
 // const Jobs = () => {
+//   const { t } = useTranslation();
+
 //   const [jobs, setJobs] = useState([]);
 //   const [loading, setLoading] = useState(true);
 
@@ -742,6 +750,7 @@ export default Jobs;
 //                     mb: 3,
 //                   }}
 //                 >
+
 //                   <Box
 //                     sx={{
 //                       display: "flex",
@@ -749,6 +758,7 @@ export default Jobs;
 //                       gap: 1,
 //                     }}
 //                   >
+
 //                     <FilterAltOutlinedIcon
 //                       sx={{
 //                         color: "#00A5EC",
@@ -756,8 +766,9 @@ export default Jobs;
 //                     />
 
 //                     <Typography fontWeight={700}>
-//                       Filters
+//                       {t("jobs.filters")}
 //                     </Typography>
+
 //                   </Box>
 
 //                   <Button
@@ -768,8 +779,9 @@ export default Jobs;
 //                       fontSize: 13,
 //                     }}
 //                   >
-//                     Clear all
+//                     {t("jobs.clearAll")}
 //                   </Button>
+
 //                 </Box>
 
 //                 {/* CATEGORY */}
@@ -778,13 +790,13 @@ export default Jobs;
 //                   fontWeight={600}
 //                   mb={1}
 //                 >
-//                   Category
+//                   {t("jobs.category")}
 //                 </Typography>
 
 //                 <TextField
 //                   fullWidth
 //                   size="small"
-//                   placeholder="e.g. Software Developer"
+//                   placeholder={t("jobs.categoryPlaceholder")}
 //                   value={category}
 //                   onChange={(e) =>
 //                     setCategory(e.target.value)
@@ -800,13 +812,13 @@ export default Jobs;
 //                   fontWeight={600}
 //                   mb={1}
 //                 >
-//                   Location
+//                   {t("jobs.location")}
 //                 </Typography>
 
 //                 <TextField
 //                   fullWidth
 //                   size="small"
-//                   placeholder="e.g. Mumbai"
+//                   placeholder={t("jobs.locationPlaceholder")}
 //                   value={location}
 //                   onChange={(e) =>
 //                     setLocation(e.target.value)
@@ -822,13 +834,13 @@ export default Jobs;
 //                   fontWeight={600}
 //                   mb={1}
 //                 >
-//                   Experience
+//                   {t("jobs.experience")}
 //                 </Typography>
 
 //                 <TextField
 //                   fullWidth
 //                   size="small"
-//                   placeholder="e.g. 2 years"
+//                   placeholder={t("jobs.experiencePlaceholder")}
 //                   value={experience}
 //                   onChange={(e) =>
 //                     setExperience(e.target.value)
@@ -852,7 +864,7 @@ export default Jobs;
 //                       }
 //                     />
 //                   }
-//                   label="Work from home"
+//                   label={t("jobs.workFromHome")}
 //                   sx={{
 //                     display: "block",
 //                     mb: 1,
@@ -873,7 +885,7 @@ export default Jobs;
 //                       }
 //                     />
 //                   }
-//                   label="Part-time"
+//                   label={t("jobs.partTime")}
 //                   sx={{
 //                     display: "block",
 //                     mb: 3,
@@ -886,7 +898,7 @@ export default Jobs;
 //                   fontWeight={600}
 //                   mb={2}
 //                 >
-//                   Annual Salary (₹ in lakhs)
+//                   {t("jobs.annualSalary")}
 //                 </Typography>
 
 //                 <Slider
@@ -907,6 +919,7 @@ export default Jobs;
 //                     mt: 1,
 //                   }}
 //                 >
+
 //                   <Typography fontSize={13}>
 //                     ₹0L
 //                   </Typography>
@@ -918,9 +931,11 @@ export default Jobs;
 //                   <Typography fontSize={13}>
 //                     ₹100L
 //                   </Typography>
+
 //                 </Box>
 
 //               </Paper>
+
 //             </Grid>
 
 //             {/* ================================= */}
@@ -938,15 +953,22 @@ export default Jobs;
 //                   border: "1px solid #e5e7eb",
 //                 }}
 //               >
+
 //                 <Typography
 //                   fontWeight={600}
 //                   textAlign="center"
 //                 >
-//                   {filteredJobs.length} Jobs found
+//                   {t("jobs.jobsFound", {
+//                     count: filteredJobs.length,
+//                   })}
 //                 </Typography>
+
 //               </Paper>
 
+//               {/* NO RESULTS */}
+
 //               {filteredJobs.length === 0 ? (
+
 //                 <Typography
 //                   textAlign="center"
 //                   sx={{
@@ -954,11 +976,15 @@ export default Jobs;
 //                     color: "text.secondary",
 //                   }}
 //                 >
-//                   No Jobs Found
+//                   {t("jobs.noJobsFound")}
 //                 </Typography>
+
 //               ) : (
+
 //                 <Grid container spacing={3}>
+
 //                   {filteredJobs.map((job) => (
+
 //                     <Grid
 //                       item
 //                       xs={12}
@@ -966,13 +992,18 @@ export default Jobs;
 //                       lg={4}
 //                       key={job._id}
 //                     >
+
 //                       <InternshipCard
 //                         internship={job}
 //                         type="job"
 //                       />
+
 //                     </Grid>
+
 //                   ))}
+
 //                 </Grid>
+
 //               )}
 
 //             </Grid>
@@ -982,9 +1013,12 @@ export default Jobs;
 //         </Container>
 
 //         <Footer />
+
 //       </Box>
 //     </>
 //   );
 // };
 
 // export default Jobs;
+
+

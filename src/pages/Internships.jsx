@@ -23,7 +23,7 @@ import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
 const Internships = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [internships, setInternships] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ const Internships = () => {
 
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
-
+  const [company, setCompany] = useState("");
   const [workFromHome, setWorkFromHome] = useState(false);
   const [partTime, setPartTime] = useState(false);
 
@@ -46,14 +46,19 @@ const Internships = () => {
 
   useEffect(() => {
     fetchInternships();
-  }, []);
+  }, [i18n.language]);
 
   const fetchInternships = async () => {
     try {
       setLoading(true);
 
+      const currentLang = i18n.language || "en";
+
       const res = await axios.get(
-        "http://localhost:8000/api/internships"
+        "http://localhost:8000/api/internships",
+        {
+          params: { lang: currentLang },
+        }
       );
 
       console.log("Internships:", res.data);
@@ -499,8 +504,10 @@ const Internships = () => {
 export default Internships;
 
 
+
 // import { useEffect, useState } from "react";
 // import axios from "axios";
+// import { useTranslation } from "react-i18next";
 
 // import {
 //   Box,
@@ -523,6 +530,8 @@ export default Internships;
 // import Footer from "../components/layout/Footer";
 
 // const Internships = () => {
+//   const { t } = useTranslation();
+
 //   const [internships, setInternships] = useState([]);
 //   const [loading, setLoading] = useState(true);
 
@@ -633,9 +642,7 @@ export default Internships;
 //         .includes("part-time");
 
 //     // Stipend
-//     const stipendValue = getStipendValue(
-//       item.stipend
-//     );
+//     const stipendValue = getStipendValue(item.stipend);
 
 //     const stipendMatch =
 //       stipendValue >= stipend[0] &&
@@ -750,7 +757,7 @@ export default Internships;
 //                     />
 
 //                     <Typography fontWeight={700}>
-//                       Filters
+//                       {t("internships.filters")}
 //                     </Typography>
 
 //                   </Box>
@@ -763,7 +770,7 @@ export default Internships;
 //                       fontSize: 13,
 //                     }}
 //                   >
-//                     Clear all
+//                     {t("internships.clearAll")}
 //                   </Button>
 
 //                 </Box>
@@ -776,13 +783,13 @@ export default Internships;
 //                   fontWeight={600}
 //                   mb={1}
 //                 >
-//                   Category
+//                   {t("internships.category")}
 //                 </Typography>
 
 //                 <TextField
 //                   fullWidth
 //                   size="small"
-//                   placeholder="e.g. Software Development"
+//                   placeholder={t("internships.categoryPlaceholder")}
 //                   value={category}
 //                   onChange={(e) =>
 //                     setCategory(e.target.value)
@@ -800,13 +807,13 @@ export default Internships;
 //                   fontWeight={600}
 //                   mb={1}
 //                 >
-//                   Location
+//                   {t("internships.location")}
 //                 </Typography>
 
 //                 <TextField
 //                   fullWidth
 //                   size="small"
-//                   placeholder="e.g. Mumbai"
+//                   placeholder={t("internships.locationPlaceholder")}
 //                   value={location}
 //                   onChange={(e) =>
 //                     setLocation(e.target.value)
@@ -832,7 +839,7 @@ export default Internships;
 //                       }
 //                     />
 //                   }
-//                   label="Work from home"
+//                   label={t("internships.workFromHome")}
 //                   sx={{
 //                     display: "block",
 //                     mb: 1,
@@ -855,7 +862,7 @@ export default Internships;
 //                       }
 //                     />
 //                   }
-//                   label="Part-time"
+//                   label={t("internships.partTime")}
 //                   sx={{
 //                     display: "block",
 //                     mb: 3,
@@ -870,7 +877,7 @@ export default Internships;
 //                   fontWeight={600}
 //                   mb={2}
 //                 >
-//                   Monthly Stipend
+//                   {t("internships.monthlyStipend")}
 //                 </Typography>
 
 //                 <Slider
@@ -932,7 +939,9 @@ export default Internships;
 //                   fontWeight={600}
 //                   textAlign="center"
 //                 >
-//                   {filteredInternships.length} Internships found
+//                   {t("internships.internshipsFound", {
+//                     count: filteredInternships.length,
+//                   })}
 //                 </Typography>
 
 //               </Paper>
@@ -948,7 +957,7 @@ export default Internships;
 //                     color: "text.secondary",
 //                   }}
 //                 >
-//                   No Internships Found
+//                   {t("internships.noInternshipsFound")}
 //                 </Typography>
 
 //               ) : (
@@ -995,3 +1004,4 @@ export default Internships;
 // };
 
 // export default Internships;
+
