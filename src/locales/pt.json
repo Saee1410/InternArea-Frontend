@@ -364,7 +364,7 @@
   "noJobsFound": "Nenhum emprego encontrado"
 },
 
-"otherUserProfile": { "fetchFailed": "Falha ao carregar o perfil do usuário", "requestSent": "Solicitação de amizade enviada com sucesso", "requestError": "Algo deu errado ao enviar a solicitação de amizade", "userNotFound": "Usuário não encontrado", "sending": "Enviando...", "requestSentButton": "Solicitação enviada", "addFriend": "Adicionar amigo", "phone": "Telefone", "location": "Localização", "qualification": "Qualificação", "skills": "Habilidades", "bio": "Biografia" },
+"otherUserProfile": { "fetchFailed": "Falha ao carregar o perfil do usuário", "requestSent": "Solicitação de amizade enviada com sucesso", "requestError": "Algo deu errado ao enviar a solicitação de amizade", "requestAlreadyExists": "A solicitação de amizade já existe", "userNotFound": "Usuário não encontrado", "sending": "Enviando...", "requestSentButton": "Solicitação enviada", "addFriend": "Adicionar amigo", "phone": "Telefone", "location": "Localização", "qualification": "Qualificação", "skills": "Habilidades", "bio": "Biografia" },
 
 "publicSpace": {
   "title": "Espaço público",

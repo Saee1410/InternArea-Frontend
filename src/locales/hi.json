@@ -345,6 +345,7 @@
   "requestSent": "मित्र अनुरोध सफलतापूर्वक भेजा गया",
   "requestError": "मित्र अनुरोध भेजते समय कुछ गलत हो गया",
   "userNotFound": "यूज़र नहीं मिला",
+  "requestAlreadyExists": "फ्रेंड रिक्वेस्ट पहले से मौजूद है",
   "sending": "भेजा जा रहा है...",
   "requestSentButton": "अनुरोध भेजा गया",
   "addFriend": "मित्र जोड़ें",

@@ -363,6 +363,7 @@
   "fetchFailed": "No se pudo cargar el perfil del usuario",
   "requestSent": "Solicitud de amistad enviada correctamente",
   "requestError": "Algo salió mal al enviar la solicitud de amistad",
+  "requestAlreadyExists": "La solicitud de amistad ya existe",
   "userNotFound": "Usuario no encontrado",
   "sending": "Enviando...",
   "requestSentButton": "Solicitud enviada",

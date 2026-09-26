@@ -377,6 +377,7 @@
   "fetchFailed": "Échec du chargement du profil utilisateur",
   "requestSent": "Demande d’ami envoyée avec succès",
   "requestError": "Une erreur s’est produite lors de l’envoi de la demande d’ami",
+  "requestAlreadyExists": "La demande d'ami existe déjà",
   "userNotFound": "Utilisateur introuvable",
   "sending": "Envoi...",
   "requestSentButton": "Demande envoyée",

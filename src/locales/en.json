@@ -364,6 +364,7 @@
   "fetchFailed": "Failed to load user profile",
   "requestSent": "Friend request sent successfully",
   "requestError": "Something went wrong while sending friend request",
+  "requestAlreadyExists": "Friend request already exists",
   "userNotFound": "User not found",
   "sending": "Sending...",
   "requestSentButton": "Request Sent",

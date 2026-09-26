@@ -361,6 +361,7 @@
   "requestSent": "好友请求已成功发送",
   "requestError": "发送好友请求时出现问题",
   "userNotFound": "未找到用户",
+  "requestAlreadyExists": "好友请求已存在",
   "sending": "发送中...",
   "requestSentButton": "请求已发送",
   "addFriend": "添加好友",
