@@ -16,6 +16,7 @@ import InternshipCard from "./InternshipCard";
 
 function InternshipSection() {
   const { t, i18n } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [filter, setFilter] = useState("all");
 

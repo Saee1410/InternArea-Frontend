@@ -29,6 +29,7 @@ import Navbar from "../components/layout/Navbar";
 
 function ApplicationsList() {
   const { t } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +62,7 @@ function ApplicationsList() {
       const currentUserId = getCurrentUserId();
 
       const res = await axios.get(
-        "http://localhost:8000/api/applications",
+        `${API_URL}/api/applications`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -465,16 +466,3 @@ function ApplicationsList() {
 }
 
 export default ApplicationsList;
-
-
-
-
-
-
-
-
-
-
-
-
-

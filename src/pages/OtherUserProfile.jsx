@@ -18,6 +18,7 @@ import Footer from "../components/layout/Footer";
 const OtherUserProfile = () => {
   const { userId } = useParams();
   const { t } = useTranslation();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,7 @@ const OtherUserProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        `http://localhost:8000/api/profile/${userId}`,
+        `${API_URL}/api/profile/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,7 +79,7 @@ const OtherUserProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:8000/api/friends/request",
+        `${API_URL}/api/friends/request`,
         {
           receiverId: user._id,
         },

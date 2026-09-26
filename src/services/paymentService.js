@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:8000/api/payment";
+const API = `${import.meta.env.VITE_API_URL}/api/payment`;
 
 export const createResumeOrder = async () => {
     const token = localStorage.getItem("token");

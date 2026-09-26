@@ -21,6 +21,7 @@ import Navbar from "../components/layout/Navbar";
 function AdminEdit() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     profilePhoto: "",
@@ -38,7 +39,7 @@ function AdminEdit() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:8000/api/profile", {
+      const res = await axios.get(`${API_URL}/api/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -123,7 +124,7 @@ function AdminEdit() {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        "http://localhost:8000/api/profile",
+        `${API_URL}/api/profile`,
         formData,
         {
           headers: {

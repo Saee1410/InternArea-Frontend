@@ -18,6 +18,7 @@ import Navbar from "../components/layout/Navbar";
 function CreateInternship() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -60,7 +61,7 @@ function CreateInternship() {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/internships",
+        `${API_URL}/api/internships`,
         formData
       );
 

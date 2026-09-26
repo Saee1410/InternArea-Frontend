@@ -17,6 +17,7 @@ import Footer from "../components/layout/Footer";
 
 const FriendRequests = () => {
   const { t } = useTranslation();
+ const API_URL = import.meta.env.VITE_API_URL;
 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +36,7 @@ const FriendRequests = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:8000/api/friends/requests",
+        `${API_URL}/api/friends/requests`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,7 +69,7 @@ const FriendRequests = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        `http://localhost:8000/api/friends/request/${requestId}/accept`,
+        `${API_URL}/api/friends/request/${requestId}/accept`,
         {},
         {
           headers: {
@@ -109,7 +110,7 @@ const FriendRequests = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        `http://localhost:8000/api/friends/request/${requestId}/reject`,
+        `${API_URL}/api/friends/request/${requestId}/reject`,
         {},
         {
           headers: {

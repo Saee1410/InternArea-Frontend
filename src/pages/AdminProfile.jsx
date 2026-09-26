@@ -29,6 +29,7 @@ import Navbar from "../components/layout/Navbar";
 function AdminProfile() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [admin, setAdmin] = useState({});
   const [loginHistory, setLoginHistory] = useState([]);
@@ -47,7 +48,7 @@ function AdminProfile() {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:8000/api/profile",
+        `${API_URL}/api/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -77,7 +78,7 @@ function AdminProfile() {
       }
 
       const res = await axios.get(
-        "http://localhost:8000/api/auth/login-history/all",
+        `${API_URL}/api/auth/login-history/all`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

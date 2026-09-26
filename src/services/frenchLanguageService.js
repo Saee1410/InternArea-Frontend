@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/french-language";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/french-language`;
 //const API_URL = "https://internarea-4g9n.onrender.com/api/french-language";
 
 // ==========================================

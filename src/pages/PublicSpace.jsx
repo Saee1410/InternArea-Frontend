@@ -29,6 +29,7 @@ import Footer from "../components/layout/Footer";
 
 const PublicSpace = () => {
   const { t } = useTranslation();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // ================================
   // UPLOAD STATES
@@ -90,7 +91,7 @@ const PublicSpace = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:8000/api/public-posts",
+        `${API_URL}/api/public-posts`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -171,7 +172,7 @@ const PublicSpace = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:8000/api/public-posts/${postId}/like`,
+        `${API_URL}/api/public-posts/${postId}/like`,
         {},
         {
           headers: {
@@ -238,7 +239,7 @@ const PublicSpace = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8000/api/public-posts/${postId}/comment`,
+        `${API_URL}/api/public-posts/${postId}/comment`,
         {
           text: text.trim(),
         },
@@ -282,7 +283,7 @@ const PublicSpace = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:8000/api/public-posts/${postId}/share`,
+        `${API_URL}/api/public-posts/${postId}/share`,
         {},
         {
           headers: {
@@ -358,7 +359,7 @@ const PublicSpace = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "http://localhost:8000/api/public-posts",
+        `${API_URL}/api/public-posts`,
         formData,
         {
           headers: {
