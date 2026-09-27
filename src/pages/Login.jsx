@@ -36,16 +36,16 @@ import logo2 from "../assets/logo2.jpg";
 
 function Login() {
   const navigate = useNavigate();
-
   const { t } = useTranslation();
+
+  // IMPORTANT:
+  // Vercel Environment Variable:
+  // VITE_API_URL = https://your-backend-url.onrender.com
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [loading, setLoading] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [remember, setRemember] = useState(false);
-
   const [loginType, setLoginType] = useState("student");
 
   const [formData, setFormData] = useState({
@@ -58,12 +58,34 @@ function Login() {
   // =====================================================
 
   const [showOTP, setShowOTP] = useState(false);
-
   const [otp, setOtp] = useState("");
-
   const [otpUserId, setOtpUserId] = useState(null);
-
   const [otpEmail, setOtpEmail] = useState("");
+
+  // =====================================================
+  // CHECK API URL
+  // =====================================================
+
+  const checkAPI = () => {
+    if (!API_URL) {
+      alert(
+        "API URL is not configured. Please check VITE_API_URL."
+      );
+
+      console.error(
+        "VITE_API_URL is missing."
+      );
+
+      return false;
+    }
+
+    console.log(
+      "API URL:",
+      API_URL
+    );
+
+    return true;
+  };
 
   // =====================================================
   // HANDLE INPUT CHANGE
@@ -82,31 +104,56 @@ function Login() {
 
   const handleSuccessfulLogin = (user, token) => {
     if (!user || !token) {
-      alert("Invalid login response");
+      alert("Invalid login response.");
       return;
     }
 
-    console.log("LOGIN USER:", user);
-    console.log("LOGIN ROLE:", user.role);
+    console.log(
+      "LOGIN USER:",
+      user
+    );
+
+    console.log(
+      "LOGIN ROLE:",
+      user.role
+    );
 
     // Save token
-    localStorage.setItem("token", token);
+    localStorage.setItem(
+      "token",
+      token
+    );
 
     // Save user
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
 
-    // ---------------------------------------------
+    // Remember me
+    if (remember) {
+      localStorage.setItem(
+        "rememberMe",
+        "true"
+      );
+    } else {
+      localStorage.removeItem(
+        "rememberMe"
+      );
+    }
+
+    // =================================================
     // ADMIN
-    // ---------------------------------------------
+    // =================================================
 
     if (user.role === "admin") {
       navigate("/admin/dashboard");
       return;
     }
 
-    // ---------------------------------------------
+    // =================================================
     // STUDENT
-    // ---------------------------------------------
+    // =================================================
 
     navigate("/");
   };
@@ -116,13 +163,33 @@ function Login() {
   // =====================================================
 
   const handleGoogleLogin = async (response) => {
+    if (!checkAPI()) {
+      return;
+    }
+
+    if (!response?.credential) {
+      alert(
+        t("login.googleLoginFailed") ||
+          "Google login failed."
+      );
+
+      return;
+    }
+
     try {
       setLoading(true);
+
+      console.log(
+        "Google login started"
+      );
 
       const res = await axios.post(
         `${API_URL}/api/auth/google`,
         {
           credential: response.credential,
+        },
+        {
+          timeout: 20000,
         }
       );
 
@@ -131,39 +198,65 @@ function Login() {
         res.data
       );
 
-      // ---------------------------------------------
+      // =================================================
       // OTP REQUIRED
-      // ---------------------------------------------
+      // =================================================
 
-      if (res.data.requiresOTP) {
-        setOtpUserId(res.data.userId);
-        setOtpEmail(res.data.email);
+      if (res.data?.requiresOTP) {
+        setOtpUserId(
+          res.data.userId
+        );
+
+        setOtpEmail(
+          res.data.email || ""
+        );
+
         setOtp("");
+
         setShowOTP(true);
 
         return;
       }
 
-      // ---------------------------------------------
+      // =================================================
       // NORMAL GOOGLE LOGIN
-      // ---------------------------------------------
+      // =================================================
 
-      const user = res.data.user;
+      if (
+        !res.data?.user ||
+        !res.data?.token
+      ) {
+        throw new Error(
+          "Invalid Google login response."
+        );
+      }
 
       handleSuccessfulLogin(
-        user,
+        res.data.user,
         res.data.token
       );
-    } catch (err) {
+
+    } catch (error) {
       console.error(
         "Google Login Error:",
-        err
+        error
       );
 
-      alert(
-        err.response?.data?.message ||
-          t("login.googleLoginFailed")
-      );
+      if (
+        error.code ===
+        "ERR_NETWORK"
+      ) {
+        alert(
+          "Cannot connect to server. Please check your backend URL."
+        );
+      } else {
+        alert(
+          error.response?.data?.message ||
+            t("login.googleLoginFailed") ||
+            "Google login failed."
+        );
+      }
+
     } finally {
       setLoading(false);
     }
@@ -176,12 +269,16 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.email ||
-      !formData.password
-    ) {
+    if (!checkAPI()) {
+      return;
+    }
+
+    const email = formData.email.trim();
+    const password = formData.password;
+
+    if (!email || !password) {
       alert(
-        "Please enter email and password"
+        "Please enter email and password."
       );
 
       return;
@@ -190,9 +287,24 @@ function Login() {
     try {
       setLoading(true);
 
+      console.log(
+        "LOGIN API:",
+        `${API_URL}/api/auth/login`
+      );
+
       const res = await axios.post(
         `${API_URL}/api/auth/login`,
-        formData
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          timeout: 20000,
+        }
       );
 
       console.log(
@@ -204,20 +316,10 @@ function Login() {
       // OTP REQUIRED
       // =================================================
 
-      if (res.data.requiresOTP) {
+      if (res.data?.requiresOTP) {
         console.log(
           "OTP required for:",
           res.data.email
-        );
-
-        console.log(
-          "Login Type:",
-          loginType
-        );
-
-        console.log(
-          "User ID:",
-          res.data.userId
         );
 
         setOtpUserId(
@@ -225,7 +327,7 @@ function Login() {
         );
 
         setOtpEmail(
-          res.data.email
+          res.data.email || email
         );
 
         setOtp("");
@@ -236,14 +338,23 @@ function Login() {
       }
 
       // =================================================
-      // NORMAL LOGIN WITHOUT OTP
+      // NORMAL LOGIN
       // =================================================
 
-      const user = res.data.user;
+      const user = res.data?.user;
+      const token = res.data?.token;
 
-      // ---------------------------------------------
+      if (!user || !token) {
+        alert(
+          "Invalid login response from server."
+        );
+
+        return;
+      }
+
+      // =================================================
       // LOGIN TYPE VALIDATION
-      // ---------------------------------------------
+      // =================================================
 
       if (
         loginType === "admin" &&
@@ -267,24 +378,38 @@ function Login() {
         return;
       }
 
-      // ---------------------------------------------
-      // SUCCESSFUL LOGIN
-      // ---------------------------------------------
+      // =================================================
+      // SUCCESS
+      // =================================================
 
       handleSuccessfulLogin(
         user,
-        res.data.token
+        token
       );
+
     } catch (error) {
       console.error(
         "Login Error:",
         error
       );
 
-      alert(
-        error.response?.data?.message ||
-          t("login.loginFailed")
-      );
+      if (
+        error.code ===
+          "ERR_NETWORK" ||
+        error.message ===
+          "Network Error"
+      ) {
+        alert(
+          "Cannot connect to backend server. Please check VITE_API_URL and make sure backend is running."
+        );
+      } else {
+        alert(
+          error.response?.data?.message ||
+            t("login.loginFailed") ||
+            "Login failed."
+        );
+      }
+
     } finally {
       setLoading(false);
     }
@@ -295,9 +420,13 @@ function Login() {
   // =====================================================
 
   const handleVerifyOTP = async () => {
+    if (!checkAPI()) {
+      return;
+    }
+
     if (!otp || otp.length !== 6) {
       alert(
-        "Please enter a valid 6 digit OTP"
+        "Please enter a valid 6 digit OTP."
       );
 
       return;
@@ -319,16 +448,18 @@ function Login() {
         otp
       );
 
-      console.log(
-        "OTP USER ID:",
-        otpUserId
-      );
-
       const res = await axios.post(
         `${API_URL}/api/auth/verify-login-otp`,
         {
           userId: otpUserId,
           otp: otp.trim(),
+        },
+        {
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          timeout: 20000,
         }
       );
 
@@ -337,16 +468,23 @@ function Login() {
         res.data
       );
 
-      const user = res.data.user;
+      const user = res.data?.user;
+      const token = res.data?.token;
 
-      // =================================================
-      // Backend gives actual user.role
-      // =================================================
+      if (!user || !token) {
+        alert(
+          "Invalid OTP verification response."
+        );
 
+        return;
+      }
+
+      // Backend already gives actual role
       handleSuccessfulLogin(
         user,
-        res.data.token
+        token
       );
+
     } catch (error) {
       console.error(
         "OTP Verification Error:",
@@ -355,11 +493,23 @@ function Login() {
 
       alert(
         error.response?.data?.message ||
-          "Invalid OTP"
+          "Invalid OTP."
       );
+
     } finally {
       setLoading(false);
     }
+  };
+
+  // =====================================================
+  // BACK TO LOGIN
+  // =====================================================
+
+  const handleBackToLogin = () => {
+    setShowOTP(false);
+    setOtp("");
+    setOtpUserId(null);
+    setOtpEmail("");
   };
 
   // =====================================================
@@ -429,7 +579,7 @@ function Login() {
               fontWeight="bold"
               sx={{
                 fontSize: {
-                  xs: "1.7rem",
+                  xs: "1.8rem",
                   sm: "2.125rem",
                 },
               }}
@@ -440,12 +590,6 @@ function Login() {
             <Typography
               color="text.secondary"
               mt={1}
-              sx={{
-                fontSize: {
-                  xs: "0.9rem",
-                  sm: "1rem",
-                },
-              }}
             >
               OTP has been sent to
             </Typography>
@@ -455,10 +599,6 @@ function Login() {
               mt={1}
               sx={{
                 wordBreak: "break-word",
-                fontSize: {
-                  xs: "0.9rem",
-                  sm: "1rem",
-                },
               }}
             >
               {otpEmail}
@@ -478,10 +618,9 @@ function Login() {
               value={otp}
               onChange={(e) => {
                 const value =
-                  e.target.value.replace(
-                    /\D/g,
-                    ""
-                  );
+                  e.target.value
+                    .replace(/\D/g, "")
+                    .slice(0, 6);
 
                 setOtp(value);
               }}
@@ -520,12 +659,9 @@ function Login() {
 
             <Button
               variant="text"
-              onClick={() => {
-                setShowOTP(false);
-                setOtp("");
-                setOtpUserId(null);
-                setOtpEmail("");
-              }}
+              onClick={
+                handleBackToLogin
+              }
             >
               Back to Login
             </Button>
@@ -567,7 +703,7 @@ function Login() {
           width: "100%",
           maxWidth: 520,
           p: {
-            xs: 3,
+            xs: 2.5,
             sm: 5,
           },
           borderRadius: {
@@ -601,7 +737,7 @@ function Login() {
             fontWeight="bold"
             sx={{
               fontSize: {
-                xs: "1.7rem",
+                xs: "1.8rem",
                 sm: "2.125rem",
               },
             }}
@@ -614,8 +750,8 @@ function Login() {
             mt={1}
             sx={{
               fontSize: {
-                xs: "0.9rem",
-                sm: "1rem",
+                xs: 14,
+                sm: 16,
               },
             }}
           >
@@ -635,24 +771,31 @@ function Login() {
             mt: 4,
             background: "#f3f4f6",
             borderRadius: 2,
-
-            "& .MuiTab-root": {
-              minWidth: 0,
-              fontSize: {
-                xs: "0.8rem",
-                sm: "0.875rem",
-              },
-            },
+            minHeight: 48,
           }}
         >
           <Tab
             value="student"
             label={t("login.student")}
+            sx={{
+              minWidth: 0,
+              fontSize: {
+                xs: 13,
+                sm: 14,
+              },
+            }}
           />
 
           <Tab
             value="admin"
             label={t("login.admin")}
+            sx={{
+              minWidth: 0,
+              fontSize: {
+                xs: 13,
+                sm: 14,
+              },
+            }}
           />
         </Tabs>
 
@@ -669,10 +812,10 @@ function Login() {
           <TextField
             label={t("login.email")}
             name="email"
+            type="email"
             value={formData.email}
             onChange={handleChange}
             fullWidth
-            type="email"
             autoComplete="email"
             InputProps={{
               startAdornment: (
@@ -704,7 +847,7 @@ function Login() {
 
               endAdornment: (
                 <IconButton
-                  edge="end"
+                  type="button"
                   onClick={() =>
                     setShowPassword(
                       !showPassword
@@ -724,8 +867,7 @@ function Login() {
           <Box
             sx={{
               display: "flex",
-              justifyContent:
-                "space-between",
+              justifyContent: "space-between",
               alignItems: {
                 xs: "flex-start",
                 sm: "center",
@@ -734,35 +876,25 @@ function Login() {
                 xs: "column",
                 sm: "row",
               },
-              gap: {
-                xs: 1,
-                sm: 0,
-              },
+              gap: 1,
             }}
           >
             <FormControlLabel
               control={
                 <Checkbox
                   checked={remember}
-                  onChange={() =>
+                  onChange={(e) =>
                     setRemember(
-                      !remember
+                      e.target.checked
                     )
                   }
-                  size="small"
                 />
               }
               label={
                 t("login.rememberMe")
               }
               sx={{
-                "& .MuiFormControlLabel-label":
-                  {
-                    fontSize: {
-                      xs: "0.85rem",
-                      sm: "0.875rem",
-                    },
-                  },
+                m: 0,
               }}
             />
 
@@ -770,12 +902,6 @@ function Login() {
               component={RouterLink}
               to="/forgot"
               underline="hover"
-              sx={{
-                fontSize: {
-                  xs: "0.85rem",
-                  sm: "0.875rem",
-                },
-              }}
             >
               {t(
                 "login.forgotPassword"
@@ -825,13 +951,18 @@ function Login() {
             onSuccess={
               handleGoogleLogin
             }
-            onError={() =>
-              console.log(
+            onError={() => {
+              console.error(
+                "Google Login Failed"
+              );
+
+              alert(
                 t(
                   "login.googleLoginFailed"
-                )
-              )
-            }
+                ) ||
+                  "Google login failed."
+              );
+            }}
           />
         </Box>
 
@@ -840,8 +971,8 @@ function Login() {
           mt={3}
           sx={{
             fontSize: {
-              xs: "0.85rem",
-              sm: "1rem",
+              xs: 14,
+              sm: 16,
             },
           }}
         >
@@ -861,6 +992,16 @@ function Login() {
 }
 
 export default Login;
+
+
+
+
+
+
+
+
+
+
 
 
 // import { useState } from "react";
