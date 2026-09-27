@@ -29,7 +29,7 @@ function Home() {
         <Hero />
 
         {/* Community Slider */}
-        <Box sx={{ mt: -20 }}>
+        <Box sx={{ mt: -30 }}>
         <CommunitySection />
         </Box>
 
