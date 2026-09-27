@@ -246,8 +246,8 @@ export default function SvgSlider() {
                   sx={{
                     position: "relative",
                     height: {
-                      xs: 600,
-                      md: 380,
+                      xs: 300,
+                      md: 260,
                     },
                     width: "100%",
                     background: slide.bgColor,
