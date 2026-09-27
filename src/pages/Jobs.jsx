@@ -24,6 +24,7 @@ import Footer from "../components/layout/Footer";
 
 const Jobs = () => {
   const { t, i18n } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +53,7 @@ const Jobs = () => {
       const currentLang = i18n.language || "en";
 
       const res = await axios.get(
-        "http://localhost:8000/api/jobs",
+        `${API_URL}/api/jobs`,
         {
           params: { lang: currentLang },
         }

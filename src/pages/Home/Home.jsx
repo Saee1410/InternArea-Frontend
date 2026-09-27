@@ -3,8 +3,8 @@ import { Box } from "@mui/material";
 import Navbar from "../../components/layout/Navbar";
 import Hero from "./Hero";
 import InternshipSection from "./InternshipSection";
-import Footer from "../../components/layout/Footer";
 import CommunitySection from "./CommunitySection";
+import Footer from "../../components/layout/Footer";
 
 function Home() {
   return (
@@ -13,7 +13,7 @@ function Home() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        background: "#f8fafc",
+        backgroundColor: "#f8fafc",
       }}
     >
       <Navbar />
@@ -22,22 +22,16 @@ function Home() {
         component="main"
         sx={{
           flex: 1,
-          display: "flex",
-          flexDirection: "column",
+          width: "100%",
         }}
       >
+        {/* HERO */}
         <Hero />
 
-        {/* Community Slider */}
-        <Box
-          sx={{
-            mt: 0,
-          }}
-        >
-          <CommunitySection />
-        </Box>
+        {/* COMMUNITY */}
+        <CommunitySection />
 
-        {/* Internship */}
+        {/* INTERNSHIPS + JOBS */}
         <InternshipSection />
       </Box>
 
@@ -47,10 +41,6 @@ function Home() {
 }
 
 export default Home;
-
-
-
-
 
 // import { Box } from "@mui/material";
 
@@ -83,8 +73,12 @@ export default Home;
 //         <Hero />
 
 //         {/* Community Slider */}
-//         <Box sx={{ mt: -30 }}>
-//         <CommunitySection />
+//         <Box
+//           sx={{
+//             mt: 0,
+//           }}
+//         >
+//           <CommunitySection />
 //         </Box>
 
 //         {/* Internship */}
@@ -97,4 +91,54 @@ export default Home;
 // }
 
 // export default Home;
+
+
+
+
+
+// // import { Box } from "@mui/material";
+
+// // import Navbar from "../../components/layout/Navbar";
+// // import Hero from "./Hero";
+// // import InternshipSection from "./InternshipSection";
+// // import Footer from "../../components/layout/Footer";
+// // import CommunitySection from "./CommunitySection";
+
+// // function Home() {
+// //   return (
+// //     <Box
+// //       sx={{
+// //         minHeight: "100vh",
+// //         display: "flex",
+// //         flexDirection: "column",
+// //         background: "#f8fafc",
+// //       }}
+// //     >
+// //       <Navbar />
+
+// //       <Box
+// //         component="main"
+// //         sx={{
+// //           flex: 1,
+// //           display: "flex",
+// //           flexDirection: "column",
+// //         }}
+// //       >
+// //         <Hero />
+
+// //         {/* Community Slider */}
+// //         <Box sx={{ mt: -30 }}>
+// //         <CommunitySection />
+// //         </Box>
+
+// //         {/* Internship */}
+// //         <InternshipSection />
+// //       </Box>
+
+// //       <Footer />
+// //     </Box>
+// //   );
+// // }
+
+// // export default Home;
 
