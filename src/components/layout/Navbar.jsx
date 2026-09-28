@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "../LanguageSelector";
 
@@ -13,13 +13,20 @@ import {
   IconButton,
   Avatar,
   Typography,
-  Divider,
 } from "@mui/material";
 
 import {
   Search,
   Menu as MenuIcon,
   X,
+  User,
+  LogOut,
+  History,
+  Globe,
+  FileText,
+  CreditCard,
+  BriefcaseBusiness,
+  Building2,
 } from "lucide-react";
 
 import logo from "../../assets/logo.jpg";
@@ -31,49 +38,32 @@ function Navbar() {
   const [user, setUser] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  // =====================================================
-  // USER
-  // =====================================================
-
+  // =========================
+  // GET USER
+  // =========================
   useEffect(() => {
-    const userData = localStorage.getItem("user");
+    const getUser = () => {
+      const userData = localStorage.getItem("user");
 
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error("User parse error:", error);
+      if (userData) {
+        try {
+          setUser(JSON.parse(userData));
+        } catch (error) {
+          console.error("Invalid user data:", error);
+          localStorage.removeItem("user");
+          setUser(null);
+        }
+      } else {
         setUser(null);
       }
-    } else {
-      setUser(null);
-    }
+    };
+
+    getUser();
   }, []);
 
-  // =====================================================
-  // CLOSE MENU
-  // =====================================================
-
-  const closeMenu = () => {
-    setMobileMenu(false);
-  };
-
-  // =====================================================
-  // NAVIGATION
-  // =====================================================
-
-  const goTo = (path) => {
-    console.log("Sidebar navigation:", path);
-
-    setMobileMenu(false);
-
-    navigate(path);
-  };
-
-  // =====================================================
+  // =========================
   // LOGOUT
-  // =====================================================
-
+  // =========================
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -86,53 +76,25 @@ function Navbar() {
     window.location.reload();
   };
 
-  // =====================================================
-  // MOBILE BUTTON
-  // =====================================================
+  // =========================
+  // MOBILE NAVIGATION
+  // =========================
+  const handleMobileNavigation = (path) => {
+    setMobileMenu(false);
+    navigate(path);
+  };
 
-  const MobileButton = ({ children, onClick, danger }) => {
-    return (
-      <Button
-        fullWidth
-        type="button"
-        onClick={onClick}
-        sx={{
-          minHeight: 52,
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
+  // =========================
+  // PROFILE NAVIGATION
+  // =========================
+  const handleProfile = () => {
+    setMobileMenu(false);
 
-          px: 2,
-
-          mb: 0.5,
-
-          borderRadius: 2,
-
-          color: danger ? "#d32f2f" : "#374151",
-
-          fontSize: 16,
-          fontWeight: 600,
-
-          textTransform: "none",
-
-          cursor: "pointer",
-
-          userSelect: "none",
-
-          "&:hover": {
-            backgroundColor: danger
-              ? "#fff5f5"
-              : "#f0faff",
-
-            color: danger
-              ? "#d32f2f"
-              : "#00A5EC",
-          },
-        }}
-      >
-        {children}
-      </Button>
-    );
+    if (user?.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/profile");
+    }
   };
 
   return (
@@ -145,84 +107,67 @@ function Navbar() {
         position="sticky"
         elevation={1}
         sx={{
-          backgroundColor: "#fff",
+          background: "#fff",
           color: "#111",
-          zIndex: 1200,
+          zIndex: 1300,
         }}
       >
         <Toolbar
           sx={{
-            minHeight: {
-              xs: 75,
-              lg: 100,
-            },
-
-            px: {
-              xs: 2,
-              sm: 3,
-              lg: 8,
-            },
-
+            height: 100,
+            minHeight: "100px !important",
+            px: { xs: 2, sm: 3, lg: 8 },
             display: "flex",
-            alignItems: "center",
             justifyContent: "space-between",
-
-            gap: 2,
           }}
         >
+
           {/* =================================================
               LOGO
           ================================================= */}
 
           <Link
             to="/"
-            onClick={closeMenu}
+            onClick={() => setMobileMenu(false)}
             style={{
-              display: "flex",
-              flexShrink: 0,
               textDecoration: "none",
+              color: "inherit",
+              flexShrink: 0,
             }}
           >
             <Box
-              component="img"
-              src={logo}
-              alt="Intern Area"
               sx={{
-                width: {
-                  xs: 52,
-                  sm: 60,
-                  lg: 65,
-                },
-
-                height: {
-                  xs: 52,
-                  sm: 60,
-                  lg: 65,
-                },
-
-                borderRadius: 2,
-
-                objectFit: "cover",
+                display: "flex",
+                alignItems: "center",
               }}
-            />
+            >
+              <Box
+                component="img"
+                src={logo}
+                alt="InternArea Logo"
+                sx={{
+                  width: { xs: 55, sm: 60, lg: 65 },
+                  height: { xs: 55, sm: 60, lg: 65 },
+                  borderRadius: 2,
+                  objectFit: "cover",
+                }}
+              />
+            </Box>
           </Link>
 
           {/* =================================================
-              DESKTOP NAVIGATION
+              DESKTOP MENU
           ================================================= */}
 
           <Box
             sx={{
-              display: {
-                xs: "none",
-                lg: "flex",
-              },
-
-              alignItems: "center",
-
+              display: { xs: "none", lg: "flex" },
               gap: 4,
+              alignItems: "center",
             }}
           >
+
+            {/* Internships */}
             <Button
               component={Link}
               to="/internships"
@@ -234,13 +179,13 @@ function Navbar() {
 
                 "&:hover": {
                   color: "#00A5EC",
-                  backgroundColor: "transparent",
                 },
               }}
             >
               {t("navbar.internships")}
             </Button>
 
+            {/* Jobs */}
             <Button
               component={Link}
               to="/jobs"
@@ -252,13 +197,13 @@ function Navbar() {
 
                 "&:hover": {
                   color: "#00A5EC",
-                  backgroundColor: "transparent",
                 },
               }}
             >
               {t("navbar.jobs")}
             </Button>
 
+            {/* Plans */}
             <Button
               component={Link}
               to="/subscriptions"
@@ -270,12 +215,12 @@ function Navbar() {
 
                 "&:hover": {
                   color: "#00A5EC",
-                  backgroundColor: "transparent",
                 },
               }}
             >
               {t("navbar.plans")}
             </Button>
+
           </Box>
 
           {/* =================================================
@@ -285,15 +230,9 @@ function Navbar() {
           <TextField
             placeholder={t("hero.searchPlaceholder")}
             sx={{
-              display: {
-                xs: "none",
-                lg: "flex",
-              },
-
+              display: { xs: "none", lg: "flex" },
               width: 340,
-
-              backgroundColor: "#f3f4f6",
-
+              background: "#f3f4f6",
               borderRadius: 2,
 
               "& fieldset": {
@@ -310,23 +249,21 @@ function Navbar() {
           />
 
           {/* =================================================
-              DESKTOP RIGHT
+              DESKTOP RIGHT SIDE
           ================================================= */}
 
           <Box
             sx={{
-              display: {
-                xs: "none",
-                lg: "flex",
-              },
-
-              alignItems: "center",
-
+              display: { xs: "none", lg: "flex" },
               gap: 2,
+              alignItems: "center",
             }}
           >
+
+            {/* Language */}
             <LanguageSelector />
 
+            {/* LOGIN */}
             {!user ? (
               <Button
                 component={Link}
@@ -335,20 +272,15 @@ function Navbar() {
                 sx={{
                   px: 4,
                   py: 1.2,
-
                   borderRadius: 2,
-
                   borderColor: "#00A5EC",
-
                   color: "#00A5EC",
-
                   fontWeight: "bold",
-
                   textTransform: "none",
 
                   "&:hover": {
                     borderColor: "#00A5EC",
-                    backgroundColor: "#f0faff",
+                    background: "#f0faff",
                   },
                 }}
               >
@@ -356,24 +288,18 @@ function Navbar() {
               </Button>
             ) : (
               <>
+                {/* Profile */}
                 <Box
-                  onClick={() =>
-                    navigate(
-                      user.role === "admin"
-                        ? "/admin"
-                        : "/profile"
-                    )
-                  }
+                  onClick={handleProfile}
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     gap: 1,
-
                     cursor: "pointer",
                   }}
                 >
                   <Avatar
-                    src={user.profilePhoto || ""}
+                    src={user.profilePhoto}
                     sx={{
                       width: 40,
                       height: 40,
@@ -382,29 +308,26 @@ function Navbar() {
 
                   <Typography
                     fontWeight="bold"
-                    color="#111"
+                    color="black"
                   >
                     {user.name}
                   </Typography>
                 </Box>
 
+                {/* Logout */}
                 <Button
                   onClick={handleLogout}
                   variant="contained"
                   sx={{
                     px: 3,
                     py: 1.2,
-
                     borderRadius: 2,
-
-                    backgroundColor: "#00A5EC",
-
+                    background: "#00A5EC",
                     fontWeight: "bold",
-
                     textTransform: "none",
 
                     "&:hover": {
-                      backgroundColor: "#008dcc",
+                      background: "#008dcc",
                     },
                   }}
                 >
@@ -412,331 +335,499 @@ function Navbar() {
                 </Button>
               </>
             )}
+
           </Box>
 
           {/* =================================================
-              MOBILE MENU BUTTON
+              MOBILE HAMBURGER
           ================================================= */}
 
           <IconButton
-            type="button"
             onClick={() => setMobileMenu(true)}
             aria-label="Open menu"
             sx={{
-              display: {
-                xs: "flex",
-                lg: "none",
-              },
-
+              display: { xs: "flex", lg: "none" },
+              color: "#111",
               width: 48,
               height: 48,
-
-              color: "#111",
-
-              cursor: "pointer",
+              zIndex: 1400,
             }}
           >
             <MenuIcon size={30} />
           </IconButton>
+
         </Toolbar>
       </AppBar>
+
+      {/* =====================================================
+          MOBILE OVERLAY
+      ===================================================== */}
+
+      {mobileMenu && (
+        <Box
+          onClick={() => setMobileMenu(false)}
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.35)",
+            zIndex: 1390,
+          }}
+        />
+      )}
 
       {/* =====================================================
           MOBILE SIDEBAR
       ===================================================== */}
 
-      {mobileMenu && (
-        <>
-          {/* BACKDROP */}
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          width: {
+            xs: "85%",
+            sm: 360,
+          },
+          maxWidth: 400,
+          height: "100vh",
+
+          background: "#fff",
+
+          zIndex: 1400,
+
+          transform: mobileMenu
+            ? "translateX(0)"
+            : "translateX(100%)",
+
+          transition: "transform 0.3s ease-in-out",
+
+          boxShadow: "-8px 0 30px rgba(0,0,0,0.15)",
+
+          overflowY: "auto",
+
+          display: {
+            xs: "block",
+            lg: "none",
+          },
+        }}
+      >
+
+        {/* =================================================
+            SIDEBAR HEADER
+        ================================================= */}
+
+        <Box
+          sx={{
+            height: 85,
+            px: 2.5,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #eee",
+            position: "sticky",
+            top: 0,
+            background: "#fff",
+            zIndex: 2,
+          }}
+        >
 
           <Box
-            onClick={closeMenu}
+            component="img"
+            src={logo}
+            alt="logo"
             sx={{
-              position: "fixed",
-
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-
-              backgroundColor: "rgba(0,0,0,0.35)",
-
-              zIndex: 1298,
-
-              display: {
-                xs: "block",
-                lg: "none",
-              },
+              width: 50,
+              height: 50,
+              borderRadius: 2,
             }}
           />
 
-          {/* SIDEBAR */}
+          <IconButton
+            onClick={() => setMobileMenu(false)}
+            aria-label="Close menu"
+            sx={{
+              color: "#111",
+            }}
+          >
+            <X size={28} />
+          </IconButton>
+
+        </Box>
+
+        {/* =================================================
+            SIDEBAR CONTENT
+        ================================================= */}
+
+        <Box
+          sx={{
+            p: 2.5,
+            pb: 5,
+          }}
+        >
+
+          {/* =================================================
+              SEARCH
+          ================================================= */}
+
+          <TextField
+            fullWidth
+            placeholder={t("hero.searchPlaceholder")}
+            size="small"
+            sx={{
+              mb: 2.5,
+              background: "#f3f4f6",
+              borderRadius: 2,
+
+              "& fieldset": {
+                border: "none",
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search size={20} />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* =================================================
+              LANGUAGE
+          ================================================= */}
 
           <Box
             sx={{
-              position: "fixed",
-
-              top: 0,
-              right: 0,
-
-              width: {
-                xs: "85vw",
-                sm: 360,
-              },
-
-              maxWidth: 380,
-
-              height: "100vh",
-
-              backgroundColor: "#fff",
-
-              zIndex: 1299,
-
-              display: {
-                xs: "flex",
-                lg: "none",
-              },
-
-              flexDirection: "column",
-
-              boxShadow:
-                "-8px 0 30px rgba(0,0,0,0.15)",
+              mb: 2.5,
+              p: 1.5,
+              borderRadius: 2,
+              background: "#f8fafc",
             }}
           >
-            {/* =================================================
-                SIDEBAR HEADER
-            ================================================= */}
+            <LanguageSelector />
+          </Box>
 
-            <Box
-              sx={{
-                minHeight: 75,
+          {/* =================================================
+              PUBLIC NAVIGATION
+          ================================================= */}
 
-                display: "flex",
+          <Typography
+            sx={{
+              fontSize: 12,
+              fontWeight: "bold",
+              color: "#9ca3af",
+              mb: 1,
+              px: 1,
+              textTransform: "uppercase",
+            }}
+          >
+            Explore
+          </Typography>
 
-                alignItems: "center",
+          {/* Internships */}
+          <Button
+            fullWidth
+            onClick={() =>
+              handleMobileNavigation("/internships")
+            }
+            startIcon={<BriefcaseBusiness size={20} />}
+            sx={{
+              justifyContent: "flex-start",
+              py: 1.5,
+              px: 1.5,
+              mb: 0.5,
+              fontSize: 16,
+              fontWeight: 600,
+              color: "#374151",
+              textTransform: "none",
+              borderRadius: 2,
 
-                justifyContent: "space-between",
+              "&:hover": {
+                color: "#00A5EC",
+                background: "#f0faff",
+              },
+            }}
+          >
+            {t("navbar.internships")}
+          </Button>
 
-                px: 2,
+          {/* Jobs */}
+          <Button
+            fullWidth
+            onClick={() =>
+              handleMobileNavigation("/jobs")
+            }
+            startIcon={<Building2 size={20} />}
+            sx={{
+              justifyContent: "flex-start",
+              py: 1.5,
+              px: 1.5,
+              mb: 0.5,
+              fontSize: 16,
+              fontWeight: 600,
+              color: "#374151",
+              textTransform: "none",
+              borderRadius: 2,
 
-                borderBottom: "1px solid #eeeeee",
+              "&:hover": {
+                color: "#00A5EC",
+                background: "#f0faff",
+              },
+            }}
+          >
+            {t("navbar.jobs")}
+          </Button>
 
-                flexShrink: 0,
-              }}
-            >
+          {/* Plans */}
+          <Button
+            fullWidth
+            onClick={() =>
+              handleMobileNavigation("/subscriptions")
+            }
+            startIcon={<CreditCard size={20} />}
+            sx={{
+              justifyContent: "flex-start",
+              py: 1.5,
+              px: 1.5,
+              mb: 0.5,
+              fontSize: 16,
+              fontWeight: 600,
+              color: "#374151",
+              textTransform: "none",
+              borderRadius: 2,
+
+              "&:hover": {
+                color: "#00A5EC",
+                background: "#f0faff",
+              },
+            }}
+          >
+            {t("navbar.plans")}
+          </Button>
+
+          {/* =================================================
+              USER MENU
+          ================================================= */}
+
+          {user ? (
+            <>
               <Box
                 sx={{
-                  display: "flex",
-
-                  alignItems: "center",
-
-                  gap: 1.5,
-                }}
-              >
-                <Box
-                  component="img"
-                  src={logo}
-                  alt="Intern Area"
-                  sx={{
-                    width: 45,
-                    height: 45,
-
-                    borderRadius: 2,
-
-                    objectFit: "cover",
-                  }}
-                />
-
-                <Typography
-                  fontSize={18}
-                  fontWeight={700}
-                  color="#111"
-                >
-                  Intern Area
-                </Typography>
-              </Box>
-
-              <IconButton
-                type="button"
-                onClick={closeMenu}
-                aria-label="Close menu"
-                sx={{
-                  color: "#111",
-
-                  cursor: "pointer",
-                }}
-              >
-                <X size={28} />
-              </IconButton>
-            </Box>
-
-            {/* =================================================
-                SIDEBAR BODY
-            ================================================= */}
-
-            <Box
-              sx={{
-                flex: 1,
-
-                overflowY: "auto",
-
-                p: 2,
-
-                minHeight: 0,
-              }}
-            >
-              {/* SEARCH */}
-
-              <TextField
-                fullWidth
-                size="small"
-                placeholder={t("hero.searchPlaceholder")}
-                sx={{
-                  mb: 2,
-
-                  backgroundColor: "#f3f4f6",
-
-                  borderRadius: 2,
-
-                  "& fieldset": {
-                    border: "none",
-                  },
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search size={20} />
-                    </InputAdornment>
-                  ),
+                  mt: 2,
+                  mb: 1,
+                  borderTop: "1px solid #eee",
+                  pt: 2,
                 }}
               />
 
-              {/* LANGUAGE */}
+              <Typography
+                sx={{
+                  fontSize: 12,
+                  fontWeight: "bold",
+                  color: "#9ca3af",
+                  mb: 1,
+                  px: 1,
+                  textTransform: "uppercase",
+                }}
+              >
+                Account
+              </Typography>
 
-              <Box sx={{ mb: 2 }}>
-                <LanguageSelector />
-              </Box>
+              {/* Profile */}
+              <Button
+                fullWidth
+                onClick={handleProfile}
+                startIcon={<User size={20} />}
+                sx={{
+                  justifyContent: "flex-start",
+                  py: 1.5,
+                  px: 1.5,
+                  mb: 0.5,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#374151",
+                  textTransform: "none",
+                  borderRadius: 2,
 
-              <Divider sx={{ mb: 1.5 }} />
+                  "&:hover": {
+                    background: "#f8fafc",
+                  },
+                }}
+              >
+                {user.name || "Profile"}
+              </Button>
 
+              {/* Login History */}
+              <Button
+                fullWidth
+                onClick={() =>
+                  handleMobileNavigation("/LoginHistory")
+                }
+                startIcon={<History size={20} />}
+                sx={{
+                  justifyContent: "flex-start",
+                  py: 1.5,
+                  px: 1.5,
+                  mb: 0.5,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#374151",
+                  textTransform: "none",
+                  borderRadius: 2,
+
+                  "&:hover": {
+                    background: "#f8fafc",
+                  },
+                }}
+              >
+                Login History
+              </Button>
+
+              {/* Public Space */}
+              <Button
+                fullWidth
+                onClick={() =>
+                  handleMobileNavigation("/Publicspace")
+                }
+                startIcon={<Globe size={20} />}
+                sx={{
+                  justifyContent: "flex-start",
+                  py: 1.5,
+                  px: 1.5,
+                  mb: 0.5,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#374151",
+                  textTransform: "none",
+                  borderRadius: 2,
+
+                  "&:hover": {
+                    background: "#f8fafc",
+                  },
+                }}
+              >
+                Public Space
+              </Button>
+
+              {/* Resume Builder */}
+              <Button
+                fullWidth
+                onClick={() =>
+                  handleMobileNavigation("/ResumeBuilder")
+                }
+                startIcon={<FileText size={20} />}
+                sx={{
+                  justifyContent: "flex-start",
+                  py: 1.5,
+                  px: 1.5,
+                  mb: 0.5,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#374151",
+                  textTransform: "none",
+                  borderRadius: 2,
+
+                  "&:hover": {
+                    background: "#f8fafc",
+                  },
+                }}
+              >
+                Resume Builder
+              </Button>
+
+              {/* Subscription */}
+              <Button
+                fullWidth
+                onClick={() =>
+                  handleMobileNavigation("/subscriptions")
+                }
+                startIcon={<CreditCard size={20} />}
+                sx={{
+                  justifyContent: "flex-start",
+                  py: 1.5,
+                  px: 1.5,
+                  mb: 0.5,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#374151",
+                  textTransform: "none",
+                  borderRadius: 2,
+
+                  "&:hover": {
+                    background: "#f8fafc",
+                  },
+                }}
+              >
+                Subscription
+              </Button>
+
+              {/* Logout */}
+              <Button
+                fullWidth
+                onClick={handleLogout}
+                startIcon={<LogOut size={20} />}
+                sx={{
+                  justifyContent: "flex-start",
+                  py: 1.5,
+                  px: 1.5,
+                  mt: 1,
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: "#dc2626",
+                  textTransform: "none",
+                  borderRadius: 2,
+
+                  "&:hover": {
+                    background: "#fff5f5",
+                  },
+                }}
+              >
+                {t("navbar.logout")}
+              </Button>
+            </>
+          ) : (
+            <>
               {/* =================================================
-                  PUBLIC NAVIGATION
+                  LOGIN
               ================================================= */}
 
-              <MobileButton
-                onClick={() => goTo("/internships")}
+              <Box
+                sx={{
+                  mt: 2,
+                  borderTop: "1px solid #eee",
+                  pt: 2,
+                }}
+              />
+
+              <Button
+                fullWidth
+                onClick={() =>
+                  handleMobileNavigation("/login")
+                }
+                variant="contained"
+                sx={{
+                  mt: 1,
+                  py: 1.4,
+                  borderRadius: 2,
+                  background: "#00A5EC",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  fontSize: 16,
+
+                  "&:hover": {
+                    background: "#008dcc",
+                  },
+                }}
               >
-                {t("navbar.internships")}
-              </MobileButton>
+                {t("navbar.login")}
+              </Button>
+            </>
+          )}
 
-              <MobileButton
-                onClick={() => goTo("/jobs")}
-              >
-                {t("navbar.jobs")}
-              </MobileButton>
-
-              <MobileButton
-                onClick={() => goTo("/subscriptions")}
-              >
-                {t("navbar.plans")}
-              </MobileButton>
-
-              {/* =================================================
-                  USER MENU
-              ================================================= */}
-
-              {user ? (
-                <>
-                  <Divider sx={{ my: 1.5 }} />
-
-                  {/* PROFILE */}
-
-                  <MobileButton
-                    onClick={() =>
-                      goTo(
-                        user.role === "admin"
-                          ? "/admin"
-                          : "/profile"
-                      )
-                    }
-                  >
-                    👤 {user.name || "Profile"}
-                  </MobileButton>
-
-                  {/* PUBLIC SPACE */}
-
-                  <MobileButton
-                    onClick={() => goTo("/public")}
-                  >
-                    🌐 Public Space
-                  </MobileButton>
-
-                  {/* RESUME */}
-
-                  <MobileButton
-                    onClick={() => goTo("/resume")}
-                  >
-                    📄 Resume Builder
-                  </MobileButton>
-
-                  {/* SUBSCRIPTION */}
-
-                  <MobileButton
-                    onClick={() =>
-                      goTo("/subscriptions")
-                    }
-                  >
-                    💎 Subscription
-                  </MobileButton>
-
-                  <Divider sx={{ my: 1.5 }} />
-
-                  {/* LOGOUT */}
-
-                  <MobileButton
-                    danger
-                    onClick={handleLogout}
-                  >
-                    🚪 {t("navbar.logout")}
-                  </MobileButton>
-                </>
-              ) : (
-                <>
-                  <Divider sx={{ my: 1.5 }} />
-
-                  <Button
-                    fullWidth
-                    type="button"
-                    variant="contained"
-                    onClick={() => goTo("/login")}
-                    sx={{
-                      minHeight: 52,
-
-                      borderRadius: 2,
-
-                      backgroundColor: "#00A5EC",
-
-                      fontSize: 16,
-
-                      fontWeight: "bold",
-
-                      textTransform: "none",
-
-                      cursor: "pointer",
-
-                      "&:hover": {
-                        backgroundColor: "#008dcc",
-                      },
-                    }}
-                  >
-                    {t("navbar.login")}
-                  </Button>
-                </>
-              )}
-            </Box>
-          </Box>
-        </>
-      )}
+        </Box>
+      </Box>
     </>
   );
 }
