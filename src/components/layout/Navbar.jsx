@@ -33,6 +33,10 @@ function Navbar() {
   // Mobile Menu
   const [mobileMenu, setMobileMenu] = useState(false);
 
+  // =====================================================
+  // GET USER FROM LOCAL STORAGE
+  // =====================================================
+
   useEffect(() => {
     const userData = localStorage.getItem("user");
 
@@ -41,9 +45,14 @@ function Navbar() {
         setUser(JSON.parse(userData));
       } catch (error) {
         console.error("User data error:", error);
+        setUser(null);
       }
     }
   }, []);
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -57,10 +66,21 @@ function Navbar() {
     window.location.reload();
   };
 
-  // Close mobile menu after navigation
+  // =====================================================
+  // MOBILE NAVIGATION
+  // =====================================================
+
   const handleMobileNavigation = (path) => {
     setMobileMenu(false);
     navigate(path);
+  };
+
+  // =====================================================
+  // TOGGLE MOBILE MENU
+  // =====================================================
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenu((prev) => !prev);
   };
 
   return (
@@ -70,18 +90,28 @@ function Navbar() {
       sx={{
         background: "#fff",
         color: "#111",
+
+        // Important for mobile menu
+        zIndex: 1200,
       }}
     >
       <Toolbar
         sx={{
           height: 100,
           px: { xs: 2, lg: 8 },
+
           display: "flex",
           justifyContent: "space-between",
+
+          // Important for mobile sidebar
+          position: "relative",
+          overflow: "visible",
         }}
       >
+        {/* ================================================= */}
+        {/* LOGO */}
+        {/* ================================================= */}
 
-        {/* Logo */}
         <Link
           to="/"
           style={{
@@ -105,21 +135,28 @@ function Navbar() {
                 width: 65,
                 height: 65,
                 borderRadius: 2,
+                objectFit: "cover",
               }}
             />
           </Box>
         </Link>
 
+        {/* ================================================= */}
+        {/* DESKTOP MENU */}
+        {/* ================================================= */}
 
-        {/* Menu */}
         <Box
           sx={{
-            display: { xs: "none", lg: "flex" },
+            display: {
+              xs: "none",
+              lg: "flex",
+            },
+
             gap: 4,
           }}
         >
-
           {/* Internships */}
+
           <Button
             component={Link}
             to="/internships"
@@ -137,8 +174,8 @@ function Navbar() {
             {t("navbar.internships")}
           </Button>
 
-
           {/* Jobs */}
+
           <Button
             component={Link}
             to="/jobs"
@@ -156,8 +193,8 @@ function Navbar() {
             {t("navbar.jobs")}
           </Button>
 
-
           {/* Plans */}
+
           <Button
             component={Link}
             to="/subscriptions"
@@ -174,16 +211,22 @@ function Navbar() {
           >
             {t("navbar.plans")}
           </Button>
-
         </Box>
 
+        {/* ================================================= */}
+        {/* DESKTOP SEARCH */}
+        {/* ================================================= */}
 
-        {/* Search */}
         <TextField
           placeholder={t("hero.searchPlaceholder")}
           sx={{
-            display: { xs: "none", lg: "flex" },
+            display: {
+              xs: "none",
+              lg: "flex",
+            },
+
             width: 340,
+
             background: "#f3f4f6",
             borderRadius: 2,
 
@@ -200,24 +243,31 @@ function Navbar() {
           }}
         />
 
+        {/* ================================================= */}
+        {/* DESKTOP RIGHT SIDE */}
+        {/* ================================================= */}
 
-        {/* Right Side */}
         <Box
           sx={{
-            display: { xs: "none", lg: "flex" },
+            display: {
+              xs: "none",
+              lg: "flex",
+            },
+
             gap: 2,
             alignItems: "center",
           }}
         >
+          {/* Language */}
 
-          {/* Language Selector */}
           <LanguageSelector />
 
+          {/* ================================================= */}
+          {/* LOGIN / PROFILE */}
+          {/* ================================================= */}
 
-          {/* Login / Profile */}
           {!user ? (
-
-            /* Login */
+            /* LOGIN */
             <Button
               component={Link}
               to="/login"
@@ -226,8 +276,10 @@ function Navbar() {
                 px: 4,
                 py: 1.2,
                 borderRadius: 2,
+
                 borderColor: "#00A5EC",
                 color: "#00A5EC",
+
                 fontWeight: "bold",
                 textTransform: "none",
 
@@ -239,11 +291,10 @@ function Navbar() {
             >
               {t("navbar.login")}
             </Button>
-
           ) : (
-
             <>
-              {/* Profile */}
+              {/* PROFILE */}
+
               <Box
                 onClick={() =>
                   navigate(
@@ -259,7 +310,6 @@ function Navbar() {
                   cursor: "pointer",
                 }}
               >
-
                 <Avatar
                   src={user.profilePhoto}
                   sx={{
@@ -274,11 +324,10 @@ function Navbar() {
                 >
                   {user.name}
                 </Typography>
-
               </Box>
 
+              {/* LOGOUT */}
 
-              {/* Logout */}
               <Button
                 onClick={handleLogout}
                 variant="contained"
@@ -286,7 +335,9 @@ function Navbar() {
                   px: 3,
                   py: 1.2,
                   borderRadius: 2,
+
                   background: "#00A5EC",
+
                   fontWeight: "bold",
                   textTransform: "none",
 
@@ -297,20 +348,27 @@ function Navbar() {
               >
                 {t("navbar.logout")}
               </Button>
-
             </>
           )}
-
         </Box>
 
-
-        {/* ================= MOBILE MENU BUTTON ================= */}
+        {/* ================================================= */}
+        {/* MOBILE MENU BUTTON */}
+        {/* ================================================= */}
 
         <IconButton
-          onClick={() => setMobileMenu(!mobileMenu)}
+          onClick={handleMobileMenuToggle}
+          aria-label="mobile menu"
           sx={{
-            display: { xs: "flex", lg: "none" },
+            display: {
+              xs: "flex",
+              lg: "none",
+            },
+
             color: "#111",
+
+            position: "relative",
+            zIndex: 1301,
           }}
         >
           {mobileMenu ? (
@@ -319,25 +377,47 @@ function Navbar() {
             <MenuIcon size={30} />
           )}
         </IconButton>
-
       </Toolbar>
 
-
-      {/* ================= MOBILE SIDEBAR / MENU ================= */}
+      {/* ================================================= */}
+      {/* MOBILE SIDEBAR / MENU */}
+      {/* ================================================= */}
 
       {mobileMenu && (
         <Box
           sx={{
-            display: { xs: "block", lg: "none" },
+            display: {
+              xs: "block",
+              lg: "none",
+            },
+
+            position: "absolute",
+
+            top: "100%",
+            left: 0,
+            right: 0,
+
+            width: "100%",
+
             background: "#fff",
+
             borderTop: "1px solid #eee",
+
             px: 3,
             py: 3,
-            boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+
+            boxShadow:
+              "0 8px 20px rgba(0,0,0,0.08)",
+
+            // Important
+            zIndex: 1300,
+
+            pointerEvents: "auto",
           }}
         >
-
-          {/* Search */}
+          {/* ================================================= */}
+          {/* MOBILE SEARCH */}
+          {/* ================================================= */}
 
           <TextField
             fullWidth
@@ -345,7 +425,9 @@ function Navbar() {
             size="small"
             sx={{
               mb: 2,
+
               background: "#f3f4f6",
+
               borderRadius: 2,
 
               "& fieldset": {
@@ -361,32 +443,50 @@ function Navbar() {
             }}
           />
 
-
-          {/* Language */}
+          {/* ================================================= */}
+          {/* MOBILE LANGUAGE */}
+          {/* ================================================= */}
 
           <Box
             sx={{
               mb: 2,
+
+              position: "relative",
+              zIndex: 1301,
+
+              pointerEvents: "auto",
             }}
           >
             <LanguageSelector />
           </Box>
 
-
-          {/* Internships */}
+          {/* ================================================= */}
+          {/* INTERNSHIPS */}
+          {/* ================================================= */}
 
           <Button
             fullWidth
             onClick={() =>
-              handleMobileNavigation("/internships")
+              handleMobileNavigation(
+                "/internships"
+              )
             }
             sx={{
               justifyContent: "flex-start",
+
               py: 1.5,
+
               fontSize: 16,
               fontWeight: 600,
+
               color: "#374151",
+
               textTransform: "none",
+
+              position: "relative",
+              zIndex: 1301,
+
+              pointerEvents: "auto",
 
               "&:hover": {
                 color: "#00A5EC",
@@ -397,8 +497,9 @@ function Navbar() {
             {t("navbar.internships")}
           </Button>
 
-
-          {/* Jobs */}
+          {/* ================================================= */}
+          {/* JOBS */}
+          {/* ================================================= */}
 
           <Button
             fullWidth
@@ -407,11 +508,20 @@ function Navbar() {
             }
             sx={{
               justifyContent: "flex-start",
+
               py: 1.5,
+
               fontSize: 16,
               fontWeight: 600,
+
               color: "#374151",
+
               textTransform: "none",
+
+              position: "relative",
+              zIndex: 1301,
+
+              pointerEvents: "auto",
 
               "&:hover": {
                 color: "#00A5EC",
@@ -422,21 +532,33 @@ function Navbar() {
             {t("navbar.jobs")}
           </Button>
 
-
-          {/* Plans */}
+          {/* ================================================= */}
+          {/* PLANS */}
+          {/* ================================================= */}
 
           <Button
             fullWidth
             onClick={() =>
-              handleMobileNavigation("/subscriptions")
+              handleMobileNavigation(
+                "/subscriptions"
+              )
             }
             sx={{
               justifyContent: "flex-start",
+
               py: 1.5,
+
               fontSize: 16,
               fontWeight: 600,
+
               color: "#374151",
+
               textTransform: "none",
+
+              position: "relative",
+              zIndex: 1301,
+
+              pointerEvents: "auto",
 
               "&:hover": {
                 color: "#00A5EC",
@@ -447,13 +569,13 @@ function Navbar() {
             {t("navbar.plans")}
           </Button>
 
-
-          {/* ================= USER ================= */}
+          {/* ================================================= */}
+          {/* LOGGED IN USER */}
+          {/* ================================================= */}
 
           {user ? (
             <>
-
-              {/* Profile */}
+              {/* PROFILE */}
 
               <Button
                 fullWidth
@@ -468,11 +590,20 @@ function Navbar() {
                 }}
                 sx={{
                   justifyContent: "flex-start",
+
                   py: 1.5,
+
                   fontSize: 16,
                   fontWeight: 600,
+
                   color: "#374151",
+
                   textTransform: "none",
+
+                  position: "relative",
+                  zIndex: 1301,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#f8fafc",
@@ -482,21 +613,31 @@ function Navbar() {
                 👤 {user.name || "Profile"}
               </Button>
 
-
-              {/* Login History */}
+              {/* LOGIN HISTORY */}
 
               <Button
                 fullWidth
                 onClick={() =>
-                  handleMobileNavigation("/LoginHistory")
+                  handleMobileNavigation(
+                    "/LoginHistory"
+                  )
                 }
                 sx={{
                   justifyContent: "flex-start",
+
                   py: 1.5,
+
                   fontSize: 16,
                   fontWeight: 600,
+
                   color: "#374151",
+
                   textTransform: "none",
+
+                  position: "relative",
+                  zIndex: 1301,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#f8fafc",
@@ -506,21 +647,31 @@ function Navbar() {
                 🔐 Login History
               </Button>
 
-
-              {/* Public Space */}
+              {/* PUBLIC SPACE */}
 
               <Button
                 fullWidth
                 onClick={() =>
-                  handleMobileNavigation("/Publicspace")
+                  handleMobileNavigation(
+                    "/Publicspace"
+                  )
                 }
                 sx={{
                   justifyContent: "flex-start",
+
                   py: 1.5,
+
                   fontSize: 16,
                   fontWeight: 600,
+
                   color: "#374151",
+
                   textTransform: "none",
+
+                  position: "relative",
+                  zIndex: 1301,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#f8fafc",
@@ -530,21 +681,31 @@ function Navbar() {
                 🌐 Public Space
               </Button>
 
-
-              {/* Resume Builder */}
+              {/* RESUME BUILDER */}
 
               <Button
                 fullWidth
                 onClick={() =>
-                  handleMobileNavigation("/ResumeBuilder")
+                  handleMobileNavigation(
+                    "/ResumeBuilder"
+                  )
                 }
                 sx={{
                   justifyContent: "flex-start",
+
                   py: 1.5,
+
                   fontSize: 16,
                   fontWeight: 600,
+
                   color: "#374151",
+
                   textTransform: "none",
+
+                  position: "relative",
+                  zIndex: 1301,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#f8fafc",
@@ -554,21 +715,31 @@ function Navbar() {
                 📄 Resume Builder
               </Button>
 
-
-              {/* Subscription */}
+              {/* SUBSCRIPTION */}
 
               <Button
                 fullWidth
                 onClick={() =>
-                  handleMobileNavigation("/subscriptions")
+                  handleMobileNavigation(
+                    "/subscriptions"
+                  )
                 }
                 sx={{
                   justifyContent: "flex-start",
+
                   py: 1.5,
+
                   fontSize: 16,
                   fontWeight: 600,
+
                   color: "#374151",
+
                   textTransform: "none",
+
+                  position: "relative",
+                  zIndex: 1301,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#f8fafc",
@@ -578,19 +749,27 @@ function Navbar() {
                 💎 Subscription
               </Button>
 
-
-              {/* Logout */}
+              {/* LOGOUT */}
 
               <Button
                 fullWidth
                 onClick={handleLogout}
                 sx={{
                   justifyContent: "flex-start",
+
                   py: 1.5,
+
                   fontSize: 16,
                   fontWeight: 600,
+
                   color: "red",
+
                   textTransform: "none",
+
+                  position: "relative",
+                  zIndex: 1301,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#fff5f5",
@@ -599,50 +778,701 @@ function Navbar() {
               >
                 🚪 {t("navbar.logout")}
               </Button>
-
             </>
           ) : (
+            /* ================================================= */
+            /* NOT LOGGED IN */
+            /* ================================================= */
 
-            /* ================= NOT LOGGED IN ================= */
+            <Button
+              fullWidth
+              onClick={() =>
+                handleMobileNavigation("/login")
+              }
+              variant="contained"
+              sx={{
+                mt: 2,
 
-            <>
+                py: 1.3,
 
-              {/* Login */}
+                borderRadius: 2,
 
-              <Button
-                fullWidth
-                onClick={() =>
-                  handleMobileNavigation("/login")
-                }
-                variant="contained"
-                sx={{
-                  mt: 2,
-                  py: 1.3,
-                  borderRadius: 2,
-                  background: "#00A5EC",
-                  textTransform: "none",
-                  fontWeight: "bold",
+                background: "#00A5EC",
 
-                  "&:hover": {
-                    background: "#008dcc",
-                  },
-                }}
-              >
-                {t("navbar.login")}
-              </Button>
+                textTransform: "none",
 
-            </>
+                fontWeight: "bold",
 
+                position: "relative",
+                zIndex: 1301,
+
+                pointerEvents: "auto",
+
+                "&:hover": {
+                  background: "#008dcc",
+                },
+              }}
+            >
+              {t("navbar.login")}
+            </Button>
           )}
-
         </Box>
       )}
-
     </AppBar>
   );
 }
 
 export default Navbar;
+
+
+
+
+
+// import { Link, useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useTranslation } from "react-i18next";
+// import LanguageSelector from "../LanguageSelector";
+
+// import {
+//   AppBar,
+//   Toolbar,
+//   Box,
+//   Button,
+//   TextField,
+//   InputAdornment,
+//   IconButton,
+//   Avatar,
+//   Typography,
+// } from "@mui/material";
+
+// import {
+//   Search,
+//   Menu as MenuIcon,
+//   X,
+// } from "lucide-react";
+
+// import logo from "../../assets/logo.jpg";
+
+// function Navbar() {
+//   const navigate = useNavigate();
+
+//   const { t } = useTranslation();
+
+//   const [user, setUser] = useState(null);
+
+//   // Mobile Menu
+//   const [mobileMenu, setMobileMenu] = useState(false);
+
+//   useEffect(() => {
+//     const userData = localStorage.getItem("user");
+
+//     if (userData) {
+//       try {
+//         setUser(JSON.parse(userData));
+//       } catch (error) {
+//         console.error("User data error:", error);
+//       }
+//     }
+//   }, []);
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user");
+
+//     setUser(null);
+//     setMobileMenu(false);
+
+//     navigate("/login");
+
+//     window.location.reload();
+//   };
+
+//   // Close mobile menu after navigation
+//   const handleMobileNavigation = (path) => {
+//     setMobileMenu(false);
+//     navigate(path);
+//   };
+
+//   return (
+//     <AppBar
+//       position="sticky"
+//       elevation={1}
+//       sx={{
+//         background: "#fff",
+//         color: "#111",
+//       }}
+//     >
+//       <Toolbar
+//         sx={{
+//           height: 100,
+//           px: { xs: 2, lg: 8 },
+//           display: "flex",
+//           justifyContent: "space-between",
+//         }}
+//       >
+
+//         {/* Logo */}
+//         <Link
+//           to="/"
+//           style={{
+//             textDecoration: "none",
+//             color: "inherit",
+//           }}
+//           onClick={() => setMobileMenu(false)}
+//         >
+//           <Box
+//             sx={{
+//               display: "flex",
+//               alignItems: "center",
+//               gap: 2,
+//             }}
+//           >
+//             <Box
+//               component="img"
+//               src={logo}
+//               alt="logo"
+//               sx={{
+//                 width: 65,
+//                 height: 65,
+//                 borderRadius: 2,
+//               }}
+//             />
+//           </Box>
+//         </Link>
+
+
+//         {/* Menu */}
+//         <Box
+//           sx={{
+//             display: { xs: "none", lg: "flex" },
+//             gap: 4,
+//           }}
+//         >
+
+//           {/* Internships */}
+//           <Button
+//             component={Link}
+//             to="/internships"
+//             sx={{
+//               fontSize: 17,
+//               fontWeight: "bold",
+//               color: "#374151",
+//               textTransform: "none",
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//               },
+//             }}
+//           >
+//             {t("navbar.internships")}
+//           </Button>
+
+
+//           {/* Jobs */}
+//           <Button
+//             component={Link}
+//             to="/jobs"
+//             sx={{
+//               fontSize: 17,
+//               fontWeight: "bold",
+//               color: "#374151",
+//               textTransform: "none",
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//               },
+//             }}
+//           >
+//             {t("navbar.jobs")}
+//           </Button>
+
+
+//           {/* Plans */}
+//           <Button
+//             component={Link}
+//             to="/subscriptions"
+//             sx={{
+//               fontSize: 17,
+//               fontWeight: "bold",
+//               color: "#374151",
+//               textTransform: "none",
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//               },
+//             }}
+//           >
+//             {t("navbar.plans")}
+//           </Button>
+
+//         </Box>
+
+
+//         {/* Search */}
+//         <TextField
+//           placeholder={t("hero.searchPlaceholder")}
+//           sx={{
+//             display: { xs: "none", lg: "flex" },
+//             width: 340,
+//             background: "#f3f4f6",
+//             borderRadius: 2,
+
+//             "& fieldset": {
+//               border: "none",
+//             },
+//           }}
+//           InputProps={{
+//             startAdornment: (
+//               <InputAdornment position="start">
+//                 <Search size={20} />
+//               </InputAdornment>
+//             ),
+//           }}
+//         />
+
+
+//         {/* Right Side */}
+//         <Box
+//           sx={{
+//             display: { xs: "none", lg: "flex" },
+//             gap: 2,
+//             alignItems: "center",
+//           }}
+//         >
+
+//           {/* Language Selector */}
+//           <LanguageSelector />
+
+
+//           {/* Login / Profile */}
+//           {!user ? (
+
+//             /* Login */
+//             <Button
+//               component={Link}
+//               to="/login"
+//               variant="outlined"
+//               sx={{
+//                 px: 4,
+//                 py: 1.2,
+//                 borderRadius: 2,
+//                 borderColor: "#00A5EC",
+//                 color: "#00A5EC",
+//                 fontWeight: "bold",
+//                 textTransform: "none",
+
+//                 "&:hover": {
+//                   borderColor: "#00A5EC",
+//                   background: "#f0faff",
+//                 },
+//               }}
+//             >
+//               {t("navbar.login")}
+//             </Button>
+
+//           ) : (
+
+//             <>
+//               {/* Profile */}
+//               <Box
+//                 onClick={() =>
+//                   navigate(
+//                     user.role === "admin"
+//                       ? "/admin"
+//                       : "/profile"
+//                   )
+//                 }
+//                 sx={{
+//                   display: "flex",
+//                   alignItems: "center",
+//                   gap: 1,
+//                   cursor: "pointer",
+//                 }}
+//               >
+
+//                 <Avatar
+//                   src={user.profilePhoto}
+//                   sx={{
+//                     width: 40,
+//                     height: 40,
+//                   }}
+//                 />
+
+//                 <Typography
+//                   fontWeight="bold"
+//                   color="black"
+//                 >
+//                   {user.name}
+//                 </Typography>
+
+//               </Box>
+
+
+//               {/* Logout */}
+//               <Button
+//                 onClick={handleLogout}
+//                 variant="contained"
+//                 sx={{
+//                   px: 3,
+//                   py: 1.2,
+//                   borderRadius: 2,
+//                   background: "#00A5EC",
+//                   fontWeight: "bold",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#008dcc",
+//                   },
+//                 }}
+//               >
+//                 {t("navbar.logout")}
+//               </Button>
+
+//             </>
+//           )}
+
+//         </Box>
+
+
+//         {/* ================= MOBILE MENU BUTTON ================= */}
+
+//         <IconButton
+//           onClick={() => setMobileMenu(!mobileMenu)}
+//           sx={{
+//             display: { xs: "flex", lg: "none" },
+//             color: "#111",
+//           }}
+//         >
+//           {mobileMenu ? (
+//             <X size={30} />
+//           ) : (
+//             <MenuIcon size={30} />
+//           )}
+//         </IconButton>
+
+//       </Toolbar>
+
+
+//       {/* ================= MOBILE SIDEBAR / MENU ================= */}
+
+//       {mobileMenu && (
+//         <Box
+//           sx={{
+//             display: { xs: "block", lg: "none" },
+//             background: "#fff",
+//             borderTop: "1px solid #eee",
+//             px: 3,
+//             py: 3,
+//             boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+//           }}
+//         >
+
+//           {/* Search */}
+
+//           <TextField
+//             fullWidth
+//             placeholder={t("hero.searchPlaceholder")}
+//             size="small"
+//             sx={{
+//               mb: 2,
+//               background: "#f3f4f6",
+//               borderRadius: 2,
+
+//               "& fieldset": {
+//                 border: "none",
+//               },
+//             }}
+//             InputProps={{
+//               startAdornment: (
+//                 <InputAdornment position="start">
+//                   <Search size={20} />
+//                 </InputAdornment>
+//               ),
+//             }}
+//           />
+
+
+//           {/* Language */}
+
+//           <Box
+//             sx={{
+//               mb: 2,
+//             }}
+//           >
+//             <LanguageSelector />
+//           </Box>
+
+
+//           {/* Internships */}
+
+//           <Button
+//             fullWidth
+//             onClick={() =>
+//               handleMobileNavigation("/internships")
+//             }
+//             sx={{
+//               justifyContent: "flex-start",
+//               py: 1.5,
+//               fontSize: 16,
+//               fontWeight: 600,
+//               color: "#374151",
+//               textTransform: "none",
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//                 background: "#f8fafc",
+//               },
+//             }}
+//           >
+//             {t("navbar.internships")}
+//           </Button>
+
+
+//           {/* Jobs */}
+
+//           <Button
+//             fullWidth
+//             onClick={() =>
+//               handleMobileNavigation("/jobs")
+//             }
+//             sx={{
+//               justifyContent: "flex-start",
+//               py: 1.5,
+//               fontSize: 16,
+//               fontWeight: 600,
+//               color: "#374151",
+//               textTransform: "none",
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//                 background: "#f8fafc",
+//               },
+//             }}
+//           >
+//             {t("navbar.jobs")}
+//           </Button>
+
+
+//           {/* Plans */}
+
+//           <Button
+//             fullWidth
+//             onClick={() =>
+//               handleMobileNavigation("/subscriptions")
+//             }
+//             sx={{
+//               justifyContent: "flex-start",
+//               py: 1.5,
+//               fontSize: 16,
+//               fontWeight: 600,
+//               color: "#374151",
+//               textTransform: "none",
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//                 background: "#f8fafc",
+//               },
+//             }}
+//           >
+//             {t("navbar.plans")}
+//           </Button>
+
+
+//           {/* ================= USER ================= */}
+
+//           {user ? (
+//             <>
+
+//               {/* Profile */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={() => {
+//                   setMobileMenu(false);
+
+//                   navigate(
+//                     user.role === "admin"
+//                       ? "/admin"
+//                       : "/profile"
+//                   );
+//                 }}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 👤 {user.name || "Profile"}
+//               </Button>
+
+
+//               {/* Login History */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/LoginHistory")
+//                 }
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 🔐 Login History
+//               </Button>
+
+
+//               {/* Public Space */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/Publicspace")
+//                 }
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 🌐 Public Space
+//               </Button>
+
+
+//               {/* Resume Builder */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/ResumeBuilder")
+//                 }
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 📄 Resume Builder
+//               </Button>
+
+
+//               {/* Subscription */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/subscriptions")
+//                 }
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 💎 Subscription
+//               </Button>
+
+
+//               {/* Logout */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={handleLogout}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "red",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     background: "#fff5f5",
+//                   },
+//                 }}
+//               >
+//                 🚪 {t("navbar.logout")}
+//               </Button>
+
+//             </>
+//           ) : (
+
+//             /* ================= NOT LOGGED IN ================= */
+
+//             <>
+
+//               {/* Login */}
+
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/login")
+//                 }
+//                 variant="contained"
+//                 sx={{
+//                   mt: 2,
+//                   py: 1.3,
+//                   borderRadius: 2,
+//                   background: "#00A5EC",
+//                   textTransform: "none",
+//                   fontWeight: "bold",
+
+//                   "&:hover": {
+//                     background: "#008dcc",
+//                   },
+//                 }}
+//               >
+//                 {t("navbar.login")}
+//               </Button>
+
+//             </>
+
+//           )}
+
+//         </Box>
+//       )}
+
+//     </AppBar>
+//   );
+// }
+
+// export default Navbar;
 
 // import { Link, useNavigate } from "react-router-dom";
 // import { useState, useEffect } from "react";
