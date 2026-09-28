@@ -32,9 +32,9 @@ function Navbar() {
   const [user, setUser] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  // =====================================================
+  // ================================
   // GET USER
-  // =====================================================
+  // ================================
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -49,29 +49,29 @@ function Navbar() {
     }
   }, []);
 
-  // =====================================================
-  // CLOSE DRAWER
-  // =====================================================
+  // ================================
+  // CLOSE MENU
+  // ================================
 
   const closeMobileMenu = () => {
     setMobileMenu(false);
   };
 
-  // =====================================================
+  // ================================
   // MOBILE NAVIGATION
-  // =====================================================
+  // ================================
 
   const handleMobileNavigation = (path) => {
+    console.log("Navigating to:", path);
+
     setMobileMenu(false);
 
-    setTimeout(() => {
-      navigate(path);
-    }, 100);
+    navigate(path);
   };
 
-  // =====================================================
+  // ================================
   // LOGOUT
-  // =====================================================
+  // ================================
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -81,13 +81,11 @@ function Navbar() {
     setMobileMenu(false);
 
     navigate("/login");
-
-    window.location.reload();
   };
 
-  // =====================================================
-  // MOBILE MENU ITEM
-  // =====================================================
+  // ================================
+  // MOBILE BUTTON
+  // ================================
 
   const MobileMenuButton = ({
     children,
@@ -96,27 +94,45 @@ function Navbar() {
   }) => {
     return (
       <Button
+        type="button"
         fullWidth
         onClick={onClick}
         sx={{
+          position: "relative",
+          zIndex: 2,
+
+          display: "flex",
           justifyContent: "flex-start",
+          alignItems: "center",
+
           textAlign: "left",
+
           py: 1.6,
           px: 2,
           mb: 0.5,
+
+          minHeight: 52,
+
           borderRadius: 2,
+
           fontSize: 16,
           fontWeight: 600,
+
           color: danger ? "#d32f2f" : "#374151",
+
           textTransform: "none",
 
+          cursor: "pointer",
+
+          pointerEvents: "auto",
+
           "&:hover": {
-            background: danger ? "#fff5f5" : "#f0faff",
+            backgroundColor: danger ? "#fff5f5" : "#f0faff",
             color: danger ? "#d32f2f" : "#00A5EC",
           },
 
           "&:active": {
-            background: "#e8f7ff",
+            backgroundColor: "#e8f7ff",
           },
         }}
       >
@@ -137,40 +153,61 @@ function Navbar() {
         sx={{
           background: "#fff",
           color: "#111",
-          zIndex: (theme) => theme.zIndex.drawer + 2,
+          zIndex: (theme) => theme.zIndex.appBar,
         }}
       >
         <Toolbar
           sx={{
-            minHeight: { xs: 75, lg: 100 },
-            height: { lg: 100 },
-            px: { xs: 2, sm: 3, lg: 8 },
+            minHeight: {
+              xs: 75,
+              lg: 100,
+            },
+
+            height: {
+              lg: 100,
+            },
+
+            px: {
+              xs: 2,
+              sm: 3,
+              lg: 8,
+            },
+
             display: "flex",
             justifyContent: "space-between",
             gap: 2,
           }}
         >
-
           {/* =================================================
               LOGO
           ================================================= */}
 
           <Link
             to="/"
+            onClick={closeMobileMenu}
             style={{
               textDecoration: "none",
               color: "inherit",
               flexShrink: 0,
             }}
-            onClick={closeMobileMenu}
           >
             <Box
               component="img"
               src={logo}
-              alt="logo"
+              alt="Intern Area"
               sx={{
-                width: { xs: 52, sm: 60, lg: 65 },
-                height: { xs: 52, sm: 60, lg: 65 },
+                width: {
+                  xs: 52,
+                  sm: 60,
+                  lg: 65,
+                },
+
+                height: {
+                  xs: 52,
+                  sm: 60,
+                  lg: 65,
+                },
+
                 borderRadius: 2,
                 objectFit: "cover",
               }}
@@ -183,7 +220,11 @@ function Navbar() {
 
           <Box
             sx={{
-              display: { xs: "none", lg: "flex" },
+              display: {
+                xs: "none",
+                lg: "flex",
+              },
+
               gap: 4,
               alignItems: "center",
             }}
@@ -247,9 +288,15 @@ function Navbar() {
           <TextField
             placeholder={t("hero.searchPlaceholder")}
             sx={{
-              display: { xs: "none", lg: "flex" },
+              display: {
+                xs: "none",
+                lg: "flex",
+              },
+
               width: 340,
+
               background: "#f3f4f6",
+
               borderRadius: 2,
 
               "& fieldset": {
@@ -266,12 +313,16 @@ function Navbar() {
           />
 
           {/* =================================================
-              DESKTOP RIGHT SIDE
+              DESKTOP RIGHT
           ================================================= */}
 
           <Box
             sx={{
-              display: { xs: "none", lg: "flex" },
+              display: {
+                xs: "none",
+                lg: "flex",
+              },
+
               gap: 2,
               alignItems: "center",
             }}
@@ -286,10 +337,14 @@ function Navbar() {
                 sx={{
                   px: 4,
                   py: 1.2,
+
                   borderRadius: 2,
+
                   borderColor: "#00A5EC",
                   color: "#00A5EC",
+
                   fontWeight: "bold",
+
                   textTransform: "none",
 
                   "&:hover": {
@@ -303,13 +358,13 @@ function Navbar() {
             ) : (
               <>
                 <Box
-                  onClick={() =>
+                  onClick={() => {
                     navigate(
                       user.role === "admin"
                         ? "/admin"
                         : "/profile"
-                    )
-                  }
+                    );
+                  }}
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -339,9 +394,13 @@ function Navbar() {
                   sx={{
                     px: 3,
                     py: 1.2,
+
                     borderRadius: 2,
+
                     background: "#00A5EC",
+
                     fontWeight: "bold",
+
                     textTransform: "none",
 
                     "&:hover": {
@@ -356,19 +415,25 @@ function Navbar() {
           </Box>
 
           {/* =================================================
-              MOBILE MENU BUTTON
+              MOBILE MENU ICON
           ================================================= */}
 
           <IconButton
+            type="button"
             onClick={() => setMobileMenu(true)}
             aria-label="Open mobile menu"
             sx={{
-              display: { xs: "flex", lg: "none" },
+              display: {
+                xs: "flex",
+                lg: "none",
+              },
+
               color: "#111",
+
               width: 48,
               height: 48,
+
               flexShrink: 0,
-              zIndex: 10,
             }}
           >
             <MenuIcon size={30} />
@@ -384,18 +449,22 @@ function Navbar() {
         anchor="right"
         open={mobileMenu}
         onClose={closeMobileMenu}
-        ModalProps={{
-          keepMounted: true,
+        keepMounted
+        sx={{
+          zIndex: (theme) => theme.zIndex.modal,
         }}
         PaperProps={{
           sx: {
             width: {
-              xs: "85%",
+              xs: "85vw",
               sm: 360,
             },
+
             maxWidth: 380,
-            background: "#fff",
-            zIndex: (theme) => theme.zIndex.drawer + 1,
+
+            backgroundColor: "#fff",
+
+            overflow: "hidden",
           },
         }}
       >
@@ -406,10 +475,15 @@ function Navbar() {
         <Box
           sx={{
             display: "flex",
+
             alignItems: "center",
+
             justifyContent: "space-between",
+
             px: 2.5,
             py: 2,
+
+            flexShrink: 0,
           }}
         >
           <Box
@@ -422,11 +496,13 @@ function Navbar() {
             <Box
               component="img"
               src={logo}
-              alt="logo"
+              alt="Intern Area"
               sx={{
                 width: 45,
                 height: 45,
+
                 borderRadius: 2,
+
                 objectFit: "cover",
               }}
             />
@@ -440,6 +516,7 @@ function Navbar() {
           </Box>
 
           <IconButton
+            type="button"
             onClick={closeMobileMenu}
             aria-label="Close mobile menu"
             sx={{
@@ -459,11 +536,16 @@ function Navbar() {
         <Box
           sx={{
             p: 2,
+
             overflowY: "auto",
+
             flex: 1,
+
+            position: "relative",
+
+            zIndex: 1,
           }}
         >
-
           {/* SEARCH */}
 
           <TextField
@@ -472,7 +554,9 @@ function Navbar() {
             size="small"
             sx={{
               mb: 2,
+
               background: "#f3f4f6",
+
               borderRadius: 2,
 
               "& fieldset": {
@@ -490,7 +574,14 @@ function Navbar() {
 
           {/* LANGUAGE */}
 
-          <Box sx={{ mb: 2 }}>
+          <Box
+            sx={{
+              mb: 2,
+
+              position: "relative",
+              zIndex: 10,
+            }}
+          >
             <LanguageSelector />
           </Box>
 
@@ -525,7 +616,7 @@ function Navbar() {
           </MobileMenuButton>
 
           {/* =================================================
-              LOGGED USER
+              USER LINKS
           ================================================= */}
 
           {user ? (
@@ -535,17 +626,13 @@ function Navbar() {
               {/* PROFILE */}
 
               <MobileMenuButton
-                onClick={() => {
-                  setMobileMenu(false);
-
-                  setTimeout(() => {
-                    navigate(
-                      user.role === "admin"
-                        ? "/admin"
-                        : "/profile"
-                    );
-                  }, 100);
-                }}
+                onClick={() =>
+                  handleMobileNavigation(
+                    user.role === "admin"
+                      ? "/admin"
+                      : "/profile"
+                  )
+                }
               >
                 👤 {user.name || "Profile"}
               </MobileMenuButton>
@@ -608,6 +695,7 @@ function Navbar() {
               {/* LOGIN */}
 
               <Button
+                type="button"
                 fullWidth
                 onClick={() =>
                   handleMobileNavigation("/login")
@@ -615,11 +703,22 @@ function Navbar() {
                 variant="contained"
                 sx={{
                   py: 1.5,
+
                   borderRadius: 2,
+
                   background: "#00A5EC",
+
                   textTransform: "none",
+
                   fontWeight: "bold",
+
                   fontSize: 16,
+
+                  position: "relative",
+
+                  zIndex: 5,
+
+                  pointerEvents: "auto",
 
                   "&:hover": {
                     background: "#008dcc",
@@ -637,6 +736,9 @@ function Navbar() {
 }
 
 export default Navbar;
+
+
+
 
 
 // import { Link, useNavigate } from "react-router-dom";
