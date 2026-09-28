@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "../LanguageSelector";
 
@@ -25,40 +25,6 @@ import {
 
 import logo from "../../assets/logo.jpg";
 
-// ================================
-// MOBILE BUTTON (Moved outside to prevent re-mount bugs)
-// ================================
-const MobileMenuButton = ({ children, onClick, danger = false }) => {
-  return (
-    <Button
-      type="button"
-      fullWidth
-      onClick={onClick}
-      sx={{
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        textAlign: "left",
-        py: 1.6,
-        px: 2,
-        mb: 0.5,
-        minHeight: 52,
-        borderRadius: 2,
-        fontSize: 16,
-        fontWeight: 600,
-        color: danger ? "#d32f2f" : "#374151",
-        textTransform: "none",
-        "&:hover": {
-          backgroundColor: danger ? "#fff5f5" : "#f0faff",
-          color: danger ? "#d32f2f" : "#00A5EC",
-        },
-      }}
-    >
-      {children}
-    </Button>
-  );
-};
-
 function Navbar() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -66,40 +32,55 @@ function Navbar() {
   const [user, setUser] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  // ================================
+  // =====================================================
   // GET USER
-  // ================================
+  // =====================================================
+
   useEffect(() => {
     const userData = localStorage.getItem("user");
 
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error("User data error:", error);
-        setUser(null);
-      }
+    if (!userData) {
+      setUser(null);
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+    } catch (error) {
+      console.error("User data error:", error);
+      setUser(null);
     }
   }, []);
 
-  // ================================
-  // CLOSE MENU
-  // ================================
+  // =====================================================
+  // OPEN / CLOSE SIDEBAR
+  // =====================================================
+
+  const openMobileMenu = () => {
+    setMobileMenu(true);
+  };
+
   const closeMobileMenu = () => {
     setMobileMenu(false);
   };
 
-  // ================================
+  // =====================================================
   // MOBILE NAVIGATION
-  // ================================
+  // =====================================================
+
   const handleMobileNavigation = (path) => {
+    console.log("Mobile navigation:", path);
+
     setMobileMenu(false);
+
     navigate(path);
   };
 
-  // ================================
+  // =====================================================
   // LOGOUT
-  // ================================
+  // =====================================================
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -108,6 +89,62 @@ function Navbar() {
     setMobileMenu(false);
 
     navigate("/login");
+
+    window.location.reload();
+  };
+
+  // =====================================================
+  // MOBILE MENU BUTTON
+  // =====================================================
+
+  const MobileMenuButton = ({
+    children,
+    onClick,
+    danger = false,
+  }) => {
+    return (
+      <Button
+        fullWidth
+        type="button"
+        onClick={onClick}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+
+          width: "100%",
+          minHeight: 52,
+
+          px: 2,
+          py: 1.5,
+
+          mb: 0.5,
+
+          borderRadius: 2,
+
+          color: danger ? "#d32f2f" : "#374151",
+
+          fontSize: 16,
+          fontWeight: 600,
+
+          textTransform: "none",
+
+          cursor: "pointer",
+
+          "&:hover": {
+            backgroundColor: danger
+              ? "#fff5f5"
+              : "#f0faff",
+
+            color: danger
+              ? "#d32f2f"
+              : "#00A5EC",
+          },
+        }}
+      >
+        {children}
+      </Button>
+    );
   };
 
   return (
@@ -115,65 +152,173 @@ function Navbar() {
       {/* =====================================================
           NAVBAR
       ===================================================== */}
+
       <AppBar
         position="sticky"
         elevation={1}
         sx={{
-          background: "#fff",
-          color: "#111",
+          backgroundColor: "#ffffff",
+          color: "#111111",
+
+          // Keep navbar above normal page content
+          zIndex: 1100,
         }}
       >
         <Toolbar
           sx={{
-            minHeight: { xs: 75, lg: 100 },
-            height: { lg: 100 },
-            px: { xs: 2, sm: 3, lg: 8 },
+            minHeight: {
+              xs: 75,
+              lg: 100,
+            },
+
+            px: {
+              xs: 2,
+              sm: 3,
+              lg: 8,
+            },
+
             display: "flex",
+            alignItems: "center",
             justifyContent: "space-between",
+
             gap: 2,
           }}
         >
-          {/* LOGO */}
+          {/* =================================================
+              LOGO
+          ================================================= */}
+
           <Link
             to="/"
             onClick={closeMobileMenu}
-            style={{ textDecoration: "none", color: "inherit", flexShrink: 0 }}
+            style={{
+              display: "flex",
+              textDecoration: "none",
+              flexShrink: 0,
+            }}
           >
             <Box
               component="img"
               src={logo}
               alt="Intern Area"
               sx={{
-                width: { xs: 52, sm: 60, lg: 65 },
-                height: { xs: 52, sm: 60, lg: 65 },
+                width: {
+                  xs: 52,
+                  sm: 60,
+                  lg: 65,
+                },
+
+                height: {
+                  xs: 52,
+                  sm: 60,
+                  lg: 65,
+                },
+
                 borderRadius: 2,
+
                 objectFit: "cover",
               }}
             />
           </Link>
 
-          {/* DESKTOP MENU */}
-          <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 4, alignItems: "center" }}>
-            <Button component={Link} to="/internships" sx={{ fontSize: 17, fontWeight: "bold", color: "#374151", textTransform: "none", "&:hover": { color: "#00A5EC" } }}>
+          {/* =================================================
+              DESKTOP MENU
+          ================================================= */}
+
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                lg: "flex",
+              },
+
+              alignItems: "center",
+
+              gap: 4,
+            }}
+          >
+            <Button
+              component={Link}
+              to="/internships"
+              sx={{
+                fontSize: 17,
+                fontWeight: "bold",
+
+                color: "#374151",
+
+                textTransform: "none",
+
+                "&:hover": {
+                  color: "#00A5EC",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
               {t("navbar.internships")}
             </Button>
-            <Button component={Link} to="/jobs" sx={{ fontSize: 17, fontWeight: "bold", color: "#374151", textTransform: "none", "&:hover": { color: "#00A5EC" } }}>
+
+            <Button
+              component={Link}
+              to="/jobs"
+              sx={{
+                fontSize: 17,
+                fontWeight: "bold",
+
+                color: "#374151",
+
+                textTransform: "none",
+
+                "&:hover": {
+                  color: "#00A5EC",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
               {t("navbar.jobs")}
             </Button>
-            <Button component={Link} to="/subscriptions" sx={{ fontSize: 17, fontWeight: "bold", color: "#374151", textTransform: "none", "&:hover": { color: "#00A5EC" } }}>
+
+            <Button
+              component={Link}
+              to="/subscriptions"
+              sx={{
+                fontSize: 17,
+                fontWeight: "bold",
+
+                color: "#374151",
+
+                textTransform: "none",
+
+                "&:hover": {
+                  color: "#00A5EC",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
               {t("navbar.plans")}
             </Button>
           </Box>
 
-          {/* DESKTOP SEARCH */}
+          {/* =================================================
+              DESKTOP SEARCH
+          ================================================= */}
+
           <TextField
             placeholder={t("hero.searchPlaceholder")}
             sx={{
-              display: { xs: "none", lg: "flex" },
+              display: {
+                xs: "none",
+                lg: "flex",
+              },
+
               width: 340,
-              background: "#f3f4f6",
+
+              backgroundColor: "#f3f4f6",
+
               borderRadius: 2,
-              "& fieldset": { border: "none" },
+
+              "& fieldset": {
+                border: "none",
+              },
             }}
             InputProps={{
               startAdornment: (
@@ -184,9 +329,26 @@ function Navbar() {
             }}
           />
 
-          {/* DESKTOP RIGHT */}
-          <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 2, alignItems: "center" }}>
+          {/* =================================================
+              DESKTOP RIGHT SIDE
+          ================================================= */}
+
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                lg: "flex",
+              },
+
+              alignItems: "center",
+
+              gap: 2,
+            }}
+          >
             <LanguageSelector />
+
+            {/* ================= LOGIN ================= */}
+
             {!user ? (
               <Button
                 component={Link}
@@ -195,38 +357,84 @@ function Navbar() {
                 sx={{
                   px: 4,
                   py: 1.2,
+
                   borderRadius: 2,
+
                   borderColor: "#00A5EC",
+
                   color: "#00A5EC",
+
                   fontWeight: "bold",
+
                   textTransform: "none",
-                  "&:hover": { borderColor: "#00A5EC", background: "#f0faff" },
+
+                  "&:hover": {
+                    borderColor: "#00A5EC",
+
+                    backgroundColor: "#f0faff",
+                  },
                 }}
               >
                 {t("navbar.login")}
               </Button>
             ) : (
               <>
+                {/* ================= PROFILE ================= */}
+
                 <Box
-                  onClick={() => navigate(user.role === "admin" ? "/admin" : "/profile")}
-                  sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
+                  onClick={() => {
+                    navigate(
+                      user.role === "admin"
+                        ? "/admin"
+                        : "/profile"
+                    );
+                  }}
+                  sx={{
+                    display: "flex",
+
+                    alignItems: "center",
+
+                    gap: 1,
+
+                    cursor: "pointer",
+                  }}
                 >
-                  <Avatar src={user.profilePhoto} sx={{ width: 40, height: 40 }} />
-                  <Typography fontWeight="bold" color="black">
+                  <Avatar
+                    src={user.profilePhoto || ""}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                    }}
+                  />
+
+                  <Typography
+                    fontWeight="bold"
+                    color="#111111"
+                  >
                     {user.name}
                   </Typography>
                 </Box>
+
+                {/* ================= LOGOUT ================= */}
+
                 <Button
                   onClick={handleLogout}
                   variant="contained"
                   sx={{
                     px: 3,
                     py: 1.2,
+
                     borderRadius: 2,
-                    background: "#00A5EC",
+
+                    backgroundColor: "#00A5EC",
+
                     fontWeight: "bold",
+
                     textTransform: "none",
-                    "&:hover": { background: "#008dcc" },
+
+                    "&:hover": {
+                      backgroundColor: "#008dcc",
+                    },
                   }}
                 >
                   {t("navbar.logout")}
@@ -235,17 +443,28 @@ function Navbar() {
             )}
           </Box>
 
-          {/* MOBILE MENU ICON */}
+          {/* =================================================
+              MOBILE MENU ICON
+          ================================================= */}
+
           <IconButton
             type="button"
-            onClick={() => setMobileMenu(true)}
+            onClick={openMobileMenu}
             aria-label="Open mobile menu"
             sx={{
-              display: { xs: "flex", lg: "none" },
-              color: "#111",
+              display: {
+                xs: "flex",
+                lg: "none",
+              },
+
+              color: "#111111",
+
               width: 48,
               height: 48,
+
               flexShrink: 0,
+
+              cursor: "pointer",
             }}
           >
             <MenuIcon size={30} />
@@ -254,118 +473,294 @@ function Navbar() {
       </AppBar>
 
       {/* =====================================================
-          MOBILE DRAWER
+          MOBILE SIDEBAR / DRAWER
       ===================================================== */}
+
       <Drawer
         anchor="right"
         open={mobileMenu}
         onClose={closeMobileMenu}
-        PaperProps={{
-          sx: {
-            width: { xs: "85vw", sm: 360 },
-            maxWidth: 380,
-            backgroundColor: "#fff",
-          },
-        }}
       >
-        {/* DRAWER HEADER */}
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", px: 2.5, py: 2 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-            <Box component="img" src={logo} alt="Intern Area" sx={{ width: 45, height: 45, borderRadius: 2, objectFit: "cover" }} />
-            <Typography fontWeight={700} fontSize={18}>
-              Intern Area
-            </Typography>
-          </Box>
-          <IconButton onClick={closeMobileMenu} aria-label="Close mobile menu">
-            <X size={28} />
-          </IconButton>
-        </Box>
+        <Box
+          sx={{
+            width: {
+              xs: "85vw",
+              sm: 360,
+            },
 
-        <Divider />
+            maxWidth: 380,
 
-        {/* DRAWER CONTENT */}
-        <Box sx={{ p: 2, overflowY: "auto", flex: 1 }}>
-          <TextField
-            fullWidth
-            placeholder={t("hero.searchPlaceholder")}
-            size="small"
+            height: "100%",
+
+            display: "flex",
+            flexDirection: "column",
+
+            backgroundColor: "#ffffff",
+          }}
+        >
+          {/* =================================================
+              DRAWER HEADER
+          ================================================= */}
+
+          <Box
             sx={{
-              mb: 2,
-              background: "#f3f4f6",
-              borderRadius: 2,
-              "& fieldset": { border: "none" },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search size={20} />
-                </InputAdornment>
-              ),
-            }}
-          />
+              display: "flex",
 
-          <Box sx={{ mb: 2 }}>
-            <LanguageSelector />
+              alignItems: "center",
+
+              justifyContent: "space-between",
+
+              px: 2.5,
+              py: 2,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+
+                alignItems: "center",
+
+                gap: 1.5,
+              }}
+            >
+              <Box
+                component="img"
+                src={logo}
+                alt="Intern Area"
+                sx={{
+                  width: 45,
+                  height: 45,
+
+                  borderRadius: 2,
+
+                  objectFit: "cover",
+                }}
+              />
+
+              <Typography
+                fontWeight={700}
+                fontSize={18}
+              >
+                Intern Area
+              </Typography>
+            </Box>
+
+            {/* CLOSE BUTTON */}
+
+            <IconButton
+              type="button"
+              onClick={closeMobileMenu}
+              aria-label="Close mobile menu"
+              sx={{
+                color: "#111111",
+
+                cursor: "pointer",
+              }}
+            >
+              <X size={28} />
+            </IconButton>
           </Box>
 
-          <Divider sx={{ mb: 1.5 }} />
+          <Divider />
 
-          {/* PUBLIC LINKS */}
-          <MobileMenuButton onClick={() => handleMobileNavigation("/internships")}>
-            {t("navbar.internships")}
-          </MobileMenuButton>
-          <MobileMenuButton onClick={() => handleMobileNavigation("/jobs")}>
-            {t("navbar.jobs")}
-          </MobileMenuButton>
-          <MobileMenuButton onClick={() => handleMobileNavigation("/subscriptions")}>
-            {t("navbar.plans")}
-          </MobileMenuButton>
+          {/* =================================================
+              DRAWER CONTENT
+          ================================================= */}
 
-          {/* USER LINKS */}
-          {user ? (
-            <>
-              <Divider sx={{ my: 1.5 }} />
-              <MobileMenuButton onClick={() => handleMobileNavigation(user.role === "admin" ? "/admin" : "/profile")}>
-                👤 {user.name || "Profile"}
-              </MobileMenuButton>
-              <MobileMenuButton onClick={() => handleMobileNavigation("/LoginHistory")}>
-                🔐 Login History
-              </MobileMenuButton>
-              <MobileMenuButton onClick={() => handleMobileNavigation("/Publicspace")}>
-                🌐 Public Space
-              </MobileMenuButton>
-              <MobileMenuButton onClick={() => handleMobileNavigation("/ResumeBuilder")}>
-                📄 Resume Builder
-              </MobileMenuButton>
-              <MobileMenuButton onClick={() => handleMobileNavigation("/subscriptions")}>
-                💎 Subscription
-              </MobileMenuButton>
-              <Divider sx={{ my: 1.5 }} />
-              <MobileMenuButton danger onClick={handleLogout}>
-                🚪 {t("navbar.logout")}
-              </MobileMenuButton>
-            </>
-          ) : (
-            <>
-              <Divider sx={{ my: 1.5 }} />
-              <Button
-                fullWidth
-                onClick={() => handleMobileNavigation("/login")}
-                variant="contained"
-                sx={{
-                  py: 1.5,
-                  borderRadius: 2,
-                  background: "#00A5EC",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  "&:hover": { background: "#008dcc" },
-                }}
-              >
-                {t("navbar.login")}
-              </Button>
-            </>
-          )}
+          <Box
+            sx={{
+              flex: 1,
+
+              overflowY: "auto",
+
+              p: 2,
+
+              backgroundColor: "#ffffff",
+            }}
+          >
+            {/* =================================================
+                SEARCH
+            ================================================= */}
+
+            <TextField
+              fullWidth
+              size="small"
+              placeholder={t("hero.searchPlaceholder")}
+              sx={{
+                mb: 2,
+
+                backgroundColor: "#f3f4f6",
+
+                borderRadius: 2,
+
+                "& fieldset": {
+                  border: "none",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search size={20} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            {/* =================================================
+                LANGUAGE
+            ================================================= */}
+
+            <Box
+              sx={{
+                mb: 2,
+              }}
+            >
+              <LanguageSelector />
+            </Box>
+
+            <Divider sx={{ mb: 1.5 }} />
+
+            {/* =================================================
+                INTERNSHIPS
+            ================================================= */}
+
+            <MobileMenuButton
+              onClick={() =>
+                handleMobileNavigation("/internships")
+              }
+            >
+              {t("navbar.internships")}
+            </MobileMenuButton>
+
+            {/* =================================================
+                JOBS
+            ================================================= */}
+
+            <MobileMenuButton
+              onClick={() =>
+                handleMobileNavigation("/jobs")
+              }
+            >
+              {t("navbar.jobs")}
+            </MobileMenuButton>
+
+            {/* =================================================
+                PLANS
+            ================================================= */}
+
+            <MobileMenuButton
+              onClick={() =>
+                handleMobileNavigation("/subscriptions")
+              }
+            >
+              {t("navbar.plans")}
+            </MobileMenuButton>
+
+            {/* =================================================
+                LOGGED USER
+            ================================================= */}
+
+            {user ? (
+              <>
+                <Divider sx={{ my: 1.5 }} />
+
+                {/* ================= PROFILE ================= */}
+
+                <MobileMenuButton
+                  onClick={() => {
+                    if (user.role === "admin") {
+                      handleMobileNavigation("/admin");
+                    } else {
+                      handleMobileNavigation("/profile");
+                    }
+                  }}
+                >
+                  👤 {user.name || "Profile"}
+                </MobileMenuButton>
+
+                {/* ================= PUBLIC SPACE ================= */}
+
+                <MobileMenuButton
+                  onClick={() =>
+                    handleMobileNavigation("/public")
+                  }
+                >
+                  🌐 Public Space
+                </MobileMenuButton>
+
+                {/* ================= RESUME BUILDER ================= */}
+
+                <MobileMenuButton
+                  onClick={() =>
+                    handleMobileNavigation("/resume")
+                  }
+                >
+                  📄 Resume Builder
+                </MobileMenuButton>
+
+                {/* ================= SUBSCRIPTION ================= */}
+
+                <MobileMenuButton
+                  onClick={() =>
+                    handleMobileNavigation("/subscriptions")
+                  }
+                >
+                  💎 Subscription
+                </MobileMenuButton>
+
+                <Divider sx={{ my: 1.5 }} />
+
+                {/* ================= LOGOUT ================= */}
+
+                <MobileMenuButton
+                  danger
+                  onClick={handleLogout}
+                >
+                  🚪 {t("navbar.logout")}
+                </MobileMenuButton>
+              </>
+            ) : (
+              <>
+                <Divider sx={{ my: 1.5 }} />
+
+                {/* ================= LOGIN ================= */}
+
+                <Button
+                  fullWidth
+                  type="button"
+                  variant="contained"
+                  onClick={() =>
+                    handleMobileNavigation("/login")
+                  }
+                  sx={{
+                    minHeight: 52,
+
+                    py: 1.5,
+
+                    borderRadius: 2,
+
+                    backgroundColor: "#00A5EC",
+
+                    color: "#ffffff",
+
+                    fontSize: 16,
+
+                    fontWeight: "bold",
+
+                    textTransform: "none",
+
+                    cursor: "pointer",
+
+                    "&:hover": {
+                      backgroundColor: "#008dcc",
+                    },
+                  }}
+                >
+                  {t("navbar.login")}
+                </Button>
+              </>
+            )}
+          </Box>
         </Box>
       </Drawer>
     </>
@@ -373,6 +768,384 @@ function Navbar() {
 }
 
 export default Navbar;
+
+
+
+// import { Link, useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useTranslation } from "react-i18next";
+// import LanguageSelector from "../LanguageSelector";
+
+// import {
+//   AppBar,
+//   Toolbar,
+//   Box,
+//   Button,
+//   TextField,
+//   InputAdornment,
+//   IconButton,
+//   Avatar,
+//   Typography,
+//   Drawer,
+//   Divider,
+// } from "@mui/material";
+
+// import {
+//   Search,
+//   Menu as MenuIcon,
+//   X,
+// } from "lucide-react";
+
+// import logo from "../../assets/logo.jpg";
+
+// // ================================
+// // MOBILE BUTTON (Moved outside to prevent re-mount bugs)
+// // ================================
+// const MobileMenuButton = ({ children, onClick, danger = false }) => {
+//   return (
+//     <Button
+//       type="button"
+//       fullWidth
+//       onClick={onClick}
+//       sx={{
+//         display: "flex",
+//         justifyContent: "flex-start",
+//         alignItems: "center",
+//         textAlign: "left",
+//         py: 1.6,
+//         px: 2,
+//         mb: 0.5,
+//         minHeight: 52,
+//         borderRadius: 2,
+//         fontSize: 16,
+//         fontWeight: 600,
+//         color: danger ? "#d32f2f" : "#374151",
+//         textTransform: "none",
+//         "&:hover": {
+//           backgroundColor: danger ? "#fff5f5" : "#f0faff",
+//           color: danger ? "#d32f2f" : "#00A5EC",
+//         },
+//       }}
+//     >
+//       {children}
+//     </Button>
+//   );
+// };
+
+// function Navbar() {
+//   const navigate = useNavigate();
+//   const { t } = useTranslation();
+
+//   const [user, setUser] = useState(null);
+//   const [mobileMenu, setMobileMenu] = useState(false);
+
+//   // ================================
+//   // GET USER
+//   // ================================
+//   useEffect(() => {
+//     const userData = localStorage.getItem("user");
+
+//     if (userData) {
+//       try {
+//         setUser(JSON.parse(userData));
+//       } catch (error) {
+//         console.error("User data error:", error);
+//         setUser(null);
+//       }
+//     }
+//   }, []);
+
+//   // ================================
+//   // CLOSE MENU
+//   // ================================
+//   const closeMobileMenu = () => {
+//     setMobileMenu(false);
+//   };
+
+//   // ================================
+//   // MOBILE NAVIGATION
+//   // ================================
+//   const handleMobileNavigation = (path) => {
+//     setMobileMenu(false);
+//     navigate(path);
+//   };
+
+//   // ================================
+//   // LOGOUT
+//   // ================================
+//   const handleLogout = () => {
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user");
+
+//     setUser(null);
+//     setMobileMenu(false);
+
+//     navigate("/login");
+//   };
+
+//   return (
+//     <>
+//       {/* =====================================================
+//           NAVBAR
+//       ===================================================== */}
+//       <AppBar
+//         position="sticky"
+//         elevation={1}
+//         sx={{
+//           background: "#fff",
+//           color: "#111",
+//         }}
+//       >
+//         <Toolbar
+//           sx={{
+//             minHeight: { xs: 75, lg: 100 },
+//             height: { lg: 100 },
+//             px: { xs: 2, sm: 3, lg: 8 },
+//             display: "flex",
+//             justifyContent: "space-between",
+//             gap: 2,
+//           }}
+//         >
+//           {/* LOGO */}
+//           <Link
+//             to="/"
+//             onClick={closeMobileMenu}
+//             style={{ textDecoration: "none", color: "inherit", flexShrink: 0 }}
+//           >
+//             <Box
+//               component="img"
+//               src={logo}
+//               alt="Intern Area"
+//               sx={{
+//                 width: { xs: 52, sm: 60, lg: 65 },
+//                 height: { xs: 52, sm: 60, lg: 65 },
+//                 borderRadius: 2,
+//                 objectFit: "cover",
+//               }}
+//             />
+//           </Link>
+
+//           {/* DESKTOP MENU */}
+//           <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 4, alignItems: "center" }}>
+//             <Button component={Link} to="/internships" sx={{ fontSize: 17, fontWeight: "bold", color: "#374151", textTransform: "none", "&:hover": { color: "#00A5EC" } }}>
+//               {t("navbar.internships")}
+//             </Button>
+//             <Button component={Link} to="/jobs" sx={{ fontSize: 17, fontWeight: "bold", color: "#374151", textTransform: "none", "&:hover": { color: "#00A5EC" } }}>
+//               {t("navbar.jobs")}
+//             </Button>
+//             <Button component={Link} to="/subscriptions" sx={{ fontSize: 17, fontWeight: "bold", color: "#374151", textTransform: "none", "&:hover": { color: "#00A5EC" } }}>
+//               {t("navbar.plans")}
+//             </Button>
+//           </Box>
+
+//           {/* DESKTOP SEARCH */}
+//           <TextField
+//             placeholder={t("hero.searchPlaceholder")}
+//             sx={{
+//               display: { xs: "none", lg: "flex" },
+//               width: 340,
+//               background: "#f3f4f6",
+//               borderRadius: 2,
+//               "& fieldset": { border: "none" },
+//             }}
+//             InputProps={{
+//               startAdornment: (
+//                 <InputAdornment position="start">
+//                   <Search size={20} />
+//                 </InputAdornment>
+//               ),
+//             }}
+//           />
+
+//           {/* DESKTOP RIGHT */}
+//           <Box sx={{ display: { xs: "none", lg: "flex" }, gap: 2, alignItems: "center" }}>
+//             <LanguageSelector />
+//             {!user ? (
+//               <Button
+//                 component={Link}
+//                 to="/login"
+//                 variant="outlined"
+//                 sx={{
+//                   px: 4,
+//                   py: 1.2,
+//                   borderRadius: 2,
+//                   borderColor: "#00A5EC",
+//                   color: "#00A5EC",
+//                   fontWeight: "bold",
+//                   textTransform: "none",
+//                   "&:hover": { borderColor: "#00A5EC", background: "#f0faff" },
+//                 }}
+//               >
+//                 {t("navbar.login")}
+//               </Button>
+//             ) : (
+//               <>
+//                 <Box
+//                   onClick={() => navigate(user.role === "admin" ? "/admin" : "/profile")}
+//                   sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
+//                 >
+//                   <Avatar src={user.profilePhoto} sx={{ width: 40, height: 40 }} />
+//                   <Typography fontWeight="bold" color="black">
+//                     {user.name}
+//                   </Typography>
+//                 </Box>
+//                 <Button
+//                   onClick={handleLogout}
+//                   variant="contained"
+//                   sx={{
+//                     px: 3,
+//                     py: 1.2,
+//                     borderRadius: 2,
+//                     background: "#00A5EC",
+//                     fontWeight: "bold",
+//                     textTransform: "none",
+//                     "&:hover": { background: "#008dcc" },
+//                   }}
+//                 >
+//                   {t("navbar.logout")}
+//                 </Button>
+//               </>
+//             )}
+//           </Box>
+
+//           {/* MOBILE MENU ICON */}
+//           <IconButton
+//             type="button"
+//             onClick={() => setMobileMenu(true)}
+//             aria-label="Open mobile menu"
+//             sx={{
+//               display: { xs: "flex", lg: "none" },
+//               color: "#111",
+//               width: 48,
+//               height: 48,
+//               flexShrink: 0,
+//             }}
+//           >
+//             <MenuIcon size={30} />
+//           </IconButton>
+//         </Toolbar>
+//       </AppBar>
+
+//       {/* =====================================================
+//           MOBILE DRAWER
+//       ===================================================== */}
+//       <Drawer
+//         anchor="right"
+//         open={mobileMenu}
+//         onClose={closeMobileMenu}
+//         PaperProps={{
+//           sx: {
+//             width: { xs: "85vw", sm: 360 },
+//             maxWidth: 380,
+//             backgroundColor: "#fff",
+//           },
+//         }}
+//       >
+//         {/* DRAWER HEADER */}
+//         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", px: 2.5, py: 2 }}>
+//           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+//             <Box component="img" src={logo} alt="Intern Area" sx={{ width: 45, height: 45, borderRadius: 2, objectFit: "cover" }} />
+//             <Typography fontWeight={700} fontSize={18}>
+//               Intern Area
+//             </Typography>
+//           </Box>
+//           <IconButton onClick={closeMobileMenu} aria-label="Close mobile menu">
+//             <X size={28} />
+//           </IconButton>
+//         </Box>
+
+//         <Divider />
+
+//         {/* DRAWER CONTENT */}
+//         <Box sx={{ p: 2, overflowY: "auto", flex: 1 }}>
+//           <TextField
+//             fullWidth
+//             placeholder={t("hero.searchPlaceholder")}
+//             size="small"
+//             sx={{
+//               mb: 2,
+//               background: "#f3f4f6",
+//               borderRadius: 2,
+//               "& fieldset": { border: "none" },
+//             }}
+//             InputProps={{
+//               startAdornment: (
+//                 <InputAdornment position="start">
+//                   <Search size={20} />
+//                 </InputAdornment>
+//               ),
+//             }}
+//           />
+
+//           <Box sx={{ mb: 2 }}>
+//             <LanguageSelector />
+//           </Box>
+
+//           <Divider sx={{ mb: 1.5 }} />
+
+//           {/* PUBLIC LINKS */}
+//           <MobileMenuButton onClick={() => handleMobileNavigation("/internships")}>
+//             {t("navbar.internships")}
+//           </MobileMenuButton>
+//           <MobileMenuButton onClick={() => handleMobileNavigation("/jobs")}>
+//             {t("navbar.jobs")}
+//           </MobileMenuButton>
+//           <MobileMenuButton onClick={() => handleMobileNavigation("/subscriptions")}>
+//             {t("navbar.plans")}
+//           </MobileMenuButton>
+
+//           {/* USER LINKS */}
+//           {user ? (
+//             <>
+//               <Divider sx={{ my: 1.5 }} />
+//               <MobileMenuButton onClick={() => handleMobileNavigation(user.role === "admin" ? "/admin" : "/profile")}>
+//                 👤 {user.name || "Profile"}
+//               </MobileMenuButton>
+//               <MobileMenuButton onClick={() => handleMobileNavigation("/LoginHistory")}>
+//                 🔐 Login History
+//               </MobileMenuButton>
+//               <MobileMenuButton onClick={() => handleMobileNavigation("/Publicspace")}>
+//                 🌐 Public Space
+//               </MobileMenuButton>
+//               <MobileMenuButton onClick={() => handleMobileNavigation("/ResumeBuilder")}>
+//                 📄 Resume Builder
+//               </MobileMenuButton>
+//               <MobileMenuButton onClick={() => handleMobileNavigation("/subscriptions")}>
+//                 💎 Subscription
+//               </MobileMenuButton>
+//               <Divider sx={{ my: 1.5 }} />
+//               <MobileMenuButton danger onClick={handleLogout}>
+//                 🚪 {t("navbar.logout")}
+//               </MobileMenuButton>
+//             </>
+//           ) : (
+//             <>
+//               <Divider sx={{ my: 1.5 }} />
+//               <Button
+//                 fullWidth
+//                 onClick={() => handleMobileNavigation("/login")}
+//                 variant="contained"
+//                 sx={{
+//                   py: 1.5,
+//                   borderRadius: 2,
+//                   background: "#00A5EC",
+//                   textTransform: "none",
+//                   fontWeight: "bold",
+//                   fontSize: 16,
+//                   "&:hover": { background: "#008dcc" },
+//                 }}
+//               >
+//                 {t("navbar.login")}
+//               </Button>
+//             </>
+//           )}
+//         </Box>
+//       </Drawer>
+//     </>
+//   );
+// }
+
+// export default Navbar;
 
 
 // import { Link, useNavigate } from "react-router-dom";
