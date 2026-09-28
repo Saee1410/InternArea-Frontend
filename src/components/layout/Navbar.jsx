@@ -72,7 +72,6 @@ function Navbar() {
     setMobileMenu(false);
 
     navigate("/login");
-
     window.location.reload();
   };
 
@@ -109,7 +108,7 @@ function Navbar() {
         sx={{
           background: "#fff",
           color: "#111",
-          zIndex: 1300,
+          zIndex: 1200,
         }}
       >
         <Toolbar
@@ -121,7 +120,6 @@ function Navbar() {
             justifyContent: "space-between",
           }}
         >
-
           {/* =================================================
               LOGO
           ================================================= */}
@@ -166,8 +164,6 @@ function Navbar() {
               alignItems: "center",
             }}
           >
-
-            {/* Internships */}
             <Button
               component={Link}
               to="/internships"
@@ -176,16 +172,12 @@ function Navbar() {
                 fontWeight: "bold",
                 color: "#374151",
                 textTransform: "none",
-
-                "&:hover": {
-                  color: "#00A5EC",
-                },
+                "&:hover": { color: "#00A5EC" },
               }}
             >
               {t("navbar.internships")}
             </Button>
 
-            {/* Jobs */}
             <Button
               component={Link}
               to="/jobs"
@@ -194,16 +186,12 @@ function Navbar() {
                 fontWeight: "bold",
                 color: "#374151",
                 textTransform: "none",
-
-                "&:hover": {
-                  color: "#00A5EC",
-                },
+                "&:hover": { color: "#00A5EC" },
               }}
             >
               {t("navbar.jobs")}
             </Button>
 
-            {/* Plans */}
             <Button
               component={Link}
               to="/subscriptions"
@@ -212,15 +200,11 @@ function Navbar() {
                 fontWeight: "bold",
                 color: "#374151",
                 textTransform: "none",
-
-                "&:hover": {
-                  color: "#00A5EC",
-                },
+                "&:hover": { color: "#00A5EC" },
               }}
             >
               {t("navbar.plans")}
             </Button>
-
           </Box>
 
           {/* =================================================
@@ -234,10 +218,7 @@ function Navbar() {
               width: 340,
               background: "#f3f4f6",
               borderRadius: 2,
-
-              "& fieldset": {
-                border: "none",
-              },
+              "& fieldset": { border: "none" },
             }}
             InputProps={{
               startAdornment: (
@@ -259,11 +240,8 @@ function Navbar() {
               alignItems: "center",
             }}
           >
-
-            {/* Language */}
             <LanguageSelector />
 
-            {/* LOGIN */}
             {!user ? (
               <Button
                 component={Link}
@@ -277,7 +255,6 @@ function Navbar() {
                   color: "#00A5EC",
                   fontWeight: "bold",
                   textTransform: "none",
-
                   "&:hover": {
                     borderColor: "#00A5EC",
                     background: "#f0faff",
@@ -288,7 +265,6 @@ function Navbar() {
               </Button>
             ) : (
               <>
-                {/* Profile */}
                 <Box
                   onClick={handleProfile}
                   sx={{
@@ -298,23 +274,12 @@ function Navbar() {
                     cursor: "pointer",
                   }}
                 >
-                  <Avatar
-                    src={user.profilePhoto}
-                    sx={{
-                      width: 40,
-                      height: 40,
-                    }}
-                  />
-
-                  <Typography
-                    fontWeight="bold"
-                    color="black"
-                  >
+                  <Avatar src={user.profilePhoto} sx={{ width: 40, height: 40 }} />
+                  <Typography fontWeight="bold" color="black">
                     {user.name}
                   </Typography>
                 </Box>
 
-                {/* Logout */}
                 <Button
                   onClick={handleLogout}
                   variant="contained"
@@ -325,303 +290,141 @@ function Navbar() {
                     background: "#00A5EC",
                     fontWeight: "bold",
                     textTransform: "none",
-
-                    "&:hover": {
-                      background: "#008dcc",
-                    },
+                    "&:hover": { background: "#008dcc" },
                   }}
                 >
                   {t("navbar.logout")}
                 </Button>
               </>
             )}
-
           </Box>
 
           {/* =================================================
-              MOBILE HAMBURGER
+              MOBILE HAMBURGER BUTTON
           ================================================= */}
 
           <IconButton
-            onClick={() => setMobileMenu(true)}
+            onClick={() => setMobileMenu(!mobileMenu)}
             aria-label="Open menu"
             sx={{
               display: { xs: "flex", lg: "none" },
               color: "#111",
               width: 48,
               height: 48,
-              zIndex: 1400,
             }}
           >
-            <MenuIcon size={30} />
+            {mobileMenu ? <X size={30} /> : <MenuIcon size={30} />}
           </IconButton>
-
         </Toolbar>
       </AppBar>
 
       {/* =====================================================
-          MOBILE OVERLAY
+          MOBILE OVERLAY & SIDEBAR (FIXED LAYER)
       ===================================================== */}
 
       {mobileMenu && (
         <Box
-          onClick={() => setMobileMenu(false)}
           sx={{
             position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0,0,0,0.35)",
-            zIndex: 1390,
-          }}
-        />
-      )}
-
-      {/* =====================================================
-          MOBILE SIDEBAR
-      ===================================================== */}
-
-      <Box
-        sx={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          width: {
-            xs: "85%",
-            sm: 360,
-          },
-          maxWidth: 400,
-          height: "100vh",
-
-          background: "#fff",
-
-          zIndex: 1400,
-
-          transform: mobileMenu
-            ? "translateX(0)"
-            : "translateX(100%)",
-
-          transition: "transform 0.3s ease-in-out",
-
-          boxShadow: "-8px 0 30px rgba(0,0,0,0.15)",
-
-          overflowY: "auto",
-
-          display: {
-            xs: "block",
-            lg: "none",
-          },
-        }}
-      >
-
-        {/* =================================================
-            SIDEBAR HEADER
-        ================================================= */}
-
-        <Box
-          sx={{
-            height: 85,
-            px: 2.5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            borderBottom: "1px solid #eee",
-            position: "sticky",
-            top: 0,
-            background: "#fff",
-            zIndex: 2,
+            inset: 0,
+            zIndex: 1300,
+            display: { xs: "block", lg: "none" },
           }}
         >
-
+          {/* Backdrop Blur/Darkening */}
           <Box
-            component="img"
-            src={logo}
-            alt="logo"
-            sx={{
-              width: 50,
-              height: 50,
-              borderRadius: 2,
-            }}
-          />
-
-          <IconButton
             onClick={() => setMobileMenu(false)}
-            aria-label="Close menu"
             sx={{
-              color: "#111",
-            }}
-          >
-            <X size={28} />
-          </IconButton>
-
-        </Box>
-
-        {/* =================================================
-            SIDEBAR CONTENT
-        ================================================= */}
-
-        <Box
-          sx={{
-            p: 2.5,
-            pb: 5,
-          }}
-        >
-
-          {/* =================================================
-              SEARCH
-          ================================================= */}
-
-          <TextField
-            fullWidth
-            placeholder={t("hero.searchPlaceholder")}
-            size="small"
-            sx={{
-              mb: 2.5,
-              background: "#f3f4f6",
-              borderRadius: 2,
-
-              "& fieldset": {
-                border: "none",
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search size={20} />
-                </InputAdornment>
-              ),
+              position: "absolute",
+              inset: 0,
+              background: "rgba(0, 0, 0, 0.4)",
+              backdropFilter: "blur(2px)",
             }}
           />
 
-          {/* =================================================
-              LANGUAGE
-          ================================================= */}
-
+          {/* Sidebar Panel */}
           <Box
             sx={{
-              mb: 2.5,
-              p: 1.5,
-              borderRadius: 2,
-              background: "#f8fafc",
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: { xs: "85%", sm: 360 },
+              maxWidth: 400,
+              height: "100vh",
+              background: "#fff",
+              boxShadow: "-8px 0 30px rgba(0,0,0,0.15)",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              zIndex: 1310,
             }}
           >
-            <LanguageSelector />
-          </Box>
-
-          {/* =================================================
-              PUBLIC NAVIGATION
-          ================================================= */}
-
-          <Typography
-            sx={{
-              fontSize: 12,
-              fontWeight: "bold",
-              color: "#9ca3af",
-              mb: 1,
-              px: 1,
-              textTransform: "uppercase",
-            }}
-          >
-            Explore
-          </Typography>
-
-          {/* Internships */}
-          <Button
-            fullWidth
-            onClick={() =>
-              handleMobileNavigation("/internships")
-            }
-            startIcon={<BriefcaseBusiness size={20} />}
-            sx={{
-              justifyContent: "flex-start",
-              py: 1.5,
-              px: 1.5,
-              mb: 0.5,
-              fontSize: 16,
-              fontWeight: 600,
-              color: "#374151",
-              textTransform: "none",
-              borderRadius: 2,
-
-              "&:hover": {
-                color: "#00A5EC",
-                background: "#f0faff",
-              },
-            }}
-          >
-            {t("navbar.internships")}
-          </Button>
-
-          {/* Jobs */}
-          <Button
-            fullWidth
-            onClick={() =>
-              handleMobileNavigation("/jobs")
-            }
-            startIcon={<Building2 size={20} />}
-            sx={{
-              justifyContent: "flex-start",
-              py: 1.5,
-              px: 1.5,
-              mb: 0.5,
-              fontSize: 16,
-              fontWeight: 600,
-              color: "#374151",
-              textTransform: "none",
-              borderRadius: 2,
-
-              "&:hover": {
-                color: "#00A5EC",
-                background: "#f0faff",
-              },
-            }}
-          >
-            {t("navbar.jobs")}
-          </Button>
-
-          {/* Plans */}
-          <Button
-            fullWidth
-            onClick={() =>
-              handleMobileNavigation("/subscriptions")
-            }
-            startIcon={<CreditCard size={20} />}
-            sx={{
-              justifyContent: "flex-start",
-              py: 1.5,
-              px: 1.5,
-              mb: 0.5,
-              fontSize: 16,
-              fontWeight: 600,
-              color: "#374151",
-              textTransform: "none",
-              borderRadius: 2,
-
-              "&:hover": {
-                color: "#00A5EC",
-                background: "#f0faff",
-              },
-            }}
-          >
-            {t("navbar.plans")}
-          </Button>
-
-          {/* =================================================
-              USER MENU
-          ================================================= */}
-
-          {user ? (
-            <>
+            {/* Sidebar Header */}
+            <Box
+              sx={{
+                height: 85,
+                px: 2.5,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderBottom: "1px solid #eee",
+                position: "sticky",
+                top: 0,
+                background: "#fff",
+                zIndex: 2,
+              }}
+            >
               <Box
+                component="img"
+                src={logo}
+                alt="logo"
+                sx={{ width: 50, height: 50, borderRadius: 2 }}
+              />
+
+              <IconButton
+                onClick={() => setMobileMenu(false)}
+                aria-label="Close menu"
+                sx={{ color: "#111" }}
+              >
+                <X size={28} />
+              </IconButton>
+            </Box>
+
+            {/* Sidebar Body Content */}
+            <Box sx={{ p: 2.5, pb: 5, flexGrow: 1 }}>
+              {/* Search */}
+              <TextField
+                fullWidth
+                placeholder={t("hero.searchPlaceholder")}
+                size="small"
                 sx={{
-                  mt: 2,
-                  mb: 1,
-                  borderTop: "1px solid #eee",
-                  pt: 2,
+                  mb: 2.5,
+                  background: "#f3f4f6",
+                  borderRadius: 2,
+                  "& fieldset": { border: "none" },
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search size={20} />
+                    </InputAdornment>
+                  ),
                 }}
               />
 
+              {/* Language Selector */}
+              <Box
+                sx={{
+                  mb: 2.5,
+                  p: 1.5,
+                  borderRadius: 2,
+                  background: "#f8fafc",
+                }}
+              >
+                <LanguageSelector />
+              </Box>
+
+              {/* Explore Section */}
               <Typography
                 sx={{
                   fontSize: 12,
@@ -632,14 +435,13 @@ function Navbar() {
                   textTransform: "uppercase",
                 }}
               >
-                Account
+                Explore
               </Typography>
 
-              {/* Profile */}
               <Button
                 fullWidth
-                onClick={handleProfile}
-                startIcon={<User size={20} />}
+                onClick={() => handleMobileNavigation("/internships")}
+                startIcon={<BriefcaseBusiness size={20} />}
                 sx={{
                   justifyContent: "flex-start",
                   py: 1.5,
@@ -650,22 +452,16 @@ function Navbar() {
                   color: "#374151",
                   textTransform: "none",
                   borderRadius: 2,
-
-                  "&:hover": {
-                    background: "#f8fafc",
-                  },
+                  "&:hover": { color: "#00A5EC", background: "#f0faff" },
                 }}
               >
-                {user.name || "Profile"}
+                {t("navbar.internships")}
               </Button>
 
-              {/* Login History */}
               <Button
                 fullWidth
-                onClick={() =>
-                  handleMobileNavigation("/LoginHistory")
-                }
-                startIcon={<History size={20} />}
+                onClick={() => handleMobileNavigation("/jobs")}
+                startIcon={<Building2 size={20} />}
                 sx={{
                   justifyContent: "flex-start",
                   py: 1.5,
@@ -676,73 +472,15 @@ function Navbar() {
                   color: "#374151",
                   textTransform: "none",
                   borderRadius: 2,
-
-                  "&:hover": {
-                    background: "#f8fafc",
-                  },
+                  "&:hover": { color: "#00A5EC", background: "#f0faff" },
                 }}
               >
-                Login History
+                {t("navbar.jobs")}
               </Button>
 
-              {/* Public Space */}
               <Button
                 fullWidth
-                onClick={() =>
-                  handleMobileNavigation("/Publicspace")
-                }
-                startIcon={<Globe size={20} />}
-                sx={{
-                  justifyContent: "flex-start",
-                  py: 1.5,
-                  px: 1.5,
-                  mb: 0.5,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#374151",
-                  textTransform: "none",
-                  borderRadius: 2,
-
-                  "&:hover": {
-                    background: "#f8fafc",
-                  },
-                }}
-              >
-                Public Space
-              </Button>
-
-              {/* Resume Builder */}
-              <Button
-                fullWidth
-                onClick={() =>
-                  handleMobileNavigation("/ResumeBuilder")
-                }
-                startIcon={<FileText size={20} />}
-                sx={{
-                  justifyContent: "flex-start",
-                  py: 1.5,
-                  px: 1.5,
-                  mb: 0.5,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#374151",
-                  textTransform: "none",
-                  borderRadius: 2,
-
-                  "&:hover": {
-                    background: "#f8fafc",
-                  },
-                }}
-              >
-                Resume Builder
-              </Button>
-
-              {/* Subscription */}
-              <Button
-                fullWidth
-                onClick={() =>
-                  handleMobileNavigation("/subscriptions")
-                }
+                onClick={() => handleMobileNavigation("/subscriptions")}
                 startIcon={<CreditCard size={20} />}
                 sx={{
                   justifyContent: "flex-start",
@@ -754,85 +492,1011 @@ function Navbar() {
                   color: "#374151",
                   textTransform: "none",
                   borderRadius: 2,
-
-                  "&:hover": {
-                    background: "#f8fafc",
-                  },
+                  "&:hover": { color: "#00A5EC", background: "#f0faff" },
                 }}
               >
-                Subscription
+                {t("navbar.plans")}
               </Button>
 
-              {/* Logout */}
-              <Button
-                fullWidth
-                onClick={handleLogout}
-                startIcon={<LogOut size={20} />}
-                sx={{
-                  justifyContent: "flex-start",
-                  py: 1.5,
-                  px: 1.5,
-                  mt: 1,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: "#dc2626",
-                  textTransform: "none",
-                  borderRadius: 2,
+              {/* User Account / Auth Section */}
+              {user ? (
+                <>
+                  <Box
+                    sx={{
+                      mt: 2,
+                      mb: 1,
+                      borderTop: "1px solid #eee",
+                      pt: 2,
+                    }}
+                  />
 
-                  "&:hover": {
-                    background: "#fff5f5",
-                  },
-                }}
-              >
-                {t("navbar.logout")}
-              </Button>
-            </>
-          ) : (
-            <>
-              {/* =================================================
-                  LOGIN
-              ================================================= */}
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      fontWeight: "bold",
+                      color: "#9ca3af",
+                      mb: 1,
+                      px: 1,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Account
+                  </Typography>
 
-              <Box
-                sx={{
-                  mt: 2,
-                  borderTop: "1px solid #eee",
-                  pt: 2,
-                }}
-              />
+                  <Button
+                    fullWidth
+                    onClick={handleProfile}
+                    startIcon={<User size={20} />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      py: 1.5,
+                      px: 1.5,
+                      mb: 0.5,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#374151",
+                      textTransform: "none",
+                      borderRadius: 2,
+                      "&:hover": { background: "#f8fafc" },
+                    }}
+                  >
+                    {user.name || "Profile"}
+                  </Button>
 
-              <Button
-                fullWidth
-                onClick={() =>
-                  handleMobileNavigation("/login")
-                }
-                variant="contained"
-                sx={{
-                  mt: 1,
-                  py: 1.4,
-                  borderRadius: 2,
-                  background: "#00A5EC",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  fontSize: 16,
+                  <Button
+                    fullWidth
+                    onClick={() => handleMobileNavigation("/LoginHistory")}
+                    startIcon={<History size={20} />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      py: 1.5,
+                      px: 1.5,
+                      mb: 0.5,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#374151",
+                      textTransform: "none",
+                      borderRadius: 2,
+                      "&:hover": { background: "#f8fafc" },
+                    }}
+                  >
+                    Login History
+                  </Button>
 
-                  "&:hover": {
-                    background: "#008dcc",
-                  },
-                }}
-              >
-                {t("navbar.login")}
-              </Button>
-            </>
-          )}
+                  <Button
+                    fullWidth
+                    onClick={() => handleMobileNavigation("/Publicspace")}
+                    startIcon={<Globe size={20} />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      py: 1.5,
+                      px: 1.5,
+                      mb: 0.5,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#374151",
+                      textTransform: "none",
+                      borderRadius: 2,
+                      "&:hover": { background: "#f8fafc" },
+                    }}
+                  >
+                    Public Space
+                  </Button>
 
+                  <Button
+                    fullWidth
+                    onClick={() => handleMobileNavigation("/ResumeBuilder")}
+                    startIcon={<FileText size={20} />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      py: 1.5,
+                      px: 1.5,
+                      mb: 0.5,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#374151",
+                      textTransform: "none",
+                      borderRadius: 2,
+                      "&:hover": { background: "#f8fafc" },
+                    }}
+                  >
+                    Resume Builder
+                  </Button>
+
+                  <Button
+                    fullWidth
+                    onClick={handleLogout}
+                    startIcon={<LogOut size={20} />}
+                    sx={{
+                      justifyContent: "flex-start",
+                      py: 1.5,
+                      px: 1.5,
+                      mt: 1,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: "#dc2626",
+                      textTransform: "none",
+                      borderRadius: 2,
+                      "&:hover": { background: "#fff5f5" },
+                    }}
+                  >
+                    {t("navbar.logout")}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Box
+                    sx={{
+                      mt: 2,
+                      borderTop: "1px solid #eee",
+                      pt: 2,
+                    }}
+                  />
+                  <Button
+                    fullWidth
+                    onClick={() => handleMobileNavigation("/login")}
+                    variant="contained"
+                    sx={{
+                      mt: 1,
+                      py: 1.4,
+                      borderRadius: 2,
+                      background: "#00A5EC",
+                      textTransform: "none",
+                      fontWeight: "bold",
+                      fontSize: 16,
+                      "&:hover": { background: "#008dcc" },
+                    }}
+                  >
+                    {t("navbar.login")}
+                  </Button>
+                </>
+              )}
+            </Box>
+          </Box>
         </Box>
-      </Box>
+      )}
     </>
   );
 }
 
 export default Navbar;
+
+
+// import { Link, useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useTranslation } from "react-i18next";
+// import LanguageSelector from "../LanguageSelector";
+
+// import {
+//   AppBar,
+//   Toolbar,
+//   Box,
+//   Button,
+//   TextField,
+//   InputAdornment,
+//   IconButton,
+//   Avatar,
+//   Typography,
+// } from "@mui/material";
+
+// import {
+//   Search,
+//   Menu as MenuIcon,
+//   X,
+//   User,
+//   LogOut,
+//   History,
+//   Globe,
+//   FileText,
+//   CreditCard,
+//   BriefcaseBusiness,
+//   Building2,
+// } from "lucide-react";
+
+// import logo from "../../assets/logo.jpg";
+
+// function Navbar() {
+//   const navigate = useNavigate();
+//   const { t } = useTranslation();
+
+//   const [user, setUser] = useState(null);
+//   const [mobileMenu, setMobileMenu] = useState(false);
+
+//   // =========================
+//   // GET USER
+//   // =========================
+//   useEffect(() => {
+//     const getUser = () => {
+//       const userData = localStorage.getItem("user");
+
+//       if (userData) {
+//         try {
+//           setUser(JSON.parse(userData));
+//         } catch (error) {
+//           console.error("Invalid user data:", error);
+//           localStorage.removeItem("user");
+//           setUser(null);
+//         }
+//       } else {
+//         setUser(null);
+//       }
+//     };
+
+//     getUser();
+//   }, []);
+
+//   // =========================
+//   // LOGOUT
+//   // =========================
+//   const handleLogout = () => {
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user");
+
+//     setUser(null);
+//     setMobileMenu(false);
+
+//     navigate("/login");
+
+//     window.location.reload();
+//   };
+
+//   // =========================
+//   // MOBILE NAVIGATION
+//   // =========================
+//   const handleMobileNavigation = (path) => {
+//     setMobileMenu(false);
+//     navigate(path);
+//   };
+
+//   // =========================
+//   // PROFILE NAVIGATION
+//   // =========================
+//   const handleProfile = () => {
+//     setMobileMenu(false);
+
+//     if (user?.role === "admin") {
+//       navigate("/admin");
+//     } else {
+//       navigate("/profile");
+//     }
+//   };
+
+//   return (
+//     <>
+//       {/* =====================================================
+//           NAVBAR
+//       ===================================================== */}
+
+//       <AppBar
+//         position="sticky"
+//         elevation={1}
+//         sx={{
+//           background: "#fff",
+//           color: "#111",
+//           zIndex: 1300,
+//         }}
+//       >
+//         <Toolbar
+//           sx={{
+//             height: 100,
+//             minHeight: "100px !important",
+//             px: { xs: 2, sm: 3, lg: 8 },
+//             display: "flex",
+//             justifyContent: "space-between",
+//           }}
+//         >
+
+//           {/* =================================================
+//               LOGO
+//           ================================================= */}
+
+//           <Link
+//             to="/"
+//             onClick={() => setMobileMenu(false)}
+//             style={{
+//               textDecoration: "none",
+//               color: "inherit",
+//               flexShrink: 0,
+//             }}
+//           >
+//             <Box
+//               sx={{
+//                 display: "flex",
+//                 alignItems: "center",
+//               }}
+//             >
+//               <Box
+//                 component="img"
+//                 src={logo}
+//                 alt="InternArea Logo"
+//                 sx={{
+//                   width: { xs: 55, sm: 60, lg: 65 },
+//                   height: { xs: 55, sm: 60, lg: 65 },
+//                   borderRadius: 2,
+//                   objectFit: "cover",
+//                 }}
+//               />
+//             </Box>
+//           </Link>
+
+//           {/* =================================================
+//               DESKTOP MENU
+//           ================================================= */}
+
+//           <Box
+//             sx={{
+//               display: { xs: "none", lg: "flex" },
+//               gap: 4,
+//               alignItems: "center",
+//             }}
+//           >
+
+//             {/* Internships */}
+//             <Button
+//               component={Link}
+//               to="/internships"
+//               sx={{
+//                 fontSize: 17,
+//                 fontWeight: "bold",
+//                 color: "#374151",
+//                 textTransform: "none",
+
+//                 "&:hover": {
+//                   color: "#00A5EC",
+//                 },
+//               }}
+//             >
+//               {t("navbar.internships")}
+//             </Button>
+
+//             {/* Jobs */}
+//             <Button
+//               component={Link}
+//               to="/jobs"
+//               sx={{
+//                 fontSize: 17,
+//                 fontWeight: "bold",
+//                 color: "#374151",
+//                 textTransform: "none",
+
+//                 "&:hover": {
+//                   color: "#00A5EC",
+//                 },
+//               }}
+//             >
+//               {t("navbar.jobs")}
+//             </Button>
+
+//             {/* Plans */}
+//             <Button
+//               component={Link}
+//               to="/subscriptions"
+//               sx={{
+//                 fontSize: 17,
+//                 fontWeight: "bold",
+//                 color: "#374151",
+//                 textTransform: "none",
+
+//                 "&:hover": {
+//                   color: "#00A5EC",
+//                 },
+//               }}
+//             >
+//               {t("navbar.plans")}
+//             </Button>
+
+//           </Box>
+
+//           {/* =================================================
+//               DESKTOP SEARCH
+//           ================================================= */}
+
+//           <TextField
+//             placeholder={t("hero.searchPlaceholder")}
+//             sx={{
+//               display: { xs: "none", lg: "flex" },
+//               width: 340,
+//               background: "#f3f4f6",
+//               borderRadius: 2,
+
+//               "& fieldset": {
+//                 border: "none",
+//               },
+//             }}
+//             InputProps={{
+//               startAdornment: (
+//                 <InputAdornment position="start">
+//                   <Search size={20} />
+//                 </InputAdornment>
+//               ),
+//             }}
+//           />
+
+//           {/* =================================================
+//               DESKTOP RIGHT SIDE
+//           ================================================= */}
+
+//           <Box
+//             sx={{
+//               display: { xs: "none", lg: "flex" },
+//               gap: 2,
+//               alignItems: "center",
+//             }}
+//           >
+
+//             {/* Language */}
+//             <LanguageSelector />
+
+//             {/* LOGIN */}
+//             {!user ? (
+//               <Button
+//                 component={Link}
+//                 to="/login"
+//                 variant="outlined"
+//                 sx={{
+//                   px: 4,
+//                   py: 1.2,
+//                   borderRadius: 2,
+//                   borderColor: "#00A5EC",
+//                   color: "#00A5EC",
+//                   fontWeight: "bold",
+//                   textTransform: "none",
+
+//                   "&:hover": {
+//                     borderColor: "#00A5EC",
+//                     background: "#f0faff",
+//                   },
+//                 }}
+//               >
+//                 {t("navbar.login")}
+//               </Button>
+//             ) : (
+//               <>
+//                 {/* Profile */}
+//                 <Box
+//                   onClick={handleProfile}
+//                   sx={{
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: 1,
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   <Avatar
+//                     src={user.profilePhoto}
+//                     sx={{
+//                       width: 40,
+//                       height: 40,
+//                     }}
+//                   />
+
+//                   <Typography
+//                     fontWeight="bold"
+//                     color="black"
+//                   >
+//                     {user.name}
+//                   </Typography>
+//                 </Box>
+
+//                 {/* Logout */}
+//                 <Button
+//                   onClick={handleLogout}
+//                   variant="contained"
+//                   sx={{
+//                     px: 3,
+//                     py: 1.2,
+//                     borderRadius: 2,
+//                     background: "#00A5EC",
+//                     fontWeight: "bold",
+//                     textTransform: "none",
+
+//                     "&:hover": {
+//                       background: "#008dcc",
+//                     },
+//                   }}
+//                 >
+//                   {t("navbar.logout")}
+//                 </Button>
+//               </>
+//             )}
+
+//           </Box>
+
+//           {/* =================================================
+//               MOBILE HAMBURGER
+//           ================================================= */}
+
+//           <IconButton
+//             onClick={() => setMobileMenu(true)}
+//             aria-label="Open menu"
+//             sx={{
+//               display: { xs: "flex", lg: "none" },
+//               color: "#111",
+//               width: 48,
+//               height: 48,
+//               zIndex: 1400,
+//             }}
+//           >
+//             <MenuIcon size={30} />
+//           </IconButton>
+
+//         </Toolbar>
+//       </AppBar>
+
+//       {/* =====================================================
+//           MOBILE OVERLAY
+//       ===================================================== */}
+
+//       {mobileMenu && (
+//         <Box
+//           onClick={() => setMobileMenu(false)}
+//           sx={{
+//             position: "fixed",
+//             top: 0,
+//             left: 0,
+//             right: 0,
+//             bottom: 0,
+//             background: "rgba(0,0,0,0.35)",
+//             zIndex: 1390,
+//           }}
+//         />
+//       )}
+
+//       {/* =====================================================
+//           MOBILE SIDEBAR
+//       ===================================================== */}
+
+//       <Box
+//         sx={{
+//           position: "fixed",
+//           top: 0,
+//           right: 0,
+//           width: {
+//             xs: "85%",
+//             sm: 360,
+//           },
+//           maxWidth: 400,
+//           height: "100vh",
+
+//           background: "#fff",
+
+//           zIndex: 1400,
+
+//           transform: mobileMenu
+//             ? "translateX(0)"
+//             : "translateX(100%)",
+
+//           transition: "transform 0.3s ease-in-out",
+
+//           boxShadow: "-8px 0 30px rgba(0,0,0,0.15)",
+
+//           overflowY: "auto",
+
+//           display: {
+//             xs: "block",
+//             lg: "none",
+//           },
+//         }}
+//       >
+
+//         {/* =================================================
+//             SIDEBAR HEADER
+//         ================================================= */}
+
+//         <Box
+//           sx={{
+//             height: 85,
+//             px: 2.5,
+//             display: "flex",
+//             alignItems: "center",
+//             justifyContent: "space-between",
+//             borderBottom: "1px solid #eee",
+//             position: "sticky",
+//             top: 0,
+//             background: "#fff",
+//             zIndex: 2,
+//           }}
+//         >
+
+//           <Box
+//             component="img"
+//             src={logo}
+//             alt="logo"
+//             sx={{
+//               width: 50,
+//               height: 50,
+//               borderRadius: 2,
+//             }}
+//           />
+
+//           <IconButton
+//             onClick={() => setMobileMenu(false)}
+//             aria-label="Close menu"
+//             sx={{
+//               color: "#111",
+//             }}
+//           >
+//             <X size={28} />
+//           </IconButton>
+
+//         </Box>
+
+//         {/* =================================================
+//             SIDEBAR CONTENT
+//         ================================================= */}
+
+//         <Box
+//           sx={{
+//             p: 2.5,
+//             pb: 5,
+//           }}
+//         >
+
+//           {/* =================================================
+//               SEARCH
+//           ================================================= */}
+
+//           <TextField
+//             fullWidth
+//             placeholder={t("hero.searchPlaceholder")}
+//             size="small"
+//             sx={{
+//               mb: 2.5,
+//               background: "#f3f4f6",
+//               borderRadius: 2,
+
+//               "& fieldset": {
+//                 border: "none",
+//               },
+//             }}
+//             InputProps={{
+//               startAdornment: (
+//                 <InputAdornment position="start">
+//                   <Search size={20} />
+//                 </InputAdornment>
+//               ),
+//             }}
+//           />
+
+//           {/* =================================================
+//               LANGUAGE
+//           ================================================= */}
+
+//           <Box
+//             sx={{
+//               mb: 2.5,
+//               p: 1.5,
+//               borderRadius: 2,
+//               background: "#f8fafc",
+//             }}
+//           >
+//             <LanguageSelector />
+//           </Box>
+
+//           {/* =================================================
+//               PUBLIC NAVIGATION
+//           ================================================= */}
+
+//           <Typography
+//             sx={{
+//               fontSize: 12,
+//               fontWeight: "bold",
+//               color: "#9ca3af",
+//               mb: 1,
+//               px: 1,
+//               textTransform: "uppercase",
+//             }}
+//           >
+//             Explore
+//           </Typography>
+
+//           {/* Internships */}
+//           <Button
+//             fullWidth
+//             onClick={() =>
+//               handleMobileNavigation("/internships")
+//             }
+//             startIcon={<BriefcaseBusiness size={20} />}
+//             sx={{
+//               justifyContent: "flex-start",
+//               py: 1.5,
+//               px: 1.5,
+//               mb: 0.5,
+//               fontSize: 16,
+//               fontWeight: 600,
+//               color: "#374151",
+//               textTransform: "none",
+//               borderRadius: 2,
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//                 background: "#f0faff",
+//               },
+//             }}
+//           >
+//             {t("navbar.internships")}
+//           </Button>
+
+//           {/* Jobs */}
+//           <Button
+//             fullWidth
+//             onClick={() =>
+//               handleMobileNavigation("/jobs")
+//             }
+//             startIcon={<Building2 size={20} />}
+//             sx={{
+//               justifyContent: "flex-start",
+//               py: 1.5,
+//               px: 1.5,
+//               mb: 0.5,
+//               fontSize: 16,
+//               fontWeight: 600,
+//               color: "#374151",
+//               textTransform: "none",
+//               borderRadius: 2,
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//                 background: "#f0faff",
+//               },
+//             }}
+//           >
+//             {t("navbar.jobs")}
+//           </Button>
+
+//           {/* Plans */}
+//           <Button
+//             fullWidth
+//             onClick={() =>
+//               handleMobileNavigation("/subscriptions")
+//             }
+//             startIcon={<CreditCard size={20} />}
+//             sx={{
+//               justifyContent: "flex-start",
+//               py: 1.5,
+//               px: 1.5,
+//               mb: 0.5,
+//               fontSize: 16,
+//               fontWeight: 600,
+//               color: "#374151",
+//               textTransform: "none",
+//               borderRadius: 2,
+
+//               "&:hover": {
+//                 color: "#00A5EC",
+//                 background: "#f0faff",
+//               },
+//             }}
+//           >
+//             {t("navbar.plans")}
+//           </Button>
+
+//           {/* =================================================
+//               USER MENU
+//           ================================================= */}
+
+//           {user ? (
+//             <>
+//               <Box
+//                 sx={{
+//                   mt: 2,
+//                   mb: 1,
+//                   borderTop: "1px solid #eee",
+//                   pt: 2,
+//                 }}
+//               />
+
+//               <Typography
+//                 sx={{
+//                   fontSize: 12,
+//                   fontWeight: "bold",
+//                   color: "#9ca3af",
+//                   mb: 1,
+//                   px: 1,
+//                   textTransform: "uppercase",
+//                 }}
+//               >
+//                 Account
+//               </Typography>
+
+//               {/* Profile */}
+//               <Button
+//                 fullWidth
+//                 onClick={handleProfile}
+//                 startIcon={<User size={20} />}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   px: 1.5,
+//                   mb: 0.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+//                   borderRadius: 2,
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 {user.name || "Profile"}
+//               </Button>
+
+//               {/* Login History */}
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/LoginHistory")
+//                 }
+//                 startIcon={<History size={20} />}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   px: 1.5,
+//                   mb: 0.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+//                   borderRadius: 2,
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 Login History
+//               </Button>
+
+//               {/* Public Space */}
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/Publicspace")
+//                 }
+//                 startIcon={<Globe size={20} />}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   px: 1.5,
+//                   mb: 0.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+//                   borderRadius: 2,
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 Public Space
+//               </Button>
+
+//               {/* Resume Builder */}
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/ResumeBuilder")
+//                 }
+//                 startIcon={<FileText size={20} />}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   px: 1.5,
+//                   mb: 0.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+//                   borderRadius: 2,
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 Resume Builder
+//               </Button>
+
+//               {/* Subscription */}
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/subscriptions")
+//                 }
+//                 startIcon={<CreditCard size={20} />}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   px: 1.5,
+//                   mb: 0.5,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#374151",
+//                   textTransform: "none",
+//                   borderRadius: 2,
+
+//                   "&:hover": {
+//                     background: "#f8fafc",
+//                   },
+//                 }}
+//               >
+//                 Subscription
+//               </Button>
+
+//               {/* Logout */}
+//               <Button
+//                 fullWidth
+//                 onClick={handleLogout}
+//                 startIcon={<LogOut size={20} />}
+//                 sx={{
+//                   justifyContent: "flex-start",
+//                   py: 1.5,
+//                   px: 1.5,
+//                   mt: 1,
+//                   fontSize: 16,
+//                   fontWeight: 600,
+//                   color: "#dc2626",
+//                   textTransform: "none",
+//                   borderRadius: 2,
+
+//                   "&:hover": {
+//                     background: "#fff5f5",
+//                   },
+//                 }}
+//               >
+//                 {t("navbar.logout")}
+//               </Button>
+//             </>
+//           ) : (
+//             <>
+//               {/* =================================================
+//                   LOGIN
+//               ================================================= */}
+
+//               <Box
+//                 sx={{
+//                   mt: 2,
+//                   borderTop: "1px solid #eee",
+//                   pt: 2,
+//                 }}
+//               />
+
+//               <Button
+//                 fullWidth
+//                 onClick={() =>
+//                   handleMobileNavigation("/login")
+//                 }
+//                 variant="contained"
+//                 sx={{
+//                   mt: 1,
+//                   py: 1.4,
+//                   borderRadius: 2,
+//                   background: "#00A5EC",
+//                   textTransform: "none",
+//                   fontWeight: "bold",
+//                   fontSize: 16,
+
+//                   "&:hover": {
+//                     background: "#008dcc",
+//                   },
+//                 }}
+//               >
+//                 {t("navbar.login")}
+//               </Button>
+//             </>
+//           )}
+
+//         </Box>
+//       </Box>
+//     </>
+//   );
+// }
+
+// export default Navbar;
 
 
 
