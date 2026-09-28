@@ -32,7 +32,6 @@ function Navbar() {
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
-
     if (userData) {
       try {
         setUser(JSON.parse(userData));
@@ -45,10 +44,8 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     setUser(null);
     setMobileMenu(false);
-
     navigate("/login");
     window.location.reload();
   };
@@ -65,11 +62,12 @@ function Navbar() {
       sx={{
         background: "#fff",
         color: "#111",
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar
         sx={{
-          height: 100,
+          height: 90,
           px: { xs: 2, lg: 8 },
           display: "flex",
           justifyContent: "space-between",
@@ -78,10 +76,7 @@ function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-          }}
+          style={{ textDecoration: "none", color: "inherit" }}
           onClick={() => setMobileMenu(false)}
         >
           <Box
@@ -96,8 +91,8 @@ function Navbar() {
               src={logo}
               alt="logo"
               sx={{
-                width: 65,
-                height: 65,
+                width: 55,
+                height: 55,
                 borderRadius: 2,
               }}
             />
@@ -159,7 +154,7 @@ function Navbar() {
           placeholder={t("hero.searchPlaceholder")}
           sx={{
             display: { xs: "none", lg: "flex" },
-            width: 340,
+            width: 320,
             background: "#f3f4f6",
             borderRadius: 2,
             "& fieldset": { border: "none" },
@@ -245,30 +240,38 @@ function Navbar() {
           )}
         </Box>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - 100% Force Clickable */}
         <IconButton
-          onClick={() => setMobileMenu(!mobileMenu)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setMobileMenu(!mobileMenu);
+          }}
           sx={{
             display: { xs: "flex", lg: "none" },
             color: "#111",
+            zIndex: 9999,
           }}
         >
           {mobileMenu ? <X size={30} /> : <MenuIcon size={30} />}
         </IconButton>
       </Toolbar>
 
-      {/* Mobile Sidebar / Menu */}
+      {/* Mobile Sidebar / Menu Overlay - Fixed Positioning */}
       {mobileMenu && (
         <Box
           sx={{
-            display: { xs: "block", lg: "none" },
+            position: "fixed",
+            top: 90,
+            left: 0,
+            width: "100vw",
+            height: "calc(100vh - 90px)",
             background: "#fff",
-            borderTop: "1px solid #eee",
+            zIndex: 9998,
+            display: { xs: "block", lg: "none" },
             px: 3,
             py: 3,
-            maxHeight: "calc(100vh - 100px)",
             overflowY: "auto",
-            boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+            boxShadow: "0px 10px 20px rgba(0,0,0,0.15)",
           }}
         >
           {/* Mobile Search */}
