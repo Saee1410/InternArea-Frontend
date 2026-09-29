@@ -38,6 +38,9 @@ function Login() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // IMPORTANT:
+  // Vercel Environment Variable:
+  // VITE_API_URL = https://your-backend-url.onrender.com
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [loading, setLoading] = useState(false);
@@ -50,20 +53,43 @@ function Login() {
     password: "",
   });
 
+  // =====================================================
+  // OTP STATES
+  // =====================================================
+
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpUserId, setOtpUserId] = useState(null);
   const [otpEmail, setOtpEmail] = useState("");
 
+  // =====================================================
+  // CHECK API URL
+  // =====================================================
+
   const checkAPI = () => {
     if (!API_URL) {
-      alert("API URL is not configured. Please check VITE_API_URL.");
-      console.error("VITE_API_URL is missing.");
+      alert(
+        "API URL is not configured. Please check VITE_API_URL."
+      );
+
+      console.error(
+        "VITE_API_URL is missing."
+      );
+
       return false;
     }
-    console.log("API URL:", API_URL);
+
+    console.log(
+      "API URL:",
+      API_URL
+    );
+
     return true;
   };
+
+  // =====================================================
+  // HANDLE INPUT CHANGE
+  // =====================================================
 
   const handleChange = (e) => {
     setFormData({
@@ -72,72 +98,165 @@ function Login() {
     });
   };
 
+  // =====================================================
+  // SUCCESSFUL LOGIN
+  // =====================================================
+
   const handleSuccessfulLogin = (user, token) => {
     if (!user || !token) {
       alert("Invalid login response.");
       return;
     }
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    console.log(
+      "LOGIN USER:",
+      user
+    );
 
+    console.log(
+      "LOGIN ROLE:",
+      user.role
+    );
+
+    // Save token
+    localStorage.setItem(
+      "token",
+      token
+    );
+
+    // Save user
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
+
+    // Remember me
     if (remember) {
-      localStorage.setItem("rememberMe", "true");
+      localStorage.setItem(
+        "rememberMe",
+        "true"
+      );
     } else {
-      localStorage.removeItem("rememberMe");
+      localStorage.removeItem(
+        "rememberMe"
+      );
     }
+
+    // =================================================
+    // ADMIN
+    // =================================================
 
     if (user.role === "admin") {
       navigate("/admin/dashboard");
       return;
     }
 
+    // =================================================
+    // STUDENT
+    // =================================================
+
     navigate("/");
   };
 
   // =====================================================
-  // GOOGLE LOGIN (टाईम-आउट ६० सेकंद केला आहे)
+  // GOOGLE LOGIN
   // =====================================================
+
   const handleGoogleLogin = async (response) => {
-    if (!checkAPI()) return;
+    if (!checkAPI()) {
+      return;
+    }
 
     if (!response?.credential) {
-      alert(t("login.googleLoginFailed") || "Google login failed.");
+      alert(
+        t("login.googleLoginFailed") ||
+          "Google login failed."
+      );
+
       return;
     }
 
     try {
       setLoading(true);
-      console.log("Google login started");
+
+      console.log(
+        "Google login started"
+      );
 
       const res = await axios.post(
         `${API_URL}/api/auth/google`,
-        { credential: response.credential },
-        { timeout: 60000 } // <--- सुधारणा: २० सेकंदावरून ६० सेकंद केले
+        {
+          credential: response.credential,
+        },
+        {
+          timeout: 60000,
+        }
       );
 
-      console.log("GOOGLE LOGIN RESPONSE:", res.data);
+      console.log(
+        "GOOGLE LOGIN RESPONSE:",
+        res.data
+      );
+
+      // =================================================
+      // OTP REQUIRED
+      // =================================================
 
       if (res.data?.requiresOTP) {
-        setOtpUserId(res.data.userId);
-        setOtpEmail(res.data.email || "");
+        setOtpUserId(
+          res.data.userId
+        );
+
+        setOtpEmail(
+          res.data.email || ""
+        );
+
         setOtp("");
+
         setShowOTP(true);
+
         return;
       }
 
-      if (!res.data?.user || !res.data?.token) {
-        throw new Error("Invalid Google login response.");
+      // =================================================
+      // NORMAL GOOGLE LOGIN
+      // =================================================
+
+      if (
+        !res.data?.user ||
+        !res.data?.token
+      ) {
+        throw new Error(
+          "Invalid Google login response."
+        );
       }
 
-      handleSuccessfulLogin(res.data.user, res.data.token);
+      handleSuccessfulLogin(
+        res.data.user,
+        res.data.token
+      );
+
     } catch (error) {
-      console.error("Google Login Error:", error);
-      if (error.code === "ERR_NETWORK") {
-        alert("Cannot connect to server. Please check your backend URL.");
+      console.error(
+        "Google Login Error:",
+        error
+      );
+
+      if (
+        error.code ===
+        "ERR_NETWORK"
+      ) {
+        alert(
+          "Cannot connect to server. Please check your backend URL."
+        );
       } else {
-        alert(error.response?.data?.message || t("login.googleLoginFailed") || "Google login failed.");
+        alert(
+          error.response?.data?.message ||
+            t("login.googleLoginFailed") ||
+            "Google login failed."
+        );
       }
+
     } finally {
       setLoading(false);
     }
@@ -146,119 +265,245 @@ function Login() {
   // =====================================================
   // NORMAL LOGIN
   // =====================================================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!checkAPI()) return;
+
+    if (!checkAPI()) {
+      return;
+    }
 
     const email = formData.email.trim();
     const password = formData.password;
 
     if (!email || !password) {
-      alert("Please enter email and password.");
+      alert(
+        "Please enter email and password."
+      );
+
       return;
     }
 
     try {
       setLoading(true);
-      console.log("LOGIN API:", `${API_URL}/api/auth/login`);
+
+      console.log(
+        "LOGIN API:",
+        `${API_URL}/api/auth/login`
+      );
 
       const res = await axios.post(
         `${API_URL}/api/auth/login`,
-        { email, password },
         {
-          headers: { "Content-Type": "application/json" },
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
           timeout: 60000,
         }
       );
 
-      console.log("LOGIN RESPONSE:", res.data);
+      console.log(
+        "LOGIN RESPONSE:",
+        res.data
+      );
+
+      // =================================================
+      // OTP REQUIRED
+      // =================================================
 
       if (res.data?.requiresOTP) {
-        setOtpUserId(res.data.userId);
-        setOtpEmail(res.data.email || email);
+        console.log(
+          "OTP required for:",
+          res.data.email
+        );
+
+        setOtpUserId(
+          res.data.userId
+        );
+
+        setOtpEmail(
+          res.data.email || email
+        );
+
         setOtp("");
+
         setShowOTP(true);
+
         return;
       }
+
+      // =================================================
+      // NORMAL LOGIN
+      // =================================================
 
       const user = res.data?.user;
       const token = res.data?.token;
 
       if (!user || !token) {
-        alert("Invalid login response from server.");
+        alert(
+          "Invalid login response from server."
+        );
+
         return;
       }
 
-      if (loginType === "admin" && user.role !== "admin") {
-        alert("This account is not an admin account. Please select Student option.");
+      // =================================================
+      // LOGIN TYPE VALIDATION
+      // =================================================
+
+      if (
+        loginType === "admin" &&
+        user.role !== "admin"
+      ) {
+        alert(
+          "This account is not an admin account. Please select Student option."
+        );
+
         return;
       }
 
-      if (loginType === "student" && user.role === "admin") {
-        alert("This is an admin account. Please select Admin option.");
+      if (
+        loginType === "student" &&
+        user.role === "admin"
+      ) {
+        alert(
+          "This is an admin account. Please select Admin option."
+        );
+
         return;
       }
 
-      handleSuccessfulLogin(user, token);
+      // =================================================
+      // SUCCESS
+      // =================================================
+
+      handleSuccessfulLogin(
+        user,
+        token
+      );
+
     } catch (error) {
-      console.error("Login Error:", error);
-      if (error.code === "ERR_NETWORK" || error.message === "Network Error") {
-        alert("Cannot connect to backend server. Please check VITE_API_URL and make sure backend is running.");
+      console.error(
+        "Login Error:",
+        error
+      );
+
+      if (
+        error.code ===
+          "ERR_NETWORK" ||
+        error.message ===
+          "Network Error"
+      ) {
+        alert(
+          "Cannot connect to backend server. Please check VITE_API_URL and make sure backend is running."
+        );
       } else {
-        alert(error.response?.data?.message || t("login.loginFailed") || "Login failed.");
+        alert(
+          error.response?.data?.message ||
+            t("login.loginFailed") ||
+            "Login failed."
+        );
       }
+
     } finally {
       setLoading(false);
     }
   };
 
   // =====================================================
-  // VERIFY LOGIN OTP (टाईम-आउट ६० सेकंद केला आहे)
+  // VERIFY LOGIN OTP
   // =====================================================
+
   const handleVerifyOTP = async () => {
-    if (!checkAPI()) return;
+    if (!checkAPI()) {
+      return;
+    }
 
     if (!otp || otp.length !== 6) {
-      alert("Please enter a valid 6 digit OTP.");
+      alert(
+        "Please enter a valid 6 digit OTP."
+      );
+
       return;
     }
 
     if (!otpUserId) {
-      alert("Login session expired. Please login again.");
+      alert(
+        "Login session expired. Please login again."
+      );
+
       return;
     }
 
     try {
       setLoading(true);
-      console.log("VERIFYING OTP:", otp);
+
+      console.log(
+        "VERIFYING OTP:",
+        otp
+      );
 
       const res = await axios.post(
         `${API_URL}/api/auth/verify-login-otp`,
-        { userId: otpUserId, otp: otp.trim() },
         {
-          headers: { "Content-Type": "application/json" },
-          timeout: 60000, // <--- सुधारणा: २० सेकंदावरून ६० सेकंद केले
+          userId: otpUserId,
+          otp: otp.trim(),
+        },
+        {
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          timeout: 20000,
         }
       );
 
-      console.log("OTP VERIFY RESPONSE:", res.data);
+      console.log(
+        "OTP VERIFY RESPONSE:",
+        res.data
+      );
 
       const user = res.data?.user;
       const token = res.data?.token;
 
       if (!user || !token) {
-        alert("Invalid OTP verification response.");
+        alert(
+          "Invalid OTP verification response."
+        );
+
         return;
       }
 
-      handleSuccessfulLogin(user, token);
+      // Backend already gives actual role
+      handleSuccessfulLogin(
+        user,
+        token
+      );
+
     } catch (error) {
-      console.error("OTP Verification Error:", error);
-      alert(error.response?.data?.message || "Invalid OTP.");
+      console.error(
+        "OTP Verification Error:",
+        error
+      );
+
+      alert(
+        error.response?.data?.message ||
+          "Invalid OTP."
+      );
+
     } finally {
       setLoading(false);
     }
   };
+
+  // =====================================================
+  // BACK TO LOGIN
+  // =====================================================
 
   const handleBackToLogin = () => {
     setShowOTP(false);
@@ -266,6 +511,10 @@ function Login() {
     setOtpUserId(null);
     setOtpEmail("");
   };
+
+  // =====================================================
+  // OTP SCREEN
+  // =====================================================
 
   if (showOTP) {
     return (
@@ -275,10 +524,19 @@ function Login() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${logo2})`,
+          backgroundImage: `
+            linear-gradient(
+              rgba(255,255,255,0.75),
+              rgba(255,255,255,0.75)
+            ),
+            url(${logo2})
+          `,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          p: { xs: 2, sm: 3 },
+          p: {
+            xs: 2,
+            sm: 3,
+          },
         }}
       >
         <Paper
@@ -286,8 +544,14 @@ function Login() {
           sx={{
             width: "100%",
             maxWidth: 520,
-            p: { xs: 3, sm: 5 },
-            borderRadius: { xs: 3, sm: 5 },
+            p: {
+              xs: 3,
+              sm: 5,
+            },
+            borderRadius: {
+              xs: 3,
+              sm: 5,
+            },
             backdropFilter: "blur(10px)",
           }}
         >
@@ -296,47 +560,120 @@ function Login() {
               component="img"
               src={logo2}
               sx={{
-                width: { xs: 70, sm: 90 },
-                height: { xs: 70, sm: 90 },
+                width: {
+                  xs: 70,
+                  sm: 90,
+                },
+                height: {
+                  xs: 70,
+                  sm: 90,
+                },
                 borderRadius: "50%",
                 objectFit: "cover",
                 mb: 2,
               }}
             />
-            <Typography variant="h4" fontWeight="bold">Verify Login</Typography>
-            <Typography color="text.secondary" mt={1}>OTP has been sent to</Typography>
-            <Typography fontWeight="bold" mt={1} sx={{ wordBreak: "break-word" }}>{otpEmail}</Typography>
+
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              sx={{
+                fontSize: {
+                  xs: "1.8rem",
+                  sm: "2.125rem",
+                },
+              }}
+            >
+              Verify Login
+            </Typography>
+
+            <Typography
+              color="text.secondary"
+              mt={1}
+            >
+              OTP has been sent to
+            </Typography>
+
+            <Typography
+              fontWeight="bold"
+              mt={1}
+              sx={{
+                wordBreak: "break-word",
+              }}
+            >
+              {otpEmail}
+            </Typography>
           </Box>
 
-          <Box sx={{ mt: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+          <Box
+            sx={{
+              mt: 4,
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+            }}
+          >
             <TextField
               label="Enter 6 Digit OTP"
               value={otp}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+                const value =
+                  e.target.value
+                    .replace(/\D/g, "")
+                    .slice(0, 6);
+
                 setOtp(value);
               }}
               fullWidth
-              inputProps={{ maxLength: 6, inputMode: "numeric" }}
+              inputProps={{
+                maxLength: 6,
+                inputMode: "numeric",
+              }}
             />
 
             <Button
               variant="contained"
               size="large"
               fullWidth
-              disabled={loading || otp.length !== 6}
-              onClick={handleVerifyOTP}
-              sx={{ py: 1.5, borderRadius: 2, background: "#008BDC" }}
+              disabled={
+                loading ||
+                otp.length !== 6
+              }
+              onClick={
+                handleVerifyOTP
+              }
+              sx={{
+                py: 1.5,
+                borderRadius: 2,
+                background: "#008BDC",
+                fontSize: {
+                  xs: 16,
+                  sm: 18,
+                },
+              }}
             >
-              {loading ? "Verifying..." : "Verify OTP"}
+              {loading
+                ? "Verifying..."
+                : "Verify OTP"}
             </Button>
 
-            <Button variant="text" onClick={handleBackToLogin}>Back to Login</Button>
+            <Button
+              variant="text"
+              onClick={
+                handleBackToLogin
+              }
+            >
+              Back to Login
+            </Button>
           </Box>
         </Paper>
       </Box>
     );
   }
+
+  // =====================================================
+  // LOGIN PAGE
+  // =====================================================
 
   return (
     <Box
@@ -345,10 +682,19 @@ function Login() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${logo2})`,
+        backgroundImage: `
+          linear-gradient(
+            rgba(255,255,255,0.75),
+            rgba(255,255,255,0.75)
+          ),
+          url(${logo2})
+        `,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        p: { xs: 2, sm: 3 },
+        p: {
+          xs: 2,
+          sm: 3,
+        },
       }}
     >
       <Paper
@@ -356,8 +702,14 @@ function Login() {
         sx={{
           width: "100%",
           maxWidth: 520,
-          p: { xs: 2.5, sm: 5 },
-          borderRadius: { xs: 3, sm: 5 },
+          p: {
+            xs: 2.5,
+            sm: 5,
+          },
+          borderRadius: {
+            xs: 3,
+            sm: 5,
+          },
           backdropFilter: "blur(10px)",
         }}
       >
@@ -366,28 +718,97 @@ function Login() {
             component="img"
             src={logo2}
             sx={{
-              width: { xs: 70, sm: 90 },
-              height: { xs: 70, sm: 90 },
+              width: {
+                xs: 70,
+                sm: 90,
+              },
+              height: {
+                xs: 70,
+                sm: 90,
+              },
               borderRadius: "50%",
               objectFit: "cover",
               mb: 2,
             }}
           />
-          <Typography variant="h4" fontWeight="bold">{t("login.title")}</Typography>
-          <Typography color="text.secondary" mt={1}>{t("login.subtitle")}</Typography>
+
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            sx={{
+              fontSize: {
+                xs: "1.8rem",
+                sm: "2.125rem",
+              },
+            }}
+          >
+            {t("login.title")}
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            mt={1}
+            sx={{
+              fontSize: {
+                xs: 14,
+                sm: 16,
+              },
+            }}
+          >
+            {t("login.subtitle")}
+          </Typography>
         </Box>
+
+        {/* Student / Admin Toggle */}
 
         <Tabs
           value={loginType}
-          onChange={(e, value) => setLoginType(value)}
+          onChange={(e, value) =>
+            setLoginType(value)
+          }
           variant="fullWidth"
-          sx={{ mt: 4, background: "#f3f4f6", borderRadius: 2, minHeight: 48 }}
+          sx={{
+            mt: 4,
+            background: "#f3f4f6",
+            borderRadius: 2,
+            minHeight: 48,
+          }}
         >
-          <Tab value="student" label={t("login.student")} />
-          <Tab value="admin" label={t("login.admin")} />
+          <Tab
+            value="student"
+            label={t("login.student")}
+            sx={{
+              minWidth: 0,
+              fontSize: {
+                xs: 13,
+                sm: 14,
+              },
+            }}
+          />
+
+          <Tab
+            value="admin"
+            label={t("login.admin")}
+            sx={{
+              minWidth: 0,
+              fontSize: {
+                xs: 13,
+                sm: 14,
+              },
+            }}
+          />
         </Tabs>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            mt: 4,
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
           <TextField
             label={t("login.email")}
             name="email"
@@ -408,7 +829,11 @@ function Login() {
           <TextField
             label={t("login.password")}
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
             value={formData.password}
             onChange={handleChange}
             fullWidth
@@ -419,27 +844,68 @@ function Login() {
                   <Lock color="primary" />
                 </InputAdornment>
               ),
+
               endAdornment: (
-                <IconButton type="button" onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                <IconButton
+                  type="button"
+                  onClick={() =>
+                    setShowPassword(
+                      !showPassword
+                    )
+                  }
+                >
+                  {showPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
                 </IconButton>
               ),
             }}
           />
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: { xs: "flex-start", sm: "center" }, flexDirection: { xs: "column", sm: "row" }, gap: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: {
+                xs: "flex-start",
+                sm: "center",
+              },
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              },
+              gap: 1,
+            }}
+          >
             <FormControlLabel
               control={
                 <Checkbox
                   checked={remember}
-                  onChange={(e) => setRemember(e.target.checked)}
+                  onChange={(e) =>
+                    setRemember(
+                      e.target.checked
+                    )
+                  }
                 />
               }
-              label={t("login.rememberMe")}
-              sx={{ m: 0 }}
+              label={
+                t("login.rememberMe")
+              }
+              sx={{
+                m: 0,
+              }}
             />
-            <Link component={RouterLink} to="/forgot" underline="hover">
-              {t("login.forgotPassword")}
+
+            <Link
+              component={RouterLink}
+              to="/forgot"
+              underline="hover"
+            >
+              {t(
+                "login.forgotPassword"
+              )}
             </Link>
           </Box>
 
@@ -449,27 +915,74 @@ function Login() {
             size="large"
             fullWidth
             disabled={loading}
-            sx={{ py: 1.5, borderRadius: 2, background: "#008BDC" }}
+            sx={{
+              py: 1.5,
+              borderRadius: 2,
+              background: "#008BDC",
+              fontSize: {
+                xs: 16,
+                sm: 18,
+              },
+            }}
           >
-            {loading ? t("login.loggingIn") : t("login.loginButton")}
+            {loading
+              ? t("login.loggingIn")
+              : t("login.loginButton")}
           </Button>
         </Box>
 
-        <Typography textAlign="center" my={3} color="text.secondary">{t("login.or")}</Typography>
+        <Typography
+          textAlign="center"
+          my={3}
+          color="text.secondary"
+        >
+          {t("login.or")}
+        </Typography>
 
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%", overflow: "hidden" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            overflow: "hidden",
+          }}
+        >
           <GoogleLogin
-            onSuccess={handleGoogleLogin}
+            onSuccess={
+              handleGoogleLogin
+            }
             onError={() => {
-              console.error("Google Login Failed");
-              alert(t("login.googleLoginFailed") || "Google login failed.");
+              console.error(
+                "Google Login Failed"
+              );
+
+              alert(
+                t(
+                  "login.googleLoginFailed"
+                ) ||
+                  "Google login failed."
+              );
             }}
           />
         </Box>
 
-        <Typography textAlign="center" mt={3}>
+        <Typography
+          textAlign="center"
+          mt={3}
+          sx={{
+            fontSize: {
+              xs: 14,
+              sm: 16,
+            },
+          }}
+        >
           {t("login.noAccount")}{" "}
-          <Link component={RouterLink} to="/register" underline="hover">
+
+          <Link
+            component={RouterLink}
+            to="/register"
+            underline="hover"
+          >
             {t("login.register")}
           </Link>
         </Typography>
@@ -479,1003 +992,6 @@ function Login() {
 }
 
 export default Login;
-
-
-
-// import { useState } from "react";
-// import axios from "axios";
-
-// import {
-//   Box,
-//   Paper,
-//   Typography,
-//   TextField,
-//   Button,
-//   InputAdornment,
-//   IconButton,
-//   Tabs,
-//   Tab,
-//   Checkbox,
-//   FormControlLabel,
-//   Link,
-// } from "@mui/material";
-
-// import {
-//   Visibility,
-//   VisibilityOff,
-//   Email,
-//   Lock,
-// } from "@mui/icons-material";
-
-// import { GoogleLogin } from "@react-oauth/google";
-
-// import {
-//   useNavigate,
-//   Link as RouterLink,
-// } from "react-router-dom";
-
-// import { useTranslation } from "react-i18next";
-
-// import logo2 from "../assets/logo2.jpg";
-
-// function Login() {
-//   const navigate = useNavigate();
-//   const { t } = useTranslation();
-
-//   // IMPORTANT:
-//   // Vercel Environment Variable:
-//   // VITE_API_URL = https://your-backend-url.onrender.com
-//   const API_URL = import.meta.env.VITE_API_URL;
-
-//   const [loading, setLoading] = useState(false);
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [remember, setRemember] = useState(false);
-//   const [loginType, setLoginType] = useState("student");
-
-//   const [formData, setFormData] = useState({
-//     email: "",
-//     password: "",
-//   });
-
-//   // =====================================================
-//   // OTP STATES
-//   // =====================================================
-
-//   const [showOTP, setShowOTP] = useState(false);
-//   const [otp, setOtp] = useState("");
-//   const [otpUserId, setOtpUserId] = useState(null);
-//   const [otpEmail, setOtpEmail] = useState("");
-
-//   // =====================================================
-//   // CHECK API URL
-//   // =====================================================
-
-//   const checkAPI = () => {
-//     if (!API_URL) {
-//       alert(
-//         "API URL is not configured. Please check VITE_API_URL."
-//       );
-
-//       console.error(
-//         "VITE_API_URL is missing."
-//       );
-
-//       return false;
-//     }
-
-//     console.log(
-//       "API URL:",
-//       API_URL
-//     );
-
-//     return true;
-//   };
-
-//   // =====================================================
-//   // HANDLE INPUT CHANGE
-//   // =====================================================
-
-//   const handleChange = (e) => {
-//     setFormData({
-//       ...formData,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
-
-//   // =====================================================
-//   // SUCCESSFUL LOGIN
-//   // =====================================================
-
-//   const handleSuccessfulLogin = (user, token) => {
-//     if (!user || !token) {
-//       alert("Invalid login response.");
-//       return;
-//     }
-
-//     console.log(
-//       "LOGIN USER:",
-//       user
-//     );
-
-//     console.log(
-//       "LOGIN ROLE:",
-//       user.role
-//     );
-
-//     // Save token
-//     localStorage.setItem(
-//       "token",
-//       token
-//     );
-
-//     // Save user
-//     localStorage.setItem(
-//       "user",
-//       JSON.stringify(user)
-//     );
-
-//     // Remember me
-//     if (remember) {
-//       localStorage.setItem(
-//         "rememberMe",
-//         "true"
-//       );
-//     } else {
-//       localStorage.removeItem(
-//         "rememberMe"
-//       );
-//     }
-
-//     // =================================================
-//     // ADMIN
-//     // =================================================
-
-//     if (user.role === "admin") {
-//       navigate("/admin/dashboard");
-//       return;
-//     }
-
-//     // =================================================
-//     // STUDENT
-//     // =================================================
-
-//     navigate("/");
-//   };
-
-//   // =====================================================
-//   // GOOGLE LOGIN
-//   // =====================================================
-
-//   const handleGoogleLogin = async (response) => {
-//     if (!checkAPI()) {
-//       return;
-//     }
-
-//     if (!response?.credential) {
-//       alert(
-//         t("login.googleLoginFailed") ||
-//           "Google login failed."
-//       );
-
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       console.log(
-//         "Google login started"
-//       );
-
-//       const res = await axios.post(
-//         `${API_URL}/api/auth/google`,
-//         {
-//           credential: response.credential,
-//         },
-//         {
-//           timeout: 20000,
-//         }
-//       );
-
-//       console.log(
-//         "GOOGLE LOGIN RESPONSE:",
-//         res.data
-//       );
-
-//       // =================================================
-//       // OTP REQUIRED
-//       // =================================================
-
-//       if (res.data?.requiresOTP) {
-//         setOtpUserId(
-//           res.data.userId
-//         );
-
-//         setOtpEmail(
-//           res.data.email || ""
-//         );
-
-//         setOtp("");
-
-//         setShowOTP(true);
-
-//         return;
-//       }
-
-//       // =================================================
-//       // NORMAL GOOGLE LOGIN
-//       // =================================================
-
-//       if (
-//         !res.data?.user ||
-//         !res.data?.token
-//       ) {
-//         throw new Error(
-//           "Invalid Google login response."
-//         );
-//       }
-
-//       handleSuccessfulLogin(
-//         res.data.user,
-//         res.data.token
-//       );
-
-//     } catch (error) {
-//       console.error(
-//         "Google Login Error:",
-//         error
-//       );
-
-//       if (
-//         error.code ===
-//         "ERR_NETWORK"
-//       ) {
-//         alert(
-//           "Cannot connect to server. Please check your backend URL."
-//         );
-//       } else {
-//         alert(
-//           error.response?.data?.message ||
-//             t("login.googleLoginFailed") ||
-//             "Google login failed."
-//         );
-//       }
-
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // =====================================================
-//   // NORMAL LOGIN
-//   // =====================================================
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!checkAPI()) {
-//       return;
-//     }
-
-//     const email = formData.email.trim();
-//     const password = formData.password;
-
-//     if (!email || !password) {
-//       alert(
-//         "Please enter email and password."
-//       );
-
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       console.log(
-//         "LOGIN API:",
-//         `${API_URL}/api/auth/login`
-//       );
-
-//       const res = await axios.post(
-//         `${API_URL}/api/auth/login`,
-//         {
-//           email,
-//           password,
-//         },
-//         {
-//           headers: {
-//             "Content-Type":
-//               "application/json",
-//           },
-//           timeout: 60000,
-//         }
-//       );
-
-//       console.log(
-//         "LOGIN RESPONSE:",
-//         res.data
-//       );
-
-//       // =================================================
-//       // OTP REQUIRED
-//       // =================================================
-
-//       if (res.data?.requiresOTP) {
-//         console.log(
-//           "OTP required for:",
-//           res.data.email
-//         );
-
-//         setOtpUserId(
-//           res.data.userId
-//         );
-
-//         setOtpEmail(
-//           res.data.email || email
-//         );
-
-//         setOtp("");
-
-//         setShowOTP(true);
-
-//         return;
-//       }
-
-//       // =================================================
-//       // NORMAL LOGIN
-//       // =================================================
-
-//       const user = res.data?.user;
-//       const token = res.data?.token;
-
-//       if (!user || !token) {
-//         alert(
-//           "Invalid login response from server."
-//         );
-
-//         return;
-//       }
-
-//       // =================================================
-//       // LOGIN TYPE VALIDATION
-//       // =================================================
-
-//       if (
-//         loginType === "admin" &&
-//         user.role !== "admin"
-//       ) {
-//         alert(
-//           "This account is not an admin account. Please select Student option."
-//         );
-
-//         return;
-//       }
-
-//       if (
-//         loginType === "student" &&
-//         user.role === "admin"
-//       ) {
-//         alert(
-//           "This is an admin account. Please select Admin option."
-//         );
-
-//         return;
-//       }
-
-//       // =================================================
-//       // SUCCESS
-//       // =================================================
-
-//       handleSuccessfulLogin(
-//         user,
-//         token
-//       );
-
-//     } catch (error) {
-//       console.error(
-//         "Login Error:",
-//         error
-//       );
-
-//       if (
-//         error.code ===
-//           "ERR_NETWORK" ||
-//         error.message ===
-//           "Network Error"
-//       ) {
-//         alert(
-//           "Cannot connect to backend server. Please check VITE_API_URL and make sure backend is running."
-//         );
-//       } else {
-//         alert(
-//           error.response?.data?.message ||
-//             t("login.loginFailed") ||
-//             "Login failed."
-//         );
-//       }
-
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // =====================================================
-//   // VERIFY LOGIN OTP
-//   // =====================================================
-
-//   const handleVerifyOTP = async () => {
-//     if (!checkAPI()) {
-//       return;
-//     }
-
-//     if (!otp || otp.length !== 6) {
-//       alert(
-//         "Please enter a valid 6 digit OTP."
-//       );
-
-//       return;
-//     }
-
-//     if (!otpUserId) {
-//       alert(
-//         "Login session expired. Please login again."
-//       );
-
-//       return;
-//     }
-
-//     try {
-//       setLoading(true);
-
-//       console.log(
-//         "VERIFYING OTP:",
-//         otp
-//       );
-
-//       const res = await axios.post(
-//         `${API_URL}/api/auth/verify-login-otp`,
-//         {
-//           userId: otpUserId,
-//           otp: otp.trim(),
-//         },
-//         {
-//           headers: {
-//             "Content-Type":
-//               "application/json",
-//           },
-//           timeout: 20000,
-//         }
-//       );
-
-//       console.log(
-//         "OTP VERIFY RESPONSE:",
-//         res.data
-//       );
-
-//       const user = res.data?.user;
-//       const token = res.data?.token;
-
-//       if (!user || !token) {
-//         alert(
-//           "Invalid OTP verification response."
-//         );
-
-//         return;
-//       }
-
-//       // Backend already gives actual role
-//       handleSuccessfulLogin(
-//         user,
-//         token
-//       );
-
-//     } catch (error) {
-//       console.error(
-//         "OTP Verification Error:",
-//         error
-//       );
-
-//       alert(
-//         error.response?.data?.message ||
-//           "Invalid OTP."
-//       );
-
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // =====================================================
-//   // BACK TO LOGIN
-//   // =====================================================
-
-//   const handleBackToLogin = () => {
-//     setShowOTP(false);
-//     setOtp("");
-//     setOtpUserId(null);
-//     setOtpEmail("");
-//   };
-
-//   // =====================================================
-//   // OTP SCREEN
-//   // =====================================================
-
-//   if (showOTP) {
-//     return (
-//       <Box
-//         sx={{
-//           minHeight: "100vh",
-//           display: "flex",
-//           alignItems: "center",
-//           justifyContent: "center",
-//           backgroundImage: `
-//             linear-gradient(
-//               rgba(255,255,255,0.75),
-//               rgba(255,255,255,0.75)
-//             ),
-//             url(${logo2})
-//           `,
-//           backgroundSize: "cover",
-//           backgroundPosition: "center",
-//           p: {
-//             xs: 2,
-//             sm: 3,
-//           },
-//         }}
-//       >
-//         <Paper
-//           elevation={8}
-//           sx={{
-//             width: "100%",
-//             maxWidth: 520,
-//             p: {
-//               xs: 3,
-//               sm: 5,
-//             },
-//             borderRadius: {
-//               xs: 3,
-//               sm: 5,
-//             },
-//             backdropFilter: "blur(10px)",
-//           }}
-//         >
-//           <Box textAlign="center">
-//             <Box
-//               component="img"
-//               src={logo2}
-//               sx={{
-//                 width: {
-//                   xs: 70,
-//                   sm: 90,
-//                 },
-//                 height: {
-//                   xs: 70,
-//                   sm: 90,
-//                 },
-//                 borderRadius: "50%",
-//                 objectFit: "cover",
-//                 mb: 2,
-//               }}
-//             />
-
-//             <Typography
-//               variant="h4"
-//               fontWeight="bold"
-//               sx={{
-//                 fontSize: {
-//                   xs: "1.8rem",
-//                   sm: "2.125rem",
-//                 },
-//               }}
-//             >
-//               Verify Login
-//             </Typography>
-
-//             <Typography
-//               color="text.secondary"
-//               mt={1}
-//             >
-//               OTP has been sent to
-//             </Typography>
-
-//             <Typography
-//               fontWeight="bold"
-//               mt={1}
-//               sx={{
-//                 wordBreak: "break-word",
-//               }}
-//             >
-//               {otpEmail}
-//             </Typography>
-//           </Box>
-
-//           <Box
-//             sx={{
-//               mt: 4,
-//               display: "flex",
-//               flexDirection: "column",
-//               gap: 3,
-//             }}
-//           >
-//             <TextField
-//               label="Enter 6 Digit OTP"
-//               value={otp}
-//               onChange={(e) => {
-//                 const value =
-//                   e.target.value
-//                     .replace(/\D/g, "")
-//                     .slice(0, 6);
-
-//                 setOtp(value);
-//               }}
-//               fullWidth
-//               inputProps={{
-//                 maxLength: 6,
-//                 inputMode: "numeric",
-//               }}
-//             />
-
-//             <Button
-//               variant="contained"
-//               size="large"
-//               fullWidth
-//               disabled={
-//                 loading ||
-//                 otp.length !== 6
-//               }
-//               onClick={
-//                 handleVerifyOTP
-//               }
-//               sx={{
-//                 py: 1.5,
-//                 borderRadius: 2,
-//                 background: "#008BDC",
-//                 fontSize: {
-//                   xs: 16,
-//                   sm: 18,
-//                 },
-//               }}
-//             >
-//               {loading
-//                 ? "Verifying..."
-//                 : "Verify OTP"}
-//             </Button>
-
-//             <Button
-//               variant="text"
-//               onClick={
-//                 handleBackToLogin
-//               }
-//             >
-//               Back to Login
-//             </Button>
-//           </Box>
-//         </Paper>
-//       </Box>
-//     );
-//   }
-
-//   // =====================================================
-//   // LOGIN PAGE
-//   // =====================================================
-
-//   return (
-//     <Box
-//       sx={{
-//         minHeight: "100vh",
-//         display: "flex",
-//         alignItems: "center",
-//         justifyContent: "center",
-//         backgroundImage: `
-//           linear-gradient(
-//             rgba(255,255,255,0.75),
-//             rgba(255,255,255,0.75)
-//           ),
-//           url(${logo2})
-//         `,
-//         backgroundSize: "cover",
-//         backgroundPosition: "center",
-//         p: {
-//           xs: 2,
-//           sm: 3,
-//         },
-//       }}
-//     >
-//       <Paper
-//         elevation={8}
-//         sx={{
-//           width: "100%",
-//           maxWidth: 520,
-//           p: {
-//             xs: 2.5,
-//             sm: 5,
-//           },
-//           borderRadius: {
-//             xs: 3,
-//             sm: 5,
-//           },
-//           backdropFilter: "blur(10px)",
-//         }}
-//       >
-//         <Box textAlign="center">
-//           <Box
-//             component="img"
-//             src={logo2}
-//             sx={{
-//               width: {
-//                 xs: 70,
-//                 sm: 90,
-//               },
-//               height: {
-//                 xs: 70,
-//                 sm: 90,
-//               },
-//               borderRadius: "50%",
-//               objectFit: "cover",
-//               mb: 2,
-//             }}
-//           />
-
-//           <Typography
-//             variant="h4"
-//             fontWeight="bold"
-//             sx={{
-//               fontSize: {
-//                 xs: "1.8rem",
-//                 sm: "2.125rem",
-//               },
-//             }}
-//           >
-//             {t("login.title")}
-//           </Typography>
-
-//           <Typography
-//             color="text.secondary"
-//             mt={1}
-//             sx={{
-//               fontSize: {
-//                 xs: 14,
-//                 sm: 16,
-//               },
-//             }}
-//           >
-//             {t("login.subtitle")}
-//           </Typography>
-//         </Box>
-
-//         {/* Student / Admin Toggle */}
-
-//         <Tabs
-//           value={loginType}
-//           onChange={(e, value) =>
-//             setLoginType(value)
-//           }
-//           variant="fullWidth"
-//           sx={{
-//             mt: 4,
-//             background: "#f3f4f6",
-//             borderRadius: 2,
-//             minHeight: 48,
-//           }}
-//         >
-//           <Tab
-//             value="student"
-//             label={t("login.student")}
-//             sx={{
-//               minWidth: 0,
-//               fontSize: {
-//                 xs: 13,
-//                 sm: 14,
-//               },
-//             }}
-//           />
-
-//           <Tab
-//             value="admin"
-//             label={t("login.admin")}
-//             sx={{
-//               minWidth: 0,
-//               fontSize: {
-//                 xs: 13,
-//                 sm: 14,
-//               },
-//             }}
-//           />
-//         </Tabs>
-
-//         <Box
-//           component="form"
-//           onSubmit={handleSubmit}
-//           sx={{
-//             mt: 4,
-//             display: "flex",
-//             flexDirection: "column",
-//             gap: 3,
-//           }}
-//         >
-//           <TextField
-//             label={t("login.email")}
-//             name="email"
-//             type="email"
-//             value={formData.email}
-//             onChange={handleChange}
-//             fullWidth
-//             autoComplete="email"
-//             InputProps={{
-//               startAdornment: (
-//                 <InputAdornment position="start">
-//                   <Email color="primary" />
-//                 </InputAdornment>
-//               ),
-//             }}
-//           />
-
-//           <TextField
-//             label={t("login.password")}
-//             name="password"
-//             type={
-//               showPassword
-//                 ? "text"
-//                 : "password"
-//             }
-//             value={formData.password}
-//             onChange={handleChange}
-//             fullWidth
-//             autoComplete="current-password"
-//             InputProps={{
-//               startAdornment: (
-//                 <InputAdornment position="start">
-//                   <Lock color="primary" />
-//                 </InputAdornment>
-//               ),
-
-//               endAdornment: (
-//                 <IconButton
-//                   type="button"
-//                   onClick={() =>
-//                     setShowPassword(
-//                       !showPassword
-//                     )
-//                   }
-//                 >
-//                   {showPassword ? (
-//                     <VisibilityOff />
-//                   ) : (
-//                     <Visibility />
-//                   )}
-//                 </IconButton>
-//               ),
-//             }}
-//           />
-
-//           <Box
-//             sx={{
-//               display: "flex",
-//               justifyContent: "space-between",
-//               alignItems: {
-//                 xs: "flex-start",
-//                 sm: "center",
-//               },
-//               flexDirection: {
-//                 xs: "column",
-//                 sm: "row",
-//               },
-//               gap: 1,
-//             }}
-//           >
-//             <FormControlLabel
-//               control={
-//                 <Checkbox
-//                   checked={remember}
-//                   onChange={(e) =>
-//                     setRemember(
-//                       e.target.checked
-//                     )
-//                   }
-//                 />
-//               }
-//               label={
-//                 t("login.rememberMe")
-//               }
-//               sx={{
-//                 m: 0,
-//               }}
-//             />
-
-//             <Link
-//               component={RouterLink}
-//               to="/forgot"
-//               underline="hover"
-//             >
-//               {t(
-//                 "login.forgotPassword"
-//               )}
-//             </Link>
-//           </Box>
-
-//           <Button
-//             type="submit"
-//             variant="contained"
-//             size="large"
-//             fullWidth
-//             disabled={loading}
-//             sx={{
-//               py: 1.5,
-//               borderRadius: 2,
-//               background: "#008BDC",
-//               fontSize: {
-//                 xs: 16,
-//                 sm: 18,
-//               },
-//             }}
-//           >
-//             {loading
-//               ? t("login.loggingIn")
-//               : t("login.loginButton")}
-//           </Button>
-//         </Box>
-
-//         <Typography
-//           textAlign="center"
-//           my={3}
-//           color="text.secondary"
-//         >
-//           {t("login.or")}
-//         </Typography>
-
-//         <Box
-//           sx={{
-//             display: "flex",
-//             justifyContent: "center",
-//             width: "100%",
-//             overflow: "hidden",
-//           }}
-//         >
-//           <GoogleLogin
-//             onSuccess={
-//               handleGoogleLogin
-//             }
-//             onError={() => {
-//               console.error(
-//                 "Google Login Failed"
-//               );
-
-//               alert(
-//                 t(
-//                   "login.googleLoginFailed"
-//                 ) ||
-//                   "Google login failed."
-//               );
-//             }}
-//           />
-//         </Box>
-
-//         <Typography
-//           textAlign="center"
-//           mt={3}
-//           sx={{
-//             fontSize: {
-//               xs: 14,
-//               sm: 16,
-//             },
-//           }}
-//         >
-//           {t("login.noAccount")}{" "}
-
-//           <Link
-//             component={RouterLink}
-//             to="/register"
-//             underline="hover"
-//           >
-//             {t("login.register")}
-//           </Link>
-//         </Typography>
-//       </Paper>
-//     </Box>
-//   );
-// }
-
-// export default Login;
 
 
 
