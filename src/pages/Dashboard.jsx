@@ -21,6 +21,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 function Dashboard() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  
 
   const cards = [
     {

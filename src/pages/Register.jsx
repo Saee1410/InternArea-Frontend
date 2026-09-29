@@ -33,6 +33,7 @@ function Register() {
   const navigate = useNavigate();
 
   const { t } = useTranslation();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -102,7 +103,7 @@ function Register() {
 
 
       const res = await axios.post(
-        "http://localhost:8000/api/auth/register",
+        `${API_URL}/api/auth/register`,
         formData
       );
 

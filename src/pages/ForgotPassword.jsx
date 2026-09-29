@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 function ForgotPassword() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const [identifier, setIdentifier] = useState("");
   const [loading, setLoading] = useState(false);
@@ -68,7 +69,7 @@ function ForgotPassword() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8000/api/auth/forgot-password",
+        `${API_URL}/api/auth/forgot-password`,
         {
           identifier: identifier.trim()
         }

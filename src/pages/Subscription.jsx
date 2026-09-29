@@ -87,6 +87,7 @@ const plans = [
 
 function Subscriptions() {
   const { t } = useTranslation();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [message, setMessage] = useState("");
@@ -129,7 +130,7 @@ function Subscriptions() {
       // ==========================================
 
       const res = await axios.post(
-        "http://localhost:8000/api/payment/subscription/create-order",
+        `${API_URL}/api/payment/subscription/create-order`,
         {
           plan: plan,
         },
@@ -192,7 +193,7 @@ function Subscriptions() {
             console.log("Razorpay Response:", response);
 
             const verifyResponse = await axios.post(
-              "http://localhost:8000/api/payment/subscription/verify",
+              `${API_URL}/api/payment/subscription/verify`,
               {
                 razorpay_order_id:
                   response.razorpay_order_id,

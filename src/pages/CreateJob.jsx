@@ -15,6 +15,7 @@ import Navbar from "../components/layout/Navbar";
 
 function CreateJob() {
   const { t } = useTranslation();
+   const API_URL = import.meta.env.VITE_API_URL;
 
   const initialFormData = {
     company: "",
@@ -120,7 +121,7 @@ function CreateJob() {
       console.log("=================================");
 
       const response = await axios.post(
-        "http://localhost:8000/api/jobs/create",
+        `${API_URL}/api/jobs/create`,
         payload,
         {
           headers: {

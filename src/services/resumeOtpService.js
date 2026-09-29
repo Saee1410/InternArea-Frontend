@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/resume-otp";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/resume-otp`;
 
 export const sendResumeOTP = async (email) => {
     const token = localStorage.getItem("token");
